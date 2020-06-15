@@ -1,5 +1,8 @@
 # Metalogue
-<img src="metalogue/src/assets/logo.PNG" width="600">
+
+<p align="center">
+<img src="https://github.com/Bortoli22/Metalogue/blob/master/metalogue/src/assets/logo.png" height="25%" width="25%">
+</p>
 
 ## About
 Metalogue is an online, text-editing interface that caters to the creation of game dialogue. Metalogue generates metadata for each line of dialogue you write, and this data can be used in conjunction with the appropriate scripting to create a full-fledged dialogue system. Through an intuitive, clickable interface, the text-editor allows for a variety of dialogue types, from multi-path dialogue options to randomized greetings. Dialogue you write can be exported using Metalogue's metadata (MM) scheme as a text or res file, which can then be parsed by and interpreted by the associated scripts. Additionally, the dialogue can be exported to both XML and JSON, with an editable blueprint for its formatting
@@ -7,18 +10,18 @@ Metalogue is an online, text-editing interface that caters to the creation of ga
 ## MM Internals
 If you were type the following in the editor:
 
-  Hello there, traveler!
+ ``` Hello there, traveler!```
   
 And make the text into an ‘option’ with two possible responses the following would be generated:
 
-  \*/ 2B5 X27cT -o x17s5 t2116 /\* Hello there, traveler!
+ ``` \*/ 2B5 X27cT -o x17s5 t2116 /\* Hello there, traveler!```
   
 Taking a look at that particular tag to break down the components:
-
-	\*/ 	2B5 		X27cT 		-o 		x17s5 		t2116		 /\*
+```
+\*/ 	2B5 		X27cT 		-o 		x17s5 		t2116		 /\*
   
-  LS	spID		msgID		flags		args[0]		args[1]		RS
-  
+ LS	spID		msgID		flags		args[0]		args[1]		RS
+ ``` 
 *Note that there is multi flag support, but each flag will have its own set of args, so a tag such as “*/ 2B5 X27cT -o x17s5 t2116 -q gJ99T /*” is considered valid.
 
 ## MM Components
