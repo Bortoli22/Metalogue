@@ -2,7 +2,7 @@
     <div>
       <b-container fluid>
         <b-row>
-          <b-col>
+          <b-col class="col-1">
             <SpeakerSelect />
           </b-col>
           <b-col>
@@ -14,7 +14,7 @@
               max-rows="6"
             ></b-form-textarea>
           </b-col>
-          <b-col>
+          <b-col class="col-md-auto">
             <b-button v-on:click="modifyDialogue()">Commit</b-button>
           </b-col>
         </b-row>
