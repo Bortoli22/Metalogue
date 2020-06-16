@@ -1,18 +1,33 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <b-button v-on:click="addDialogue()">+</b-button>
+    <DialogueContainer
+    v-for="val in dialogues"
+    v-bind:key="val"
+    v-bind:msg="val"
+    />
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from '@/components/HelloWorld.vue'
+import DialogueContainer from '@/components/DialogueContainer.vue'
 
 export default {
   name: 'Home',
   components: {
-    HelloWorld
+    DialogueContainer
+  },
+  methods: {
+    addDialogue: function () {
+      const x = { name: 'added', msg: 'added' }
+      this.dialogues.push(x)
+    }
+  },
+  data () {
+    return {
+      dialogues: [{ name: 'char1', msg: 'dialogue1' }, { name: 'char2', msg: 'dialogue2' }]
+    }
   }
 }
 </script>
