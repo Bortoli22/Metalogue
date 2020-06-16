@@ -6,6 +6,7 @@
     v-bind:key="val.id"
     v-bind:msg="val.msg"
     v-bind:id="val.id"
+    v-bind:name="val.name"
     />
   </div>
 </template>

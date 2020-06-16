@@ -2,12 +2,14 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import dialogueData from '@/data/dialogueData.js'
+import characterBank from '@/data/characterBank.js'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    dialogueData
+    dialogueData,
+    characterBank
   },
   mutations: {
     appendDialogue: (state, Dialogue) => {
