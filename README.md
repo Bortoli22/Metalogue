@@ -5,7 +5,7 @@
 </p>
 
 ## About
-Metalogue is an online, text-editing interface that caters to the creation of game dialogue. Metalogue generates metadata for each line of dialogue you write, and this data can be used in conjunction with the appropriate scripting to create a full-fledged dialogue system. Through an intuitive, clickable interface, the text-editor allows for a variety of dialogue types, from multi-path dialogue options to randomized greetings. Dialogue you write can be exported using Metalogue's metadata (MM) scheme as a text or res file, which can then be parsed by and interpreted by the associated scripts. Additionally, the dialogue can be exported to both XML and JSON, with an editable blueprint for its formatting
+Metalogue is an online, text-editing interface that caters to the creation of game dialogue. Metalogue generates metadata for each line of dialogue you write, and this data can be used in conjunction with the appropriate scripting to create a full-fledged dialogue system. Through an intuitive, clickable interface, the text-editor allows for a variety of dialogue types, from multi-path dialogue options to randomized greetings. Dialogue you write can be exported using Metalogue's metadata (MM) scheme as a text or res file, which can then be parsed by and interpreted by the associated scripts. As a 'stretch goal', the dialogue can be exported to both XML and JSON, with an editable blueprint for its formatting
 
 ## MM Internals
 If you were type the following in the editor:
