@@ -1,6 +1,5 @@
 <template>
   <div class="home">
-    <b-button v-on:click="createDialogue()">+</b-button>
     <DialogueContainer
     v-for="val in dialogueData"
     v-bind:key="val.id"
@@ -9,6 +8,7 @@
     v-bind:name="val.name"
     v-bind:mod="val.mod"
     />
+    <b-button v-on:click="createDialogue()">+</b-button>
   </div>
 </template>
 
@@ -33,7 +33,7 @@ export default {
     ]),
     createDialogue () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      const created = { id: id, name: 'charx', msg: 'added', mod: [] }
+      const created = { id: id, name: 'charx', msg: '', mod: [] }
       this.addDialogue(created)
     }
   },

@@ -16,6 +16,8 @@
               placeholder="Dialogue Here..."
               rows="2"
               max-rows="6"
+              v-on:keyup.enter="createDialogue"
+              v-on:keyup.delete="removeDialogueCheck"
             ></b-form-textarea>
           </b-col>
           <b-col class="col-md-auto">
@@ -54,7 +56,9 @@ export default {
   },
   methods: {
     ...mapActions([
-      'modDialogue'
+      'modDialogue',
+      'addDialogue',
+      'remDialogue'
     ]),
     modifyDialogue () {
       this.modDialogue({ id: this.sentId, msg: this.text })
@@ -62,6 +66,16 @@ export default {
     propUpdate (payload) {
       this.sentId = payload.id
       this.charname = payload.name
+    },
+    createDialogue () {
+      const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
+      const created = { id: id, name: 'charx', msg: '', mod: [] }
+      this.addDialogue(created)
+    },
+    removeDialogueCheck () {
+      if (this.text === '') {
+        this.remDialogue(this.sentId)
+      }
     }
   }
 
