@@ -2,8 +2,8 @@
     <div>
       <b-container fluid>
         <b-row>
-          <b-col class="col-1">
-            <SpeakerSelect />
+          <b-col class="col-md-auto">
+            <FlagSet />
           </b-col>
           <b-col>
             <b-form-textarea
@@ -24,11 +24,11 @@
 
 <script>
 import { mapActions } from 'vuex'
-import SpeakerSelect from '@/components/SpeakerSelect.vue'
+import FlagSet from '@/components/FlagSet.vue'
 
 export default {
   components: {
-    SpeakerSelect
+    FlagSet
   },
   data () {
     return {
