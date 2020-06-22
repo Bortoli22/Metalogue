@@ -11,17 +11,17 @@
           </b-col>
           <b-col>
             <b-form-textarea
+              ref="dialogue"
               id="dtext"
               v-model="text"
               placeholder="Dialogue Here..."
               rows="2"
-              max-rows="6"
+              v-bind:formatter="formatter"
               v-on:keyup.enter="createDialogue"
-              v-on:keyup.delete="removeDialogueCheck"
+              v-on:keyup.delete="removeDialogueCheck(1)"
+              v-on:keydown.delete="removeDialogueCheck(0)"
+              v-on:blur="modifyDialogue"
             ></b-form-textarea>
-          </b-col>
-          <b-col class="col-md-auto">
-            <b-button v-on:click="modifyDialogue()">Commit</b-button>
           </b-col>
         </b-row>
       </b-container>
@@ -40,7 +40,8 @@ export default {
     return {
       text: '',
       sentId: '',
-      charname: ''
+      charname: '',
+      recentDeleteWasKeyup: false
     }
   },
   props: {
@@ -53,6 +54,11 @@ export default {
     this.text = this.msg
     this.sentId = this.id
     this.charname = this.name
+  },
+  mounted () {
+    this.$nextTick(function () {
+      this.$refs.dialogue.focus()
+    })
   },
   methods: {
     ...mapActions([
@@ -67,15 +73,30 @@ export default {
       this.sentId = payload.id
       this.charname = payload.name
     },
+    bufferKey () {
+      this.text = ''
+    },
     createDialogue () {
+      this.$refs.dialogue.blur()
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      const created = { id: id, name: 'charx', msg: '', mod: [] }
+      const created = { id: id, name: this.charname, msg: '', mod: [] }
       this.addDialogue(created)
     },
-    removeDialogueCheck () {
+    removeDialogueCheck (keyup) {
       if (this.text === '') {
-        this.remDialogue(this.sentId)
+        if (keyup) {
+          if (this.recentDeleteWasKeyup) {
+            this.remDialogue(this.sentId)
+          } else {
+            this.recentDeleteWasKeyup = true
+          }
+        }
+      } else {
+        this.recentDeleteWasKeyup = false
       }
+    },
+    formatter (value) {
+      return value.replace('\n', '')
     }
   }
 
