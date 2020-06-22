@@ -2,8 +2,11 @@
     <div>
         <b-button-group vertical>
             <b-button-group>
-                <SpeakerSelect />
-                <b-button>E</b-button>
+                <SpeakerSelect @propUpdate="propUpdate"
+                    v-bind:id="parentID"
+                    v-bind:name="charname"
+                />
+                <b-button v-bind:pressed.sync="emitting">E</b-button>
             </b-button-group>
             <b-button-group>
                 <b-dropdown right v-bind:text="selectedMod">
@@ -20,7 +23,7 @@
                         v-on:click="updateMod('Roulette')"
                         >Roulette</b-dropdown-item>
                 </b-dropdown>
-                <b-button>Q</b-button>
+                <b-button v-bind:pressed.sync="queued">Q</b-button>
             </b-button-group>
         </b-button-group>
     </div>
@@ -35,13 +38,30 @@ export default {
   },
   data () {
     return {
+      emitting: false,
+      queued: false,
+      parentID: '',
+      charname: '',
       selectedMod: 'Normal'
     }
   },
+  created () {
+    this.parentID = this.id
+    this.charname = this.name
+  },
   methods: {
+    propUpdate (payload) {
+      this.sentId = payload.id
+      this.charname = payload.name
+      this.$emit('propUpdate', payload)
+    },
     updateMod (mod) {
       this.selectedMod = mod
     }
+  },
+  props: {
+    id: String,
+    name: String
   }
 }
 </script>

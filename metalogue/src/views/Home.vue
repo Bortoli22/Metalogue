@@ -7,6 +7,7 @@
     v-bind:msg="val.msg"
     v-bind:id="val.id"
     v-bind:name="val.name"
+    v-bind:mod="val.mod"
     />
   </div>
 </template>
@@ -32,7 +33,7 @@ export default {
     ]),
     createDialogue () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      const created = { id: id, name: 'charx', msg: 'added' }
+      const created = { id: id, name: 'charx', msg: 'added', mod: [] }
       this.addDialogue(created)
     }
   },

@@ -20,6 +20,12 @@ export default new Vuex.Store({
       if (toModIndex > -1) {
         state.dialogueData[toModIndex].msg = Dialogue.msg
       }
+    },
+    modifySpeaker: (state, Dialogue) => {
+      const toModIndex = state.dialogueData.findIndex(element => element.id === Dialogue.id)
+      if (toModIndex > -1) {
+        state.dialogueData[toModIndex].name = Dialogue.name
+      }
     }
   },
   actions: {
@@ -28,6 +34,9 @@ export default new Vuex.Store({
     },
     modDialogue: ({ commit }, modded) => {
       commit('modifyDialogue', modded)
+    },
+    modSpeaker: ({ commit }, modded) => {
+      commit('modifySpeaker', modded)
     }
   },
   modules: {

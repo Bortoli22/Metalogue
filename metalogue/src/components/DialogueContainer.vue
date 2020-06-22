@@ -3,7 +3,11 @@
       <b-container fluid>
         <b-row>
           <b-col class="col-md-auto">
-            <FlagSet />
+            <FlagSet
+              v-bind:id="sentId"
+              v-bind:name="charname"
+              @propUpdate="propUpdate"
+            />
           </b-col>
           <b-col>
             <b-form-textarea
@@ -33,17 +37,20 @@ export default {
   data () {
     return {
       text: '',
-      sentId: ''
+      sentId: '',
+      charname: ''
     }
   },
   props: {
     id: String,
     msg: String,
-    name: String
+    name: String,
+    mod: Array
   },
   created () {
     this.text = this.msg
     this.sentId = this.id
+    this.charname = this.name
   },
   methods: {
     ...mapActions([
@@ -51,6 +58,10 @@ export default {
     ]),
     modifyDialogue () {
       this.modDialogue({ id: this.sentId, msg: this.text })
+    },
+    propUpdate (payload) {
+      this.sentId = payload.id
+      this.charname = payload.name
     }
   }
 

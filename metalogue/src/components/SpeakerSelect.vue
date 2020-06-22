@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
@@ -19,15 +19,37 @@ export default {
       'characterBank'
     ])
   },
+  created () {
+    this.selectedCharacter = this.name
+    this.parentID = this.id
+  },
   data () {
     return {
-      selectedCharacter: 'None'
+      parentID: '',
+      selectedCharacter: 'None',
+      payload: {}
     }
   },
   methods: {
+    ...mapActions([
+      'modSpeaker'
+    ]),
+    pack () {
+      this.payload = {
+        id: this.parentID,
+        name: this.selectedCharacter
+      }
+    },
     updateCharacter (name) {
       this.selectedCharacter = name
+      this.modSpeaker({ id: this.parentID, name: this.selectedCharacter })
+      this.pack()
+      this.$emit('propUpdate', this.payload)
     }
+  },
+  props: {
+    id: String,
+    name: String
   }
 }
 </script>
