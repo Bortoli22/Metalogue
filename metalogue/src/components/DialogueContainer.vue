@@ -36,6 +36,8 @@
               v-model="eventMsg"
               placeholder="Event Message..."
             ></b-form-input>
+          </b-col>
+          <b-col class="col-md-auto">
             <b-button v-on:click="upNested()">+</b-button>
           </b-col>
         </b-row>
@@ -106,7 +108,7 @@ export default {
     createDialogue () {
       this.$refs.dialogue.blur()
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      const created = { id: id, name: this.charname, msg: '', mod: [] }
+      const created = { id: id, name: this.charname, msg: '', mod: [], nest: 0 }
       this.addDialogue(created)
     },
     removeDialogueCheck (keyup) {
