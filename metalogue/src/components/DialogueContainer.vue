@@ -2,12 +2,19 @@
     <div>
       <b-container fluid>
         <b-row>
+          <b-col
+          class="col-md-auto"
+          v-bind:key="sentId + num"
+          v-for="num in nested">
+            <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
+          </b-col>
           <b-col class="col-md-auto">
             <FlagSet
               v-bind:id="sentId"
               v-bind:name="charname"
               @propUpdate="propUpdate"
               @updateEvent="updateEvent"
+              @updateMod="updateMod"
             />
           </b-col>
           <b-col>
@@ -29,6 +36,7 @@
               v-model="eventMsg"
               placeholder="Event Message..."
             ></b-form-input>
+            <b-button v-on:click="upNested()">+</b-button>
           </b-col>
         </b-row>
       </b-container>
@@ -50,19 +58,29 @@ export default {
       charname: '',
       recentDeleteWasKeyup: false,
       eventFlag: false,
-      eventMsg: ''
+      eventMsg: '',
+      optionsFlag: false,
+      nested: 0,
+      linkto: [],
+      linkfrom: []
     }
   },
   props: {
     id: String,
     msg: String,
     name: String,
-    mod: Array
+    mod: Array,
+    nestProp: Number,
+    linktoProp: Array,
+    linkfromProp: Array
   },
   created () {
     this.text = this.msg
     this.sentId = this.id
     this.charname = this.name
+    this.nested = this.nestProp
+    this.linkto = this.linktoProp
+    this.linkfrom = this.linkfromProp
   },
   mounted () {
     this.$nextTick(function () {
@@ -107,8 +125,18 @@ export default {
     formatter (value) {
       return value.replace('\n', '')
     },
+    upNested () {
+      this.nested += 1
+    },
     updateEvent (payload) {
       this.eventFlag = payload.emitting
+    },
+    updateMod (payload) {
+      if (payload.mod === 'Option') {
+        this.optionsFlag = true
+      } else {
+        this.optionsFlag = false
+      }
     }
   }
 

@@ -7,6 +7,7 @@
     v-bind:id="val.id"
     v-bind:name="val.name"
     v-bind:mod="val.mod"
+    v-bind:nestProp="val.nest"
     />
     <b-button v-on:click="createDialogue()">+</b-button>
   </div>

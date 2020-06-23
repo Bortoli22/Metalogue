@@ -45,7 +45,8 @@ export default {
       queued: false,
       parentID: '',
       charname: '',
-      selectedMod: 'Normal'
+      selectedMod: 'Normal',
+      payload: {}
     }
   },
   created () {
@@ -59,11 +60,13 @@ export default {
       this.$emit('propUpdate', payload)
     },
     updateEvent () {
-      const payload = { emitting: this.emitting }
-      this.$emit('updateEvent', payload)
+      this.payload = { emitting: this.emitting }
+      this.$emit('updateEvent', this.payload)
     },
     updateMod (mod) {
       this.selectedMod = mod
+      this.payload = { mod: this.selectedMod }
+      this.$emit('updateMod', this.payload)
     }
   },
   props: {
