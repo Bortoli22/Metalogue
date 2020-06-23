@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-dropdown v-bind:text="selectedCharacter">
+    <b-dropdown split v-on:click="cycleCharacter()" v-bind:text="selectedCharacter">
       <b-dropdown-item-button
       v-for="character in characterBank"
       v-bind:key="character.spID"
@@ -34,6 +34,15 @@ export default {
     ...mapActions([
       'modSpeaker'
     ]),
+    cycleCharacter () {
+      const cIndex = this.characterBank.findIndex(speaker => speaker.spName === this.selectedCharacter)
+      console.log(cIndex)
+      if (!(cIndex === this.characterBank.length - 1)) {
+        this.updateCharacter(this.characterBank[cIndex + 1].spName)
+      } else {
+        this.updateCharacter(this.characterBank[0].spName)
+      }
+    },
     pack () {
       this.payload = {
         id: this.parentID,

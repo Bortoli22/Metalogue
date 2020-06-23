@@ -7,6 +7,7 @@
               v-bind:id="sentId"
               v-bind:name="charname"
               @propUpdate="propUpdate"
+              @updateEvent="updateEvent"
             />
           </b-col>
           <b-col>
@@ -22,6 +23,12 @@
               v-on:keydown.delete="removeDialogueCheck(0)"
               v-on:blur="modifyDialogue"
             ></b-form-textarea>
+            <b-form-input
+              v-if="eventFlag"
+              id="event-message"
+              v-model="eventMsg"
+              placeholder="Event Message..."
+            ></b-form-input>
           </b-col>
         </b-row>
       </b-container>
@@ -41,7 +48,9 @@ export default {
       text: '',
       sentId: '',
       charname: '',
-      recentDeleteWasKeyup: false
+      recentDeleteWasKeyup: false,
+      eventFlag: false,
+      eventMsg: ''
     }
   },
   props: {
@@ -97,6 +106,9 @@ export default {
     },
     formatter (value) {
       return value.replace('\n', '')
+    },
+    updateEvent (payload) {
+      this.eventFlag = payload.emitting
     }
   }
 

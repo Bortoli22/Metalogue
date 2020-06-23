@@ -6,7 +6,10 @@
                     v-bind:id="parentID"
                     v-bind:name="charname"
                 />
-                <b-button v-bind:pressed.sync="emitting">E</b-button>
+                <b-button
+                  v-bind:pressed.sync="emitting"
+                  v-on:click="updateEvent()"
+                  >E</b-button>
             </b-button-group>
             <b-button-group>
                 <b-dropdown right v-bind:text="selectedMod">
@@ -54,6 +57,10 @@ export default {
       this.sentId = payload.id
       this.charname = payload.name
       this.$emit('propUpdate', payload)
+    },
+    updateEvent () {
+      const payload = { emitting: this.emitting }
+      this.$emit('updateEvent', payload)
     },
     updateMod (mod) {
       this.selectedMod = mod
