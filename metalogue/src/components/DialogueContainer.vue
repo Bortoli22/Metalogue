@@ -38,9 +38,6 @@
               placeholder="Event Message..."
             ></b-form-input>
           </b-col>
-          <b-col class="col-md-auto">
-            <b-button v-on:click="upNested()">+</b-button>
-          </b-col>
         </b-row>
       </b-container>
     </div>
@@ -66,14 +63,14 @@ export default {
       parentId: '',
       charname: '',
       mod: [],
-      recentDeleteWasKeyup: false,
-      eventFlag: false,
       eventMsg: '',
+      nested: 0,
+      modStarter: 'Normal',
+      keyupFlag: false,
+      eventFlag: false,
       optionsFlag: false,
       responseFlag: false,
-      rouletteFlag: false,
-      nested: 0,
-      modStarter: 'Normal'
+      rouletteFlag: false
     }
   },
   props: {
@@ -92,6 +89,7 @@ export default {
     this.parentId = this.parentProp
     this.mod = this.modProp
     var modifier
+    // TODO: Delete Console Log
     console.log(this.id)
     for (modifier of this.mod) {
       var sendMod = { mod: modifier.flag, updateState: false }
@@ -110,20 +108,6 @@ export default {
       'addDialogue',
       'remDialogue'
     ]),
-    modifyDialogue () {
-      this.modDialogue({
-        id: this.sentId,
-        name: this.charname,
-        msg: this.text,
-        mod: this.mod,
-        parent: this.parentId,
-        nest: this.nested
-      })
-    },
-    propUpdate (payload) {
-      this.sentId = payload.id
-      this.charname = payload.name
-    },
     bufferKey () {
       this.text = ''
     },
@@ -147,18 +131,34 @@ export default {
       const toAdd = { id: id, name: this.charname, msg: '', mod: computedMod, parent: computedParent, nest: computedNest }
       return toAdd
     },
+    formatter (value) {
+      return value.replace('\n', '')
+    },
+    modifyDialogue () {
+      this.modDialogue({
+        id: this.sentId,
+        name: this.charname,
+        msg: this.text,
+        mod: this.mod,
+        parent: this.parentId,
+        nest: this.nested
+      })
+    },
+    propUpdate (payload) {
+      this.sentId = payload.id
+      this.charname = payload.name
+    },
     removeDialogueCheck (keyup) {
       if (this.text === '') {
         if (keyup) {
-          if (this.recentDeleteWasKeyup) {
-            this.remDialogue(this.sentId)
-          } else {
-            this.recentDeleteWasKeyup = true
+          if (this.keyupFlag) {
             this.unNest()
+          } else {
+            this.keyupFlag = true
           }
         }
       } else {
-        this.recentDeleteWasKeyup = false
+        this.keyupFlag = false
       }
     },
     spliceMod (modName) {
@@ -167,14 +167,14 @@ export default {
         this.mod.splice(cIndex, 1)
       }
     },
-    formatter (value) {
-      return value.replace('\n', '')
-    },
     unNest () {
+      if (this.nested <= 0) {
+        this.remDialogue(this.sentId)
+      }
+      if (this.nested > 0) {
+        this.nested--
+      }
       return null
-    },
-    upNested () {
-      this.nested += 1
     },
     updateEvent (payload) {
       this.eventFlag = payload.emitting
