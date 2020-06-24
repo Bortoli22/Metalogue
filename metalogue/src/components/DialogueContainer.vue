@@ -12,6 +12,7 @@
             <FlagSet
               v-bind:id="sentId"
               v-bind:name="charname"
+              v-bind:starter="modStarter"
               @propUpdate="propUpdate"
               @updateEvent="updateEvent"
               @updateMod="updateMod"
@@ -57,6 +58,7 @@ export default {
     return {
       text: '',
       sentId: '',
+      parentId: '',
       charname: '',
       recentDeleteWasKeyup: false,
       eventFlag: false,
@@ -64,7 +66,8 @@ export default {
       optionsFlag: false,
       nested: 0,
       linkto: [],
-      linkfrom: []
+      linkfrom: [],
+      modStarter: 'Normal'
     }
   },
   props: {
@@ -73,16 +76,32 @@ export default {
     name: String,
     mod: Array,
     nestProp: Number,
-    linktoProp: Array,
-    linkfromProp: Array
+    parentProp: String
   },
   created () {
     this.text = this.msg
     this.sentId = this.id
     this.charname = this.name
     this.nested = this.nestProp
-    this.linkto = this.linktoProp
-    this.linkfrom = this.linkfromProp
+    this.parentId = this.parentProp
+    var modifier
+    var arg
+    console.log(this.id)
+    for (modifier of this.mod) {
+      console.log(modifier.flag)
+      console.log(modifier.args)
+      switch (modifier.flag) {
+        case 'Option':
+          this.optionsFlag = true
+          this.modStarter = 'Option'
+          for (arg of modifier.args) {
+            this.linkto.push(arg)
+          }
+          break
+        default:
+          break
+      }
+    }
   },
   mounted () {
     this.$nextTick(function () {

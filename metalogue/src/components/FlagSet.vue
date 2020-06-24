@@ -52,6 +52,9 @@ export default {
   created () {
     this.parentID = this.id
     this.charname = this.name
+    if (this.starter !== 'Normal') {
+      this.updateMod(this.starter)
+    }
   },
   methods: {
     propUpdate (payload) {
@@ -71,7 +74,8 @@ export default {
   },
   props: {
     id: String,
-    name: String
+    name: String,
+    starter: String
   }
 }
 </script>

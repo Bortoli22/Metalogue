@@ -8,6 +8,7 @@
     v-bind:name="val.name"
     v-bind:mod="val.mod"
     v-bind:nestProp="val.nest"
+    v-bind:parentProp="val.parent"
     />
     <b-button v-on:click="createDialogue()">+</b-button>
   </div>
@@ -34,7 +35,7 @@ export default {
     ]),
     createDialogue () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      const created = { id: id, name: 'charx', msg: '', mod: [] }
+      const created = { id: id, name: 'charx', msg: '', mod: [], nest: 0 }
       this.addDialogue(created)
     }
   },
