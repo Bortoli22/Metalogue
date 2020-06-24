@@ -10,7 +10,7 @@ export default [
   {
     id: '22jJi',
     name: 'Listener',
-    msg: 'This is an option',
+    msg: 'This is a question that has options',
     mod: [{ flag: 'Option', args: ['2j4kl', '235d4'] }],
     parent: '',
     nest: 0

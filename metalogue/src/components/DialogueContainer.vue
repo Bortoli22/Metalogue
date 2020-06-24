@@ -86,10 +86,10 @@ export default {
     this.parentId = this.parentProp
     var modifier
     var arg
-    console.log(this.id)
+    // console.log(this.id)
     for (modifier of this.mod) {
-      console.log(modifier.flag)
-      console.log(modifier.args)
+      // console.log(modifier.flag)
+      // console.log(modifier.args)
       switch (modifier.flag) {
         case 'Option':
           this.optionsFlag = true
@@ -126,9 +126,19 @@ export default {
     },
     createDialogue () {
       this.$refs.dialogue.blur()
-      const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      const created = { id: id, name: this.charname, msg: '', mod: [], nest: 0 }
+      const created = this.createDialoguePackaging()
       this.addDialogue(created)
+    },
+    createDialoguePackaging () {
+      const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
+      var computedNest = this.nested
+      var computedParent = ''
+      if (this.optionsFlag) {
+        computedNest++
+        computedParent = this.sentId
+      }
+      const toAdd = { id: id, name: this.charname, msg: '', mod: [], parent: computedParent, nest: computedNest }
+      return toAdd
     },
     removeDialogueCheck (keyup) {
       if (this.text === '') {
