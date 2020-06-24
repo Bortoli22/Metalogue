@@ -173,6 +173,7 @@ export default {
       }
       if (this.nested > 0) {
         this.nested--
+        // TODO: unNest functionality
       }
       return null
     },
@@ -187,7 +188,9 @@ export default {
           this.rouletteFlag = false
           this.modStarter = 'Option'
           if (payload.updateState) {
-            this.mod.push({ flag: 'Option', args: [] })
+            if (this.mod.findIndex(opt => opt.flag === 'Option') === -1) {
+              this.mod.push({ flag: 'Option', args: [] })
+            }
             this.spliceMod('Roulette')
           }
           break
@@ -199,7 +202,9 @@ export default {
           this.rouletteFlag = true
           this.modStarter = 'Roulette'
           if (payload.updateState) {
-            this.mod.push({ flag: 'Roulette', args: [] })
+            if (this.mod.findIndex(opt => opt.flag === 'Roulette') === -1) {
+              this.mod.push({ flag: 'Roulette', args: [] })
+            }
             this.spliceMod('Option')
           }
           break
