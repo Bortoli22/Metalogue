@@ -6,7 +6,7 @@
     v-bind:msg="val.msg"
     v-bind:id="val.id"
     v-bind:name="val.name"
-    v-bind:mod="val.mod"
+    v-bind:modProp="val.mod"
     v-bind:nestProp="val.nest"
     v-bind:parentProp="val.parent"
     />

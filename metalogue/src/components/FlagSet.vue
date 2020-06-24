@@ -68,7 +68,7 @@ export default {
     },
     updateMod (mod) {
       this.selectedMod = mod
-      this.payload = { mod: this.selectedMod }
+      this.payload = { mod: this.selectedMod, updateState: true }
       this.$emit('updateMod', this.payload)
     }
   },

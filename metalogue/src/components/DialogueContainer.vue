@@ -65,14 +65,14 @@ export default {
       sentId: '',
       parentId: '',
       charname: '',
+      mod: [],
       recentDeleteWasKeyup: false,
       eventFlag: false,
       eventMsg: '',
       optionsFlag: false,
       responseFlag: false,
+      rouletteFlag: false,
       nested: 0,
-      linkto: [],
-      linkfrom: [],
       modStarter: 'Normal'
     }
   },
@@ -80,7 +80,7 @@ export default {
     id: String,
     msg: String,
     name: String,
-    mod: Array,
+    modProp: Array,
     nestProp: Number,
     parentProp: String
   },
@@ -90,26 +90,13 @@ export default {
     this.charname = this.name
     this.nested = this.nestProp
     this.parentId = this.parentProp
+    this.mod = this.modProp
     var modifier
-    var arg
-    // console.log(this.id)
+    console.log(this.id)
     for (modifier of this.mod) {
-      // console.log(modifier.flag)
-      // console.log(modifier.args)
-      switch (modifier.flag) {
-        case 'Option':
-          this.optionsFlag = true
-          this.modStarter = 'Option'
-          for (arg of modifier.args) {
-            this.linkto.push(arg)
-          }
-          break
-        case 'Response':
-          this.responseFlag = true
-          break
-        default:
-          break
-      }
+      var sendMod = { mod: modifier.flag, updateState: false }
+      console.log(sendMod)
+      this.updateMod(sendMod)
     }
   },
   mounted () {
@@ -124,7 +111,14 @@ export default {
       'remDialogue'
     ]),
     modifyDialogue () {
-      this.modDialogue({ id: this.sentId, msg: this.text })
+      this.modDialogue({
+        id: this.sentId,
+        name: this.charname,
+        msg: this.text,
+        mod: this.mod,
+        parent: this.parentId,
+        nest: this.nested
+      })
     },
     propUpdate (payload) {
       this.sentId = payload.id
@@ -167,6 +161,12 @@ export default {
         this.recentDeleteWasKeyup = false
       }
     },
+    spliceMod (modName) {
+      const cIndex = this.mod.findIndex(opt => opt.flag === modName)
+      if (cIndex >= 0) {
+        this.mod.splice(cIndex, 1)
+      }
+    },
     formatter (value) {
       return value.replace('\n', '')
     },
@@ -180,10 +180,40 @@ export default {
       this.eventFlag = payload.emitting
     },
     updateMod (payload) {
-      if (payload.mod === 'Option') {
-        this.optionsFlag = true
-      } else {
-        this.optionsFlag = false
+      console.log('Payload: ' + payload)
+      switch (payload.mod) {
+        case 'Option':
+          this.optionsFlag = true
+          this.rouletteFlag = false
+          this.modStarter = 'Option'
+          if (payload.updateState) {
+            this.mod.push({ flag: 'Option', args: [] })
+            this.spliceMod('Roulette')
+          }
+          break
+        case 'Response':
+          this.responseFlag = true
+          break
+        case 'Roulette':
+          this.optionsFlag = false
+          this.rouletteFlag = true
+          this.modStarter = 'Roulette'
+          if (payload.updateState) {
+            this.mod.push({ flag: 'Roulette', args: [] })
+            this.spliceMod('Option')
+          }
+          break
+        default:
+          this.optionsFlag = false
+          this.rouletteFlag = false
+          if (payload.updateState) {
+            this.spliceMod('Roulette')
+            this.spliceMod('Option')
+          }
+          break
+      }
+      if (payload.updateState) {
+        this.modifyDialogue()
       }
     }
   }

@@ -36,7 +36,6 @@ export default {
     ]),
     cycleCharacter () {
       const cIndex = this.characterBank.findIndex(speaker => speaker.spName === this.selectedCharacter)
-      console.log(cIndex)
       if (!(cIndex === this.characterBank.length - 1)) {
         this.updateCharacter(this.characterBank[cIndex + 1].spName)
       } else {
