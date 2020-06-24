@@ -47,12 +47,17 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 import FlagSet from '@/components/FlagSet.vue'
 
 export default {
   components: {
     FlagSet
+  },
+  computed: {
+    ...mapState([
+      'dialogueData'
+    ])
   },
   data () {
     return {
@@ -64,6 +69,7 @@ export default {
       eventFlag: false,
       eventMsg: '',
       optionsFlag: false,
+      responseFlag: false,
       nested: 0,
       linkto: [],
       linkfrom: [],
@@ -97,6 +103,9 @@ export default {
           for (arg of modifier.args) {
             this.linkto.push(arg)
           }
+          break
+        case 'Response':
+          this.responseFlag = true
           break
         default:
           break
@@ -133,11 +142,15 @@ export default {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       var computedNest = this.nested
       var computedParent = ''
-      if (this.optionsFlag) {
+      var computedMod = []
+      if (this.optionsFlag || this.responseFlag) {
         computedNest++
         computedParent = this.sentId
+        if (this.optionsFlag) {
+          computedMod.push({ flag: 'Response', args: [] })
+        }
       }
-      const toAdd = { id: id, name: this.charname, msg: '', mod: [], parent: computedParent, nest: computedNest }
+      const toAdd = { id: id, name: this.charname, msg: '', mod: computedMod, parent: computedParent, nest: computedNest }
       return toAdd
     },
     removeDialogueCheck (keyup) {
@@ -147,6 +160,7 @@ export default {
             this.remDialogue(this.sentId)
           } else {
             this.recentDeleteWasKeyup = true
+            this.unNest()
           }
         }
       } else {
@@ -155,6 +169,9 @@ export default {
     },
     formatter (value) {
       return value.replace('\n', '')
+    },
+    unNest () {
+      return null
     },
     upNested () {
       this.nested += 1
