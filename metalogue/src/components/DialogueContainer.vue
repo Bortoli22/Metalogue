@@ -34,6 +34,7 @@
               id="event-message"
               v-model="eventMsg"
               placeholder="Event Message..."
+              v-on:blur="eventBlur"
             ></b-form-input>
             <FlagSet
               align="left"
@@ -41,8 +42,8 @@
               v-bind:id="sentId"
               v-bind:name="charname"
               v-bind:starter="modStarter"
+              v-bind:eventFlag="eventFlag"
               @propUpdate="propUpdate"
-              @updateEvent="updateEvent"
               @updateMod="updateMod"
             />
           </b-col>
@@ -142,6 +143,10 @@ export default {
       const toAdd = { id: id, name: this.charname, msg: '', mod: computedMod, parent: computedParent, nest: computedNest }
       return toAdd
     },
+    eventBlur () {
+      console.log('got to eventBlur in DC, emitting: ' + this.eventFlag)
+      this.updateMod({ mod: 'Event', emitting: this.eventFlag, updateState: true })
+    },
     formatter (value) {
       return value.replace('\n', '')
     },
@@ -191,12 +196,29 @@ export default {
       }
       return null
     },
-    updateEvent (payload) {
-      this.eventFlag = payload.emitting
-    },
     updateMod (payload) {
-      console.log('Payload: ' + payload)
+      // console.log('Payload: ' + payload)
       switch (payload.mod) {
+        case 'Event':
+          this.eventFlag = payload.emitting
+          if (!this.eventFlag) {
+            this.eventMsg = ''
+          }
+          if (payload.updateState) {
+            if (this.eventFlag) {
+              const cIndex = this.mod.findIndex(opt => opt.flag === 'Event')
+              if (cIndex === -1) {
+                console.log('sending eventmsg: ' + this.eventMsg)
+                this.mod.push({ flag: 'Event', args: [this.eventMsg] })
+              } else {
+                this.mod[cIndex].args = this.eventMsg
+              }
+            } else {
+              this.spliceMod('Event')
+            }
+          }
+          console.log('got to updateMod in DC, emitting: ' + payload.emitting + ' state: ' + payload.updateState)
+          break
         case 'Option':
           this.optionsFlag = true
           this.rouletteFlag = false

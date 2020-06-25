@@ -3,7 +3,7 @@
         <b-button-group vertical>
             <b-button-group>
                 <SpeakerSelect @propUpdate="propUpdate"
-                    v-bind:id="parentID"
+                    v-bind:id="id"
                     v-bind:name="charname"
                 />
                 <b-dropdown right v-bind:text="selectedMod">
@@ -22,7 +22,7 @@
                 </b-dropdown>
                 <b-button
                   v-bind:pressed.sync="emitting"
-                  v-on:click="updateEvent()"
+                  v-on:click="updateMod('Event')"
                 >Event</b-button>
                 <b-button v-bind:pressed.sync="queued">Queue</b-button>
             </b-button-group>
@@ -41,39 +41,44 @@ export default {
     return {
       emitting: false,
       queued: false,
-      parentID: '',
       charname: '',
       selectedMod: 'Normal',
       payload: {}
     }
   },
   created () {
-    this.parentID = this.id
     this.charname = this.name
     if (this.starter !== 'Normal') {
       this.updateMod(this.starter)
     }
+    if (this.eventFlag) {
+      this.emitting = true
+      console.log('started as true in FS')
+    }
   },
   methods: {
     propUpdate (payload) {
-      this.sentId = payload.id
       this.charname = payload.name
       this.$emit('propUpdate', payload)
     },
-    updateEvent () {
-      this.payload = { emitting: this.emitting }
-      this.$emit('updateEvent', this.payload)
-    },
     updateMod (mod) {
-      this.selectedMod = mod
-      this.payload = { mod: this.selectedMod, updateState: true }
+      var modToSend = ''
+      if (mod === 'Event') {
+        console.log('got to updateMod in FS, emitting is ' + this.emitting)
+        modToSend = 'Event'
+      } else {
+        this.selectedMod = mod
+        modToSend = mod
+      }
+      this.payload = { mod: modToSend, updateState: true, emitting: this.emitting }
       this.$emit('updateMod', this.payload)
     }
   },
   props: {
     id: String,
     name: String,
-    starter: String
+    starter: String,
+    eventFlag: Boolean
   }
 }
 </script>
