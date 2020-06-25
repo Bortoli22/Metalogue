@@ -82,8 +82,7 @@ export default {
       eventFlag: false,
       optionsFlag: false,
       responseFlag: false,
-      rouletteFlag: false,
-      focusFlag: false
+      rouletteFlag: false
     }
   },
   props: {
