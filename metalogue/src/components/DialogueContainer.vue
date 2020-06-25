@@ -9,7 +9,15 @@
             <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
           </b-col>
           <b-col class="col-md-auto">
+            <FlagSetSimple
+              v-bind:id="sentId"
+              v-bind:name="charname"
+              v-bind:starter="modStarter"
+              v-bind:modProp="mod"
+              @propUpdate="propUpdate"
+            />
             <FlagSet
+              v-if="focusFlag"
               v-bind:id="sentId"
               v-bind:name="charname"
               v-bind:starter="modStarter"
@@ -29,7 +37,8 @@
               v-on:keyup.enter="createDialogue"
               v-on:keyup.delete="removeDialogueCheck(1)"
               v-on:keydown.delete="removeDialogueCheck(0)"
-              v-on:blur="modifyDialogue"
+              v-on:blur="onBlur"
+              v-on:focus="onFocus"
             ></b-form-textarea>
             <b-form-input
               v-if="eventFlag"
@@ -46,10 +55,12 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import FlagSet from '@/components/FlagSet.vue'
+import FlagSetSimple from '@/components/FlagSetSimple.vue'
 
 export default {
   components: {
-    FlagSet
+    FlagSet,
+    FlagSetSimple
   },
   computed: {
     ...mapState([
@@ -70,7 +81,8 @@ export default {
       eventFlag: false,
       optionsFlag: false,
       responseFlag: false,
-      rouletteFlag: false
+      rouletteFlag: false,
+      focusFlag: false
     }
   },
   props: {
@@ -100,6 +112,7 @@ export default {
   mounted () {
     this.$nextTick(function () {
       this.$refs.dialogue.focus()
+      this.focusFlag = true
     })
   },
   methods: {
@@ -143,6 +156,13 @@ export default {
         parent: this.parentId,
         nest: this.nested
       })
+    },
+    onBlur () {
+      this.focusFlag = false
+      this.modifyDialogue()
+    },
+    onFocus () {
+      this.focusFlag = true
     },
     propUpdate (payload) {
       this.sentId = payload.id
