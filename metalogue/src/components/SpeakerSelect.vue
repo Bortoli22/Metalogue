@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-dropdown split v-on:click="cycleCharacter()" v-bind:text="selectedCharacter">
+    <b-dropdown variant="info" split v-on:click="cycleCharacter()" v-bind:text="selectedCharacter">
       <b-dropdown-item-button
       v-for="character in characterBank"
       v-bind:key="character.spID"

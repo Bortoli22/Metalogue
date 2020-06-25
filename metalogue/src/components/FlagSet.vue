@@ -1,12 +1,11 @@
 <template>
     <div>
-        <b-button-group vertical>
             <b-button-group>
                 <SpeakerSelect @propUpdate="propUpdate"
                     v-bind:id="id"
                     v-bind:name="charname"
                 />
-                <b-dropdown right v-bind:text="selectedMod">
+                <b-dropdown variant="info" right v-bind:text="selectedMod">
                     <b-dropdown-item
                         key="Normal"
                         v-on:click="updateMod('Normal')"
@@ -20,13 +19,12 @@
                         v-on:click="updateMod('Roulette')"
                         >Roulette</b-dropdown-item>
                 </b-dropdown>
-                <b-button
+                <b-button variant="info"
                   v-bind:pressed.sync="emitting"
                   v-on:click="updateMod('Event')"
                 >Event</b-button>
-                <b-button v-bind:pressed.sync="queued">Queue</b-button>
+                <b-button variant="info" v-bind:pressed.sync="queued">Queue</b-button>
             </b-button-group>
-        </b-button-group>
     </div>
 </template>
 
