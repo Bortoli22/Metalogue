@@ -53,7 +53,6 @@ export default {
     }
     if (this.eventFlag) {
       this.emitting = true
-      console.log('started as true in FS')
     }
   },
   methods: {
@@ -64,13 +63,12 @@ export default {
     updateMod (mod) {
       var modToSend = ''
       if (mod === 'Event') {
-        console.log('got to updateMod in FS, emitting is ' + this.emitting)
         modToSend = 'Event'
       } else {
         this.selectedMod = mod
         modToSend = mod
       }
-      this.payload = { mod: modToSend, updateState: true, emitting: this.emitting }
+      this.payload = { mod: modToSend, updateState: true, emitting: this.emitting, created: false }
       this.$emit('updateMod', this.payload)
     }
   },

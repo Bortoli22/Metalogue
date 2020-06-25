@@ -31,10 +31,11 @@
             ></b-form-textarea>
             <b-form-input
               v-if="eventFlag"
-              id="event-message"
+              v-bind:key="sentId"
               v-model="eventMsg"
               placeholder="Event Message..."
               v-on:blur="eventBlur"
+              v-on:keyup.enter="createDialogue"
             ></b-form-input>
             <FlagSet
               align="left"
@@ -101,11 +102,16 @@ export default {
     this.parentId = this.parentProp
     this.mod = this.modProp
     var modifier
-    // TODO: Delete Console Log
     console.log(this.id)
     for (modifier of this.mod) {
-      var sendMod = { mod: modifier.flag, updateState: false }
-      console.log(sendMod)
+      var sendMod = {
+        mod: modifier.flag,
+        updateState: false,
+        emitting: true,
+        args: modifier.args,
+        created: true
+      }
+      // If an event wasn't actually emitting, it wouldn't be in this mod loop, hence the true
       this.updateMod(sendMod)
     }
   },
@@ -144,8 +150,7 @@ export default {
       return toAdd
     },
     eventBlur () {
-      console.log('got to eventBlur in DC, emitting: ' + this.eventFlag)
-      this.updateMod({ mod: 'Event', emitting: this.eventFlag, updateState: true })
+      this.updateMod({ mod: 'Event', emitting: this.eventFlag, updateState: true, created: false })
     },
     formatter (value) {
       return value.replace('\n', '')
@@ -204,11 +209,13 @@ export default {
           if (!this.eventFlag) {
             this.eventMsg = ''
           }
+          if (payload.created) {
+            this.eventMsg = payload.args
+          }
           if (payload.updateState) {
             if (this.eventFlag) {
               const cIndex = this.mod.findIndex(opt => opt.flag === 'Event')
               if (cIndex === -1) {
-                console.log('sending eventmsg: ' + this.eventMsg)
                 this.mod.push({ flag: 'Event', args: [this.eventMsg] })
               } else {
                 this.mod[cIndex].args = this.eventMsg
@@ -217,7 +224,6 @@ export default {
               this.spliceMod('Event')
             }
           }
-          console.log('got to updateMod in DC, emitting: ' + payload.emitting + ' state: ' + payload.updateState)
           break
         case 'Option':
           this.optionsFlag = true
