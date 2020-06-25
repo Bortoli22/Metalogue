@@ -12,9 +12,7 @@
             <FlagSetSimple
               v-bind:id="sentId"
               v-bind:name="charname"
-              v-bind:starter="modStarter"
               v-bind:modProp="mod"
-              @propUpdate="propUpdate"
             />
           </b-col>
           <b-col>

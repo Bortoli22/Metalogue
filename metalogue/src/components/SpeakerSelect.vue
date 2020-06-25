@@ -21,11 +21,9 @@ export default {
   },
   created () {
     this.selectedCharacter = this.name
-    this.parentID = this.id
   },
   data () {
     return {
-      parentID: '',
       selectedCharacter: 'None',
       payload: {}
     }
@@ -44,13 +42,13 @@ export default {
     },
     pack () {
       this.payload = {
-        id: this.parentID,
+        id: this.id,
         name: this.selectedCharacter
       }
     },
     updateCharacter (name) {
       this.selectedCharacter = name
-      this.modSpeaker({ id: this.parentID, name: this.selectedCharacter })
+      this.modSpeaker({ id: this.id, name: this.selectedCharacter })
       this.pack()
       this.$emit('propUpdate', this.payload)
     }
