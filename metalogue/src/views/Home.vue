@@ -9,6 +9,8 @@
     v-bind:modProp="val.mod"
     v-bind:nestProp="val.nest"
     v-bind:parentProp="val.parent"
+    v-bind:activeContainerID="activeContainerID"
+    @setActiveContainerID="setActiveContainerID"
     />
     <b-button v-on:click="createDialogue()">+</b-button>
   </div>
@@ -37,10 +39,14 @@ export default {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       const created = { id: id, name: 'charx', msg: '', mod: [], nest: 0 }
       this.addDialogue(created)
+    },
+    setActiveContainerID (payload) {
+      this.activeContainerID = payload
     }
   },
   data () {
     return {
+      activeContainerID: 'none'
     }
   }
 }

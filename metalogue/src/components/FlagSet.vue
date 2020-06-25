@@ -6,12 +6,6 @@
                     v-bind:id="parentID"
                     v-bind:name="charname"
                 />
-                <b-button
-                  v-bind:pressed.sync="emitting"
-                  v-on:click="updateEvent()"
-                  >E</b-button>
-            </b-button-group>
-            <b-button-group>
                 <b-dropdown right v-bind:text="selectedMod">
                     <b-dropdown-item
                         key="Normal"
@@ -26,7 +20,11 @@
                         v-on:click="updateMod('Roulette')"
                         >Roulette</b-dropdown-item>
                 </b-dropdown>
-                <b-button v-bind:pressed.sync="queued">Q</b-button>
+                <b-button
+                  v-bind:pressed.sync="emitting"
+                  v-on:click="updateEvent()"
+                >Event</b-button>
+                <b-button v-bind:pressed.sync="queued">Queue</b-button>
             </b-button-group>
         </b-button-group>
     </div>

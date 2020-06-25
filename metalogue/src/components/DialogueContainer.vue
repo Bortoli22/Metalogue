@@ -16,15 +16,6 @@
               v-bind:modProp="mod"
               @propUpdate="propUpdate"
             />
-            <FlagSet
-              v-if="focusFlag"
-              v-bind:id="sentId"
-              v-bind:name="charname"
-              v-bind:starter="modStarter"
-              @propUpdate="propUpdate"
-              @updateEvent="updateEvent"
-              @updateMod="updateMod"
-            />
           </b-col>
           <b-col>
             <b-form-textarea
@@ -37,8 +28,8 @@
               v-on:keyup.enter="createDialogue"
               v-on:keyup.delete="removeDialogueCheck(1)"
               v-on:keydown.delete="removeDialogueCheck(0)"
-              v-on:blur="onBlur"
-              v-on:focus="onFocus"
+              v-on:blur="modifyDialogue"
+              v-on:focus="setActiveContainerID"
             ></b-form-textarea>
             <b-form-input
               v-if="eventFlag"
@@ -46,6 +37,16 @@
               v-model="eventMsg"
               placeholder="Event Message..."
             ></b-form-input>
+            <FlagSet
+              align="left"
+              v-if="activeContainerID === sentId"
+              v-bind:id="sentId"
+              v-bind:name="charname"
+              v-bind:starter="modStarter"
+              @propUpdate="propUpdate"
+              @updateEvent="updateEvent"
+              @updateMod="updateMod"
+            />
           </b-col>
         </b-row>
       </b-container>
@@ -91,7 +92,8 @@ export default {
     name: String,
     modProp: Array,
     nestProp: Number,
-    parentProp: String
+    parentProp: String,
+    activeContainerID: String
   },
   created () {
     this.text = this.msg
@@ -112,7 +114,6 @@ export default {
   mounted () {
     this.$nextTick(function () {
       this.$refs.dialogue.focus()
-      this.focusFlag = true
     })
   },
   methods: {
@@ -157,13 +158,6 @@ export default {
         nest: this.nested
       })
     },
-    onBlur () {
-      this.focusFlag = false
-      this.modifyDialogue()
-    },
-    onFocus () {
-      this.focusFlag = true
-    },
     propUpdate (payload) {
       this.sentId = payload.id
       this.charname = payload.name
@@ -180,6 +174,9 @@ export default {
       } else {
         this.keyupFlag = false
       }
+    },
+    setActiveContainerID () {
+      this.$emit('setActiveContainerID', this.sentId)
     },
     spliceMod (modName) {
       const cIndex = this.mod.findIndex(opt => opt.flag === modName)
