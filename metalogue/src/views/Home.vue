@@ -1,5 +1,7 @@
 <template>
   <div class="home">
+    <SpeakerCreate align="left"/>
+    <br>
     <DialogueContainer
     v-for="val in dialogueData"
     v-bind:key="val.id"
@@ -19,12 +21,14 @@
 <script>
 // @ is an alias to /src
 import DialogueContainer from '@/components/DialogueContainer.vue'
+import SpeakerCreate from '@/components/SpeakerCreate.vue'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Home',
   components: {
-    DialogueContainer
+    DialogueContainer,
+    SpeakerCreate
   },
   computed: {
     ...mapState([

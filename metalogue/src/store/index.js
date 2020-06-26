@@ -32,6 +32,9 @@ export default new Vuex.Store({
       if (toModIndex > -1) {
         state.dialogueData.splice(toModIndex, 1)
       }
+    },
+    appendSpeaker: (state, Speaker) => {
+      state.characterBank.push(Speaker)
     }
   },
   actions: {
@@ -46,6 +49,9 @@ export default new Vuex.Store({
     },
     remDialogue: ({ commit }, removed) => {
       commit('removeDialogue', removed)
+    },
+    addSpeaker: ({ commit }, added) => {
+      commit('appendSpeaker', added)
     }
   },
   modules: {

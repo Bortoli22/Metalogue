@@ -15,6 +15,12 @@
             nest: {{element.nest}} <br>
             ----------------------------------------------------------
         </p>
+        <p align="left" v-for="element in characterBank"
+            v-bind:key="element.spID">
+            spID: {{element.spID}} <br>
+            spName: {{element.spName}} <br>
+            ----------------------------------------------------------
+        </p>
     </b-jumbotron>
   </div>
 </template>
@@ -25,7 +31,8 @@ import { mapState } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'dialogueData'
+      'dialogueData',
+      'characterBank'
     ])
   }
 }
