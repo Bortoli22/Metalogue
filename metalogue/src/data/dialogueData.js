@@ -19,7 +19,7 @@ export default [
     id: '2j4kl',
     name: 'Speaker',
     msg: 'This is an option',
-    mod: [{ flag: 'Response', args: [] }],
+    mod: [{ flag: 'Response', args: ['22jJi'] }],
     parent: '22jJi',
     nest: 1
   },
@@ -27,7 +27,7 @@ export default [
     id: '235d4',
     name: 'Speaker',
     msg: 'This is another option',
-    mod: [{ flag: 'Response', args: [] }],
+    mod: [{ flag: 'Response', args: ['22jJi'] }],
     parent: '22jJi',
     nest: 1
   }

@@ -143,8 +143,10 @@ export default {
         computedNest++
         computedParent = this.sentId
         if (this.optionsFlag) {
-          computedMod.push({ flag: 'Response', args: [] })
+          computedMod.push({ flag: 'Response', args: [this.sentId] })
         }
+      } else {
+        computedParent = this.parentId
       }
       const toAdd = { id: id, name: this.charname, msg: '', mod: computedMod, parent: computedParent, nest: computedNest }
       return toAdd
@@ -206,13 +208,14 @@ export default {
         this.nested--
         if (this.parentId) {
           const parent = this.dialogueData.find(element => element.id === this.parentId)
-          console.log('parentMod id: ' + parent.id)
+          this.parentId = parent.parent
           if (parent.mod.findIndex(element => element.flag === 'Response') > -1) {
-            console.log('We made')
             sendMod.mod = 'Response'
-            // sendMod.args = [parent.parent]
-            this.parentId = parent.parent
+            sendMod.args = [parent.parent]
             this.updateMod(sendMod)
+          } else {
+            this.spliceMod('Response')
+            this.responseFlag = false
           }
         }
       }
@@ -256,7 +259,10 @@ export default {
         case 'Response':
           this.responseFlag = true
           if (payload.updateState) {
-            if (this.mod.findIndex(opt => opt.flag === 'Response') === -1) {
+            const mIndex = this.mod.findIndex(opt => opt.flag === 'Response')
+            if (mIndex !== -1) {
+              this.spliceMod('Response')
+            } else {
               this.mod.push({ flag: 'Response', args: payload.args })
             }
           }
