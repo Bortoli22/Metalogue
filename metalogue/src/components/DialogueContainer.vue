@@ -214,6 +214,7 @@ export default {
         if (this.parentId) {
           console.log('ID:' + this.sentId)
           console.log('PID:' + this.parentId)
+          var computedMod
           const parent = this.dialogueData.find(element => element.id === this.parentId)
           this.parentId = parent.parent
           if (parent.mod.findIndex(element => element.flag === 'Response') > -1) {
@@ -224,7 +225,7 @@ export default {
             const doubleParent = this.dialogueData.find(element => element.id === parent.parent)
             if (doubleParent !== null) {
               console.log('DPID:' + doubleParent.id)
-              var computedMod = doubleParent.mod
+              computedMod = doubleParent.mod
               computedMod[computedMod.findIndex(e => e.flag === 'Option')].args.push(this.sentId)
               this.modDialogue({
                 id: doubleParent.id,
@@ -238,6 +239,19 @@ export default {
           } else {
             this.spliceMod('Response')
             this.responseFlag = false
+            computedMod = parent.mod
+            var mIndex = computedMod.findIndex(e => e.flag === 'Option')
+            var aIndex = computedMod[mIndex].args.findIndex(e => e === this.sentId)
+            console.log('mIndex: ' + mIndex + 'aIndex: ' + aIndex)
+            computedMod[mIndex].args.splice(aIndex, 1)
+            this.modDialogue({
+              id: parent.id,
+              name: parent.name,
+              msg: parent.msg,
+              mod: computedMod,
+              parent: parent.parent,
+              nest: parent.nest
+            })
           }
         }
       }
