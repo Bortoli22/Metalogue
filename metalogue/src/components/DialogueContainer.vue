@@ -144,6 +144,11 @@ export default {
         computedParent = this.sentId
         if (this.optionsFlag) {
           computedMod.push({ flag: 'Response', args: [this.sentId] })
+          const mIndex = this.mod.findIndex(element => element.flag === 'Option')
+          if (mIndex !== -1) {
+            this.mod[mIndex].args.push(id)
+            this.modifyDialogue()
+          }
         }
       } else {
         computedParent = this.parentId
@@ -207,12 +212,29 @@ export default {
         }
         this.nested--
         if (this.parentId) {
+          console.log('ID:' + this.sentId)
+          console.log('PID:' + this.parentId)
           const parent = this.dialogueData.find(element => element.id === this.parentId)
           this.parentId = parent.parent
           if (parent.mod.findIndex(element => element.flag === 'Response') > -1) {
+            console.log('Becoming Response')
             sendMod.mod = 'Response'
             sendMod.args = [parent.parent]
             this.updateMod(sendMod)
+            const doubleParent = this.dialogueData.find(element => element.id === parent.parent)
+            if (doubleParent !== null) {
+              console.log('DPID:' + doubleParent.id)
+              var computedMod = doubleParent.mod
+              computedMod[computedMod.findIndex(e => e.flag === 'Option')].args.push(this.sentId)
+              this.modDialogue({
+                id: doubleParent.id,
+                name: doubleParent.name,
+                msg: doubleParent.msg,
+                mod: computedMod,
+                parent: doubleParent.parent,
+                nest: doubleParent.nest
+              })
+            }
           } else {
             this.spliceMod('Response')
             this.responseFlag = false
