@@ -196,8 +196,25 @@ export default {
         this.remDialogue(this.sentId)
       }
       if (this.nested > 0) {
+        var sendMod = {
+          mod: '',
+          updateState: true,
+          emitting: this.eventFlag,
+          args: [],
+          created: false
+        }
         this.nested--
-        // TODO: unNest functionality
+        if (this.parentId) {
+          const parent = this.dialogueData.find(element => element.id === this.parentId)
+          console.log('parentMod id: ' + parent.id)
+          if (parent.mod.findIndex(element => element.flag === 'Response') > -1) {
+            console.log('We made')
+            sendMod.mod = 'Response'
+            // sendMod.args = [parent.parent]
+            this.parentId = parent.parent
+            this.updateMod(sendMod)
+          }
+        }
       }
       return null
     },
@@ -238,6 +255,11 @@ export default {
           break
         case 'Response':
           this.responseFlag = true
+          if (payload.updateState) {
+            if (this.mod.findIndex(opt => opt.flag === 'Response') === -1) {
+              this.mod.push({ flag: 'Response', args: payload.args })
+            }
+          }
           break
         case 'Roulette':
           this.optionsFlag = false
