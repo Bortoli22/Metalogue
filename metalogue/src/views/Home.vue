@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <SpeakerCreate align="left"/>
+    <a v-bind:href="downloadImg" download="downloaded.png"><img src="@/assets/logo.png" height="5%" width="5%"></a>
     <br>
     <DialogueContainer
     v-for="val in dialogueData"
@@ -22,6 +23,7 @@
 // @ is an alias to /src
 import DialogueContainer from '@/components/DialogueContainer.vue'
 import SpeakerCreate from '@/components/SpeakerCreate.vue'
+import img from '@/assets/logo.png'
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -50,7 +52,8 @@ export default {
   },
   data () {
     return {
-      activeContainerID: 'none'
+      activeContainerID: 'none',
+      downloadImg: img
     }
   }
 }
