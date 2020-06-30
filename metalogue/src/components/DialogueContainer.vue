@@ -317,6 +317,7 @@ export default {
         default:
           this.optionsFlag = false
           this.rouletteFlag = false
+          this.modStarter = 'Normal'
           if (payload.updateState) {
             this.spliceMod('Roulette')
             this.spliceMod('Option')
