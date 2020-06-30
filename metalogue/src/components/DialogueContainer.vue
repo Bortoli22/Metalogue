@@ -82,7 +82,14 @@ export default {
       eventFlag: false,
       optionsFlag: false,
       responseFlag: false,
-      rouletteFlag: false
+      rouletteFlag: false,
+      sendMod: {
+        mod: '',
+        updateState: false,
+        emitting: false,
+        args: [],
+        created: false
+      }
     }
   },
   props: {
@@ -104,7 +111,7 @@ export default {
     var modifier
     console.log(this.id)
     for (modifier of this.mod) {
-      var sendMod = {
+      this.sendMod = {
         mod: modifier.flag,
         updateState: false,
         emitting: true,
@@ -112,7 +119,7 @@ export default {
         created: true
       }
       // If an event wasn't actually emitting, it wouldn't be in this mod loop, hence the true
-      this.updateMod(sendMod)
+      this.updateMod(this.sendMod)
     }
   },
   mounted () {
@@ -203,13 +210,8 @@ export default {
         this.remDialogue(this.sentId)
       }
       if (this.nested > 0) {
-        var sendMod = {
-          mod: '',
-          updateState: true,
-          emitting: this.eventFlag,
-          args: [],
-          created: false
-        }
+        this.sendMod.updateState = true
+        this.sendMod.emitting = this.eventFlag
         this.nested--
         if (this.parentId) {
           console.log('ID:' + this.sentId)
@@ -219,9 +221,9 @@ export default {
           this.parentId = parent.parent
           if (parent.mod.findIndex(element => element.flag === 'Response') > -1) {
             console.log('Becoming Response')
-            sendMod.mod = 'Response'
-            sendMod.args = [parent.parent]
-            this.updateMod(sendMod)
+            this.sendMod.mod = 'Response'
+            this.sendMod.args = [parent.parent]
+            this.updateMod(this.sendMod)
             const doubleParent = this.dialogueData.find(element => element.id === parent.parent)
             if (doubleParent !== null) {
               console.log('DPID:' + doubleParent.id)
@@ -315,7 +317,31 @@ export default {
           }
           break
         default:
-          this.optionsFlag = false
+          if (this.optionsFlag) {
+            this.optionsFlag = false
+            var arg = this.mod.find(a => a.flag === 'Option').args
+            if (arg !== undefined) {
+              console.log('args: ' + arg)
+              var tec
+              for (tec of arg) {
+                var toMod = this.dialogueData.find(x => x.id === tec)
+                var toNest = toMod.nest - 1
+                if (toNest < 0) {
+                  toNest = 0
+                }
+                console.log('toNest: ' + toNest)
+                const rIndex = toMod.mod.findIndex(t => t.flag === 'Response')
+                this.modDialogue({
+                  id: toMod.id,
+                  name: toMod.name,
+                  msg: toMod.msg,
+                  mod: toMod.mod.splice(rIndex, 1),
+                  parent: toMod.parent,
+                  nest: toNest
+                })
+              }
+            }
+          }
           this.rouletteFlag = false
           this.modStarter = 'Normal'
           if (payload.updateState) {
