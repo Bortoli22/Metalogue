@@ -329,14 +329,6 @@ export default {
                 if (toNest < 0) {
                   toNest = 0
                 }
-                /*
-                console.log('toNest: ' + toNest)
-                const rIndex = toMod.mod.findIndex(t => t.flag === 'Response')
-                console.log('rIndex: ' + rIndex)
-                console.log('old: ' + toMod.mod[0].flag + ' length: ' + toMod.mod.length)
-                var xM = toMod.mod.splice(rIndex, 1)
-                console.log('new: ' + xM[0].flag + ' length: ' + xM.length)
-*/
                 var xSend = []
                 var xParse
                 for (xParse of toMod.mod) {
@@ -347,13 +339,13 @@ export default {
                     console.log('parsed a response')
                   }
                 }
-
+                var obtainParent = this.dialogueData.find(x => x.id === toMod.parent)
                 this.modDialogue({
                   id: toMod.id,
                   name: toMod.name,
                   msg: toMod.msg,
                   mod: xSend,
-                  parent: toMod.parent,
+                  parent: obtainParent.parent,
                   nest: toNest
                 })
               }
