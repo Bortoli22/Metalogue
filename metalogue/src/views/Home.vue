@@ -5,7 +5,7 @@
     <br>
     <DialogueContainer
     v-for="val in dialogueData"
-    v-bind:key="val.id"
+    v-bind:key="val.id+val.nest"
     v-bind:msg="val.msg"
     v-bind:id="val.id"
     v-bind:name="val.name"
