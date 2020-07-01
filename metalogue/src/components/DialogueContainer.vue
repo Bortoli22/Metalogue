@@ -124,7 +124,9 @@ export default {
   },
   mounted () {
     this.$nextTick(function () {
-      this.$refs.dialogue.focus()
+      if (this.$refs.dialogue !== undefined) {
+        this.$refs.dialogue.focus()
+      }
     })
   },
   methods: {
@@ -267,14 +269,13 @@ export default {
       this.dialogueData.forEach((element) => {
         if (element.parent === payload.val) {
           if (payload.pAdjust) {
-            element.nest -= 1
-            if (element.nest < 0) {
-              element.nest = 0
-            }
             var p = this.dialogueData.find(e => e.id === payload.val)
             element.parent = p.parent
           }
-          element.nest -= 1
+          element.nest -= 2
+          if (element.nest < 0) {
+            element.nest = 0
+          }
           this.unNestChild({ val: element.id, pAdjust: false })
         }
       })
