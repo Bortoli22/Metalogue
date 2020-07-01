@@ -147,6 +147,7 @@ export default {
       var computedParent = ''
       var computedMod = []
       if (this.optionsFlag || this.responseFlag) {
+        // add to new DC nest value, push response flag if needed
         computedNest++
         computedParent = this.sentId
         if (this.optionsFlag) {
@@ -210,23 +211,23 @@ export default {
         this.remDialogue(this.sentId)
       }
       if (this.nested > 0) {
+        // unNest by one and prep for mod changes
         this.sendMod.updateState = true
         this.sendMod.emitting = this.eventFlag
         this.nested--
         if (this.parentId) {
-          console.log('ID:' + this.sentId)
-          console.log('PID:' + this.parentId)
+          // get parent
           var computedMod
           const parent = this.dialogueData.find(element => element.id === this.parentId)
           this.parentId = parent.parent
           if (parent.mod.findIndex(element => element.flag === 'Response') > -1) {
-            console.log('Becoming Response')
+            // parent is response, becomes a response itself
             this.sendMod.mod = 'Response'
             this.sendMod.args = [parent.parent]
             this.updateMod(this.sendMod)
             const doubleParent = this.dialogueData.find(element => element.id === parent.parent)
             if (doubleParent !== null) {
-              console.log('DPID:' + doubleParent.id)
+              // push the id of new response to args of parent's Option flag
               computedMod = doubleParent.mod
               computedMod[computedMod.findIndex(e => e.flag === 'Option')].args.push(this.sentId)
               this.modDialogue({
@@ -239,6 +240,7 @@ export default {
               })
             }
           } else {
+            // parent is not response, meaning this DC is the response, becomes normal
             this.spliceMod('Response')
             this.responseFlag = false
             computedMod = parent.mod
@@ -318,12 +320,14 @@ export default {
           break
         default:
           if (this.optionsFlag) {
+            // When an Option becomes a Normal
             this.optionsFlag = false
             var arg = this.mod.find(a => a.flag === 'Option').args
             if (arg !== undefined) {
-              console.log('args: ' + arg)
+              // There are responses to this option
               var tec
               for (tec of arg) {
+                // Responses are unset as responses, nest decreases
                 var toMod = this.dialogueData.find(x => x.id === tec)
                 var toNest = toMod.nest - 1
                 if (toNest < 0) {
