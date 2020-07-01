@@ -1,20 +1,28 @@
 <template>
   <div class="home">
     <SpeakerCreate align="left"/>
-    <a v-bind:href="downloadImg" download="downloaded.png"><img src="@/assets/logo.png" height="5%" width="5%"></a>
     <br>
-    <DialogueContainer
-    v-for="val in dialogueData"
-    v-bind:key="val.id+val.nest"
-    v-bind:msg="val.msg"
-    v-bind:id="val.id"
-    v-bind:name="val.name"
-    v-bind:modProp="val.mod"
-    v-bind:nestProp="val.nest"
-    v-bind:parentProp="val.parent"
-    v-bind:activeContainerID="activeContainerID"
-    @setActiveContainerID="setActiveContainerID"
-    />
+    <b-containter fluid>
+      <b-row>
+      <b-col class="col-md-auto">
+        <ProjectManager />
+      </b-col>
+      <b-col>
+        <DialogueContainer
+        v-for="val in dialogueData"
+        v-bind:key="val.id+val.nest"
+        v-bind:msg="val.msg"
+        v-bind:id="val.id"
+        v-bind:name="val.name"
+        v-bind:modProp="val.mod"
+        v-bind:nestProp="val.nest"
+        v-bind:parentProp="val.parent"
+        v-bind:activeContainerID="activeContainerID"
+        @setActiveContainerID="setActiveContainerID"
+        />
+      </b-col>
+      </b-row>
+    </b-containter>
     <b-button v-on:click="createDialogue()">+</b-button>
   </div>
 </template>
@@ -23,14 +31,15 @@
 // @ is an alias to /src
 import DialogueContainer from '@/components/DialogueContainer.vue'
 import SpeakerCreate from '@/components/SpeakerCreate.vue'
-import img from '@/assets/logo.png'
+import ProjectManager from '@/components/ProjectManager.vue'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   name: 'Home',
   components: {
     DialogueContainer,
-    SpeakerCreate
+    SpeakerCreate,
+    ProjectManager
   },
   computed: {
     ...mapState([
@@ -52,8 +61,7 @@ export default {
   },
   data () {
     return {
-      activeContainerID: 'none',
-      downloadImg: img
+      activeContainerID: 'none'
     }
   }
 }

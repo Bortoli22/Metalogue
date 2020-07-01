@@ -2,6 +2,7 @@
   <div id="app">
     <div id="nav">
         <b-navbar toggleable="lg" type="dark" variant="info">
+        <img src="@/assets/logo.png" length=2% width=2% class="navlogo">
         <b-navbar-brand href="#">Metalogue</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -56,5 +57,9 @@
 
 #nav a.router-link-exact-active {
   color: #ddcad9;
+}
+
+.navlogo {
+  padding-right: 10px
 }
 </style>
