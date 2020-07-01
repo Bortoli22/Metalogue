@@ -261,6 +261,30 @@ export default {
       }
       return null
     },
+    unNestChild (payload) {
+      console.log('in unNestChild with: ' + payload.val)
+      var conditionIndex = this.dialogueData.findIndex(e => e.parent === payload.val)
+      while (conditionIndex > -1 && payload.val !== '') {
+        conditionIndex = this.dialogueData.findIndex(e => e.parent === payload.val)
+        if (conditionIndex < 0) {
+          console.log('in loop, no more values')
+          break
+        }
+        this.dialogueData[conditionIndex].nest -= 1
+        if (payload.pAdjust) {
+          console.log('Padjust is true')
+          this.dialogueData[conditionIndex].nest -= 1
+          var p = this.dialogueData.find(e => e.id === payload.val)
+          this.dialogueData[conditionIndex].parent = p.parent
+          console.log('recurse entering unNestChild with: ' + this.dialogueData[conditionIndex].id)
+          this.unNestChild({ val: this.dialogueData[conditionIndex].id, pAdjust: false })
+        }
+        if (this.dialogueData[conditionIndex].nest < 0) {
+          this.dialogueData[conditionIndex].nest = 0
+        }
+      }
+      console.log('leaving unNestChild with: ' + payload.val)
+    },
     updateMod (payload) {
       // console.log('Payload: ' + payload)
       switch (payload.mod) {
@@ -352,6 +376,8 @@ export default {
                   parent: obtainParent.parent,
                   nest: toNest
                 })
+                console.log('Entering unNestChild with: ' + toMod.id)
+                this.unNestChild({ val: toMod.id, pAdjust: true })
               }
             }
           }
