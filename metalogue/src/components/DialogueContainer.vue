@@ -262,27 +262,22 @@ export default {
       return null
     },
     unNestChild (payload) {
-      console.log('in unNestChild with: ' + payload.val)
-      var conditionIndex = this.dialogueData.findIndex(e => e.parent === payload.val)
-      while (conditionIndex > -1 && payload.val !== '') {
-        conditionIndex = this.dialogueData.findIndex(e => e.parent === payload.val)
-        if (conditionIndex < 0) {
-          console.log('in loop, no more values')
-          break
+      console.log('in unNestChild with: ' + payload.val + ', pAdjust is ' + payload.pAdjust)
+
+      this.dialogueData.forEach((element) => {
+        if (element.parent === payload.val) {
+          if (payload.pAdjust) {
+            element.nest -= 1
+            if (element.nest < 0) {
+              element.nest = 0
+            }
+            var p = this.dialogueData.find(e => e.id === payload.val)
+            element.parent = p.parent
+          }
+          element.nest -= 1
+          this.unNestChild({ val: element.id, pAdjust: false })
         }
-        this.dialogueData[conditionIndex].nest -= 1
-        if (payload.pAdjust) {
-          console.log('Padjust is true')
-          this.dialogueData[conditionIndex].nest -= 1
-          var p = this.dialogueData.find(e => e.id === payload.val)
-          this.dialogueData[conditionIndex].parent = p.parent
-          console.log('recurse entering unNestChild with: ' + this.dialogueData[conditionIndex].id)
-          this.unNestChild({ val: this.dialogueData[conditionIndex].id, pAdjust: false })
-        }
-        if (this.dialogueData[conditionIndex].nest < 0) {
-          this.dialogueData[conditionIndex].nest = 0
-        }
-      }
+      })
       console.log('leaving unNestChild with: ' + payload.val)
     },
     updateMod (payload) {
