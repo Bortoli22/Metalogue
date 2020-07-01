@@ -5,7 +5,7 @@
     <b-containter fluid>
       <b-row>
       <b-col class="col-md-auto">
-        <ProjectManager />
+        <SceneManager />
       </b-col>
       <b-col>
         <DialogueContainer
@@ -31,7 +31,7 @@
 // @ is an alias to /src
 import DialogueContainer from '@/components/DialogueContainer.vue'
 import SpeakerCreate from '@/components/SpeakerCreate.vue'
-import ProjectManager from '@/components/ProjectManager.vue'
+import SceneManager from '@/components/SceneManager.vue'
 import { mapActions, mapState } from 'vuex'
 
 export default {
@@ -39,7 +39,7 @@ export default {
   components: {
     DialogueContainer,
     SpeakerCreate,
-    ProjectManager
+    SceneManager
   },
   computed: {
     ...mapState([

@@ -1,9 +1,0 @@
-<template>
-    <div>
-        <b-list-group>
-            <b-list-group-item>
-                TEST
-            </b-list-group-item>
-        </b-list-group>
-    </div>
-</template>
