@@ -1,6 +1,6 @@
 export default [
   {
-    name: 'project1',
+    name: 'scene1',
     data: [
       {
         id: '1aS4D',
@@ -37,7 +37,7 @@ export default [
     ]
   },
   {
-    name: 'project2',
+    name: 'scene2',
     data: [
       {
         id: '235d4',

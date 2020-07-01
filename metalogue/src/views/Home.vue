@@ -2,27 +2,30 @@
   <div class="home">
     <SpeakerCreate align="left"/>
     <br>
-    <b-containter fluid>
+    <b-container fluid>
       <b-row>
-      <b-col class="col-md-auto">
-        <SceneManager />
-      </b-col>
-      <b-col>
-        <DialogueContainer
-        v-for="val in dialogueData"
-        v-bind:key="val.id+val.nest"
-        v-bind:msg="val.msg"
-        v-bind:id="val.id"
-        v-bind:name="val.name"
-        v-bind:modProp="val.mod"
-        v-bind:nestProp="val.nest"
-        v-bind:parentProp="val.parent"
-        v-bind:activeContainerID="activeContainerID"
-        @setActiveContainerID="setActiveContainerID"
-        />
-      </b-col>
+        <b-col class="col-md-auto">
+          <SceneManager
+          v-bind:activeScene="activeScene"
+          @setActiveScene="setActiveScene"
+          />
+        </b-col>
+        <b-col>
+          <DialogueContainer
+          v-for="val in dialogueData"
+          v-bind:key="val.id+val.nest"
+          v-bind:msg="val.msg"
+          v-bind:id="val.id"
+          v-bind:name="val.name"
+          v-bind:modProp="val.mod"
+          v-bind:nestProp="val.nest"
+          v-bind:parentProp="val.parent"
+          v-bind:activeContainerID="activeContainerID"
+          @setActiveContainerID="setActiveContainerID"
+          />
+        </b-col>
       </b-row>
-    </b-containter>
+    </b-container>
     <b-button v-on:click="createDialogue()">+</b-button>
   </div>
 </template>
@@ -57,11 +60,15 @@ export default {
     },
     setActiveContainerID (payload) {
       this.activeContainerID = payload
+    },
+    setActiveScene (payload) {
+      this.activeScene = payload
     }
   },
   data () {
     return {
-      activeContainerID: 'none'
+      activeContainerID: 'none',
+      activeScene: 'scene1'
     }
   }
 }
