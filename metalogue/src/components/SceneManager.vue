@@ -6,10 +6,9 @@
             </b-list-group-item>
             <b-list-group-item
                 v-for="item in dialogueBank"
-                v-bind:key="item.name"
+                v-bind:key="item.id"
                 v-on:click="swapAction({name: item.name, id: item.id})">
                     {{ item.name }}
-                    <b-button size="sm" variant="danger"> : </b-button>
             </b-list-group-item>
         </b-list-group>
     </div>

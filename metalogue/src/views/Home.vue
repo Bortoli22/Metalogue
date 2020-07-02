@@ -4,6 +4,10 @@
       <b-row>
         <SpeakerCreate class="toolbar" align="left"/>
         <SceneCreate class="toolbar" align="left"/>
+        <SceneDelete
+        v-bind:activeSceneID="activeSceneID"
+        @setActiveScene="setActiveScene"
+        class="toolbar" align="left"/>
       </b-row>
       <b-row>
         <b-col class="col-md-auto">
@@ -13,8 +17,10 @@
           />
         </b-col>
         <b-col>
+          <SceneInitiator
+          v-if="dialogueBank.length === 0"/>
           <DialogueInitiator
-          v-if="dialogueData.length == 0"
+          v-if="(dialogueData.length === 0) && (dialogueBank.length > 0)"
           v-bind:activeSceneID="activeSceneID"/>
           <DialogueContainer
           v-for="val in dialogueData"
@@ -40,7 +46,9 @@ import DialogueContainer from '@/components/DialogueContainer.vue'
 import SpeakerCreate from '@/components/SpeakerCreate.vue'
 import SceneManager from '@/components/SceneManager.vue'
 import SceneCreate from '@/components/SceneCreate.vue'
+import SceneDelete from '@/components/SceneDelete.vue'
 import DialogueInitiator from '@/components/DialogueInitiator.vue'
+import SceneInitiator from '@/components/SceneInitiator'
 import { mapState } from 'vuex'
 
 export default {
@@ -50,11 +58,14 @@ export default {
     SpeakerCreate,
     SceneManager,
     DialogueInitiator,
-    SceneCreate
+    SceneCreate,
+    SceneInitiator,
+    SceneDelete
   },
   computed: {
     ...mapState([
-      'dialogueData'
+      'dialogueData',
+      'dialogueBank'
     ])
   },
   methods: {

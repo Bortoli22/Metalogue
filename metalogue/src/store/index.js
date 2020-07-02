@@ -58,14 +58,30 @@ export default new Vuex.Store({
         state.dialogueBank[toModIndex] = toInsert
       }
       // swap to new Scene
-      toModIndex = state.dialogueBank.findIndex(scene => scene.id === bank.new)
-      for (element of state.dialogueBank[toModIndex].data) {
-        state.dialogueData.push(element)
+      if (bank.new === undefined) {
+        // swapping because of scene deletion
+        console.log('swapping because of a deletion')
+        toModIndex = 0
+      } else {
+        // swapping because of selection of another scene
+        toModIndex = state.dialogueBank.findIndex(scene => scene.id === bank.new)
+      }
+      if (state.dialogueBank.length > 0) {
+        for (element of state.dialogueBank[toModIndex].data) {
+          state.dialogueData.push(element)
+        }
       }
     },
     appendScene: (state, scene) => {
       const toInsert = { name: scene.sceneName, id: scene.sceneID, data: [] }
       state.dialogueBank.push(toInsert)
+    },
+    removeScene: (state, scene) => {
+      // cut item from bank
+      const toModIndex = state.dialogueBank.findIndex(element => element.id === scene)
+      if (toModIndex > -1) {
+        state.dialogueBank.splice(toModIndex, 1)
+      }
     }
   },
   actions: {
@@ -89,6 +105,9 @@ export default new Vuex.Store({
     },
     addScene: ({ commit }, scene) => {
       commit('appendScene', scene)
+    },
+    remScene: ({ commit }, scene) => {
+      commit('removeScene', scene)
     }
   },
   modules: {
