@@ -33,12 +33,14 @@ export default {
       'swapBank'
     ]),
     deleteScene () {
-      this.swapAction()
       this.remScene(this.activeSceneID)
+      this.swapAction()
     },
     swapAction () {
       this.swapBank({ old: this.activeSceneID })
-      this.$emit('setActiveScene', this.dialogueBank[0].id)
+      if (this.dialogueBank.length > 0) {
+        this.$emit('setActiveScene', this.dialogueBank[0].id)
+      }
     },
     swapMainButtonText (newText) {
       this.mainButtonText = newText

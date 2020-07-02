@@ -10,16 +10,25 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
+  computed: {
+    ...mapState([
+      'characterBank'
+    ])
+  },
   methods: {
     ...mapActions([
       'addDialogue'
     ]),
     createDialogue () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      const created = { id: id, name: 'charx', msg: '', mod: [], nest: 0 }
+      let name = ''
+      if (this.characterBank.length > 0) {
+        name = this.characterBank[0].spName
+      }
+      const created = { id: id, name: name, msg: '', mod: [], nest: 0 }
       this.addDialogue(created)
     }
   },
