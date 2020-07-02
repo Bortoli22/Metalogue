@@ -57,12 +57,15 @@ export default new Vuex.Store({
       if (toModIndex > -1) {
         state.dialogueBank[toModIndex] = toInsert
       }
-      console.log('finalPushTest: ' + state.dialogueBank[toModIndex].data[0].id)
       // swap to new Scene
       toModIndex = state.dialogueBank.findIndex(scene => scene.name === bank.new)
       for (element of state.dialogueBank[toModIndex].data) {
         state.dialogueData.push(element)
       }
+    },
+    appendScene: (state, scene) => {
+      const toInsert = { name: scene.sceneName, data: [] }
+      state.dialogueBank.push(toInsert)
     }
   },
   actions: {
@@ -83,6 +86,9 @@ export default new Vuex.Store({
     },
     swapBank: ({ commit }, bank) => {
       commit('swapBankData', bank)
+    },
+    addScene: ({ commit }, scene) => {
+      commit('appendScene', scene)
     }
   },
   modules: {

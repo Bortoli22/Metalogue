@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-button v-b-toggle.speakerCreate variant="info"> {{ mainButtonText }} </b-button>
-        <b-collapse id="speakerCreate" class="mt-2" v-on:show="swapMainButtonText('Collapse')" v-on:hide="swapMainButtonText('Create Speaker')">
+        <b-collapse id="speakerCreate" class="mt-2" v-on:show="swapMainButtonText('Collapse')" v-on:hide="swapMainButtonText('New Speaker')">
             <b-card>
             <p class="card-text">Create a new speaker to take part in the dialogue</p>
             <b-form-input v-model="newSpeaker" placeholder="Enter Name..." v-on:keyup.enter="addCharacter()"></b-form-input>
@@ -20,7 +20,7 @@ import { mapActions } from 'vuex'
 export default {
   data () {
     return {
-      mainButtonText: 'Create Speaker',
+      mainButtonText: 'New Speaker',
       newSpeaker: ''
     }
   },

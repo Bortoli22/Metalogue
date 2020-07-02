@@ -1,8 +1,10 @@
 <template>
   <div class="home">
-    <SpeakerCreate align="left"/>
-    <br>
     <b-container fluid>
+      <b-row>
+        <SpeakerCreate class="toolbar" align="left"/>
+        <SceneCreate class="toolbar" align="left"/>
+      </b-row>
       <b-row>
         <b-col class="col-md-auto">
           <SceneManager
@@ -11,6 +13,9 @@
           />
         </b-col>
         <b-col>
+          <DialogueInitiator
+          v-if="dialogueData.length == 0"
+          v-bind:activeScene="activeScene"/>
           <DialogueContainer
           v-for="val in dialogueData"
           v-bind:key="val.id+val.nest"
@@ -26,7 +31,6 @@
         </b-col>
       </b-row>
     </b-container>
-    <b-button v-on:click="createDialogue()">+</b-button>
   </div>
 </template>
 
@@ -35,14 +39,18 @@
 import DialogueContainer from '@/components/DialogueContainer.vue'
 import SpeakerCreate from '@/components/SpeakerCreate.vue'
 import SceneManager from '@/components/SceneManager.vue'
-import { mapActions, mapState } from 'vuex'
+import SceneCreate from '@/components/SceneCreate.vue'
+import DialogueInitiator from '@/components/DialogueInitiator.vue'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
   components: {
     DialogueContainer,
     SpeakerCreate,
-    SceneManager
+    SceneManager,
+    DialogueInitiator,
+    SceneCreate
   },
   computed: {
     ...mapState([
@@ -50,14 +58,6 @@ export default {
     ])
   },
   methods: {
-    ...mapActions([
-      'addDialogue'
-    ]),
-    createDialogue () {
-      const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      const created = { id: id, name: 'charx', msg: '', mod: [], nest: 0 }
-      this.addDialogue(created)
-    },
     setActiveContainerID (payload) {
       this.activeContainerID = payload
     },
@@ -73,3 +73,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .toolbar {
+    padding: 0px 20px 20px 0px
+  }
+</style>
