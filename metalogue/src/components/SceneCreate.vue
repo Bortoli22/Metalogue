@@ -30,7 +30,7 @@ export default {
     ]),
     createScene () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      var toSend = { sceneID: id, sceneName: this.newScene }
+      var toSend = { sceneName: this.newScene, sceneID: id }
       this.addScene(toSend)
       this.newScene = ''
     },

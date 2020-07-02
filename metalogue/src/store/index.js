@@ -39,9 +39,9 @@ export default new Vuex.Store({
       state.characterBank.push(Speaker)
     },
     swapBankData: (state, bank) => {
-      console.log('enter swapBank' + bank.old + bank.new)
+      console.log('enter swapBank: ' + bank.old + bank.new)
       // push updates to Bank
-      var toModIndex = state.dialogueBank.findIndex(scene => scene.name === bank.old)
+      var toModIndex = state.dialogueBank.findIndex(scene => scene.id === bank.old)
       console.log('toModIndex ' + toModIndex)
       var oldData = []
       var element
@@ -53,18 +53,18 @@ export default new Vuex.Store({
       for (x = 0; x < oldLength; x++) {
         state.dialogueData.pop()
       }
-      var toInsert = { name: bank.old, data: oldData }
       if (toModIndex > -1) {
+        var toInsert = { name: state.dialogueBank[toModIndex].name, id: bank.old, data: oldData }
         state.dialogueBank[toModIndex] = toInsert
       }
       // swap to new Scene
-      toModIndex = state.dialogueBank.findIndex(scene => scene.name === bank.new)
+      toModIndex = state.dialogueBank.findIndex(scene => scene.id === bank.new)
       for (element of state.dialogueBank[toModIndex].data) {
         state.dialogueData.push(element)
       }
     },
     appendScene: (state, scene) => {
-      const toInsert = { name: scene.sceneName, data: [] }
+      const toInsert = { name: scene.sceneName, id: scene.sceneID, data: [] }
       state.dialogueBank.push(toInsert)
     }
   },

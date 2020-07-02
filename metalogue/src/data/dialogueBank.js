@@ -1,6 +1,7 @@
 export default [
   {
     name: 'scene1',
+    id: 'dj3K9',
     data: [
       {
         id: '1aS4D',
@@ -38,6 +39,7 @@ export default [
   },
   {
     name: 'scene2',
+    id: 'sj90d',
     data: [
       {
         id: '235d4',

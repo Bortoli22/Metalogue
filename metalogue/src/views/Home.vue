@@ -8,14 +8,14 @@
       <b-row>
         <b-col class="col-md-auto">
           <SceneManager
-          v-bind:activeScene="activeScene"
+          v-bind:activeSceneID="activeSceneID"
           @setActiveScene="setActiveScene"
           />
         </b-col>
         <b-col>
           <DialogueInitiator
           v-if="dialogueData.length == 0"
-          v-bind:activeScene="activeScene"/>
+          v-bind:activeSceneID="activeSceneID"/>
           <DialogueContainer
           v-for="val in dialogueData"
           v-bind:key="val.id+val.nest"
@@ -62,13 +62,13 @@ export default {
       this.activeContainerID = payload
     },
     setActiveScene (payload) {
-      this.activeScene = payload
+      this.activeSceneID = payload
     }
   },
   data () {
     return {
       activeContainerID: 'none',
-      activeScene: 'scene1'
+      activeSceneID: 'dj3K9'
     }
   }
 }

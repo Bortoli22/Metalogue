@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-        <b-jumbotron v-bind:header="activeScene" lead="Scene is empty">
+        <b-jumbotron v-bind:header="activeSceneID" lead="Scene is empty">
             <p>No dialogue data here. Create some!</p>
             <b-button variant="info" v-on:click="createDialogue()">+</b-button>
         </b-jumbotron>
@@ -24,7 +24,7 @@ export default {
     }
   },
   props: {
-    activeScene: String
+    activeSceneID: String
   }
 }
 </script>
