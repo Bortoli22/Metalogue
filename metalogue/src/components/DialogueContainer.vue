@@ -148,13 +148,18 @@ export default {
       var computedNest = this.nested
       var computedParent = ''
       var computedMod = []
-      if (this.optionsFlag || this.responseFlag) {
+      if (this.optionsFlag || this.responseFlag || this.rouletteFlag) {
         // add to new DC nest value, push response flag if needed
         computedNest++
         computedParent = this.sentId
-        if (this.optionsFlag) {
+        if (!this.responseFlag) {
           computedMod.push({ flag: 'Response', args: [this.sentId] })
-          const mIndex = this.mod.findIndex(element => element.flag === 'Option')
+          var mIndex
+          if (this.optionsFlag) {
+            mIndex = this.mod.findIndex(element => element.flag === 'Option')
+          } else {
+            mIndex = this.mod.findIndex(element => element.flag === 'Roulette')
+          }
           if (mIndex !== -1) {
             this.mod[mIndex].args.push(id)
             this.modifyDialogue()
@@ -231,7 +236,11 @@ export default {
             if (doubleParent !== null) {
               // push the id of new response to args of parent's Option flag
               computedMod = doubleParent.mod
-              computedMod[computedMod.findIndex(e => e.flag === 'Option')].args.push(this.sentId)
+              var cMI = computedMod.findIndex(e => e.flag === 'Option')
+              if (cMI === -1) {
+                cMI = computedMod.findIndex(e => e.flag === 'Roulette')
+              }
+              computedMod[cMI].args.push(this.sentId)
               this.modDialogue({
                 id: doubleParent.id,
                 name: doubleParent.name,
@@ -247,6 +256,9 @@ export default {
             this.responseFlag = false
             computedMod = parent.mod
             var mIndex = computedMod.findIndex(e => e.flag === 'Option')
+            if (mIndex === -1) {
+              mIndex = computedMod.findIndex(e => e.flag === 'Roulette')
+            }
             var aIndex = computedMod[mIndex].args.findIndex(e => e === this.sentId)
             console.log('mIndex: ' + mIndex + 'aIndex: ' + aIndex)
             computedMod[mIndex].args.splice(aIndex, 1)
@@ -339,10 +351,16 @@ export default {
           }
           break
         default:
-          if (this.optionsFlag) {
-            // When an Option becomes a Normal
+          if (this.optionsFlag || this.rouletteFlag) {
+            // When an Option or Roulette becomes a Normal
+            var arg
+            if (this.optionsFlag) {
+              arg = this.mod.find(a => a.flag === 'Option').args
+            } else {
+              arg = this.mod.find(a => a.flag === 'Roulette').args
+            }
             this.optionsFlag = false
-            var arg = this.mod.find(a => a.flag === 'Option').args
+            this.rouletteFlag = false
             if (arg !== undefined) {
               // There are responses to this option
               var tec
@@ -377,7 +395,6 @@ export default {
               }
             }
           }
-          this.rouletteFlag = false
           this.responseFlag = false
           this.modStarter = 'Normal'
           if (payload.updateState) {
