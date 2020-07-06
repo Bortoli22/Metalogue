@@ -20,7 +20,7 @@ export default new Vuex.Store({
     modifyDialogue: (state, Dialogue) => {
       const toModIndex = state.dialogueData.findIndex(element => element.id === Dialogue.id)
       if (toModIndex > -1) {
-        state.dialogueData[toModIndex] = Dialogue
+        state.dialogueData.splice(toModIndex, 1, Dialogue)
       }
     },
     modifySpeaker: (state, Dialogue) => {
