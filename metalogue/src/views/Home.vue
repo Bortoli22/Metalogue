@@ -2,6 +2,7 @@
   <div class="home">
     <b-container fluid>
       <b-row>
+        <b-button v-on:click="testAdd">TESTADD</b-button>
         <SpeakerCreate class="toolbar" align="left"/>
         <SceneCreate class="toolbar" align="left"/>
         <SceneDelete
@@ -51,6 +52,8 @@ import DialogueInitiator from '@/components/DialogueInitiator.vue'
 import SceneInitiator from '@/components/SceneInitiator'
 import { mapState } from 'vuex'
 
+import * as fire from '../firebase.js'
+
 export default {
   name: 'Home',
   components: {
@@ -69,6 +72,9 @@ export default {
     ])
   },
   methods: {
+    testAdd () {
+      fire.usersCollection.add({ name: 'Added' })
+    },
     setActiveContainerID (payload) {
       this.activeContainerID = payload
     },
