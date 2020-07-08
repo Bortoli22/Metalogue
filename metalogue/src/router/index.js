@@ -1,9 +1,13 @@
 import Vue from 'vue'
 import BootstrapVue from 'bootstrap-vue'
+import { auth } from '../firebase.js'
 
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import About from '../views/About.vue'
 import GetStore from '../views/GetStore.vue'
+import Login from '../views/Login.vue'
+import Register from '../views/Register.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -15,20 +19,42 @@ const routes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Home,
+    meta: {
+      authReq: true
+    }
   },
   {
     path: '/about',
     name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    component: About,
+    meta: {
+      authReq: false
+    }
   },
   {
     path: '/getstore',
     name: 'GetStore',
-    component: GetStore
+    component: GetStore,
+    meta: {
+      authReq: true
+    }
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+    meta: {
+      authReq: false
+    }
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register,
+    meta: {
+      authReq: false
+    }
   }
 ]
 
@@ -36,6 +62,19 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  console.log(to)
+  console.log(from)
+  const authReq = to.matched.some(x => x.meta.authReq)
+  if (authReq && (!auth.currentUser || auth.currentUser === null)) {
+    next('login')
+  } else {
+    console.log(auth.currentUser)
+    console.log(authReq)
+    next()
+  }
 })
 
 export default router

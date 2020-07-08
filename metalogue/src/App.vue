@@ -37,6 +37,11 @@
   </div>
 </template>
 
+<script>
+// import { auth } from './firebase'
+
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
