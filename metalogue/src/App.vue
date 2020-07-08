@@ -27,7 +27,7 @@
                 <em>User</em>
               </template>
               <b-dropdown-item href="#">Settings</b-dropdown-item>
-              <b-dropdown-item href="#">Sign Out</b-dropdown-item>
+              <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -38,7 +38,18 @@
 </template>
 
 <script>
-// import { auth } from './firebase'
+import { auth } from './firebase'
+
+export default {
+  methods: {
+    async signOut () {
+      if (auth.currentUser) {
+        auth.signOut()
+        this.$router.replace({ name: 'login' })
+      }
+    }
+  }
+}
 
 </script>
 
