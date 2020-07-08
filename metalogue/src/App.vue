@@ -39,7 +39,7 @@
 
 <script>
 import { auth } from './firebase'
-import { mapState } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
   created () {
@@ -56,9 +56,13 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'changeUser'
+    ]),
     async signOut () {
       if (auth.currentUser) {
         auth.signOut()
+        this.changeUser({ name: 'User' })
         this.$router.replace({ name: 'login' })
       }
     }
