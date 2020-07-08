@@ -65,14 +65,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  console.log(to)
-  console.log(from)
   const authReq = to.matched.some(x => x.meta.authReq)
   if (authReq && (!auth.currentUser || auth.currentUser === null)) {
     next('login')
   } else {
-    console.log(auth.currentUser)
-    console.log(authReq)
     next()
   }
 })
