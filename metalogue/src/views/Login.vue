@@ -19,7 +19,7 @@
 </template>
 
 <script>
-// import { auth } from './firebase'
+import { auth } from '../firebase'
 
 export default {
   data () {
@@ -29,8 +29,15 @@ export default {
     }
   },
   methods: {
-    tryLogin () {
-
+    async tryLogin () {
+      try {
+        const user = await auth.signInWithEmailAndPassword(this.email, this.password)
+        console.log('Signing in:')
+        console.log(user)
+        this.$router.replace({ name: 'Home' })
+      } catch (err) {
+        console.log(err)
+      }
     }
   }
 }
