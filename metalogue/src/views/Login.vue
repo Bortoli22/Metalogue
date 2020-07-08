@@ -21,7 +21,8 @@
 </template>
 
 <script>
-import { auth } from '../firebase'
+import * as fire from '../firebase'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
@@ -31,11 +32,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'changeUser'
+    ]),
     async tryLogin () {
       try {
-        const user = await auth.signInWithEmailAndPassword(this.email, this.password)
-        console.log('Signing in:')
-        console.log(user)
+        await fire.auth.signInWithEmailAndPassword(this.email, this.password)
+        const getName = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
+        const toSend = getName.data().name
+        this.changeUser({ name: toSend })
         // TO-DO: use action/mutator to set vuex store with data from user
         this.$router.replace({ name: 'Home' })
       } catch (err) {

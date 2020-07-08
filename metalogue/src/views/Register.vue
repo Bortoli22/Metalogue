@@ -10,7 +10,7 @@
                     <label for="text-password">Password</label>
                     <b-input v-model="password" type="password" id="text-password" required aria-describedby="password-help-block"></b-input>
                     <b-form-text id="password-help-block">
-                    Your password should be strong.
+                    Your password should be more than 6 characters.
                     </b-form-text>
 
                     <label for="text-password2">Re-enter Password</label>
@@ -32,7 +32,8 @@
 </template>
 
 <script>
-import { auth } from '../firebase'
+import * as fire from '../firebase'
+import { mapActions } from 'vuex'
 
 export default {
   data () {
@@ -44,13 +45,20 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'changeUser'
+    ]),
     async tryRegister () {
       if (this.password !== this.passwordConfirm) {
         this.rError = 'Passwords must match'
+      } else if (this.password.length < 6) {
+        this.rError = 'Password must be more than 6 characters'
       } else {
         try {
-          const user = auth.createUserWithEmailAndPassword(this.email, this.password)
+          const user = await fire.auth.createUserWithEmailAndPassword(this.email, this.password)
           console.log(user)
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).set({ name: this.email })
+          this.changeUser({ name: this.email })
           // TO-DO: use action/mutator to set vuex store with data from user
           this.$router.replace({ name: 'About' })
         } catch (error) {

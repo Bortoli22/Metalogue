@@ -4,6 +4,7 @@ import Vuex from 'vuex'
 import dialogueData from '@/data/dialogueData.js'
 import characterBank from '@/data/characterBank.js'
 import dialogueBank from '@/data/dialogueBank.js'
+import activeUser from '@/data/user.js'
 
 Vue.use(Vuex)
 
@@ -11,7 +12,8 @@ export default new Vuex.Store({
   state: {
     dialogueData,
     characterBank,
-    dialogueBank
+    dialogueBank,
+    activeUser
   },
   mutations: {
     appendDialogue: (state, Dialogue) => {
@@ -82,6 +84,9 @@ export default new Vuex.Store({
       if (toModIndex > -1) {
         state.dialogueBank.splice(toModIndex, 1)
       }
+    },
+    changeActiveUser: (state, user) => {
+      state.activeUser = user
     }
   },
   actions: {
@@ -108,6 +113,9 @@ export default new Vuex.Store({
     },
     remScene: ({ commit }, scene) => {
       commit('removeScene', scene)
+    },
+    changeUser: ({ commit }, user) => {
+      commit('changeActiveUser', user)
     }
   },
   modules: {

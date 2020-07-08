@@ -24,7 +24,7 @@
             <b-nav-item-dropdown right>
               <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
-                <em>User</em>
+                <em>{{ activeUser.name }}</em>
               </template>
               <b-dropdown-item href="#">Settings</b-dropdown-item>
               <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
@@ -39,8 +39,22 @@
 
 <script>
 import { auth } from './firebase'
+import { mapState } from 'vuex'
 
 export default {
+  created () {
+    this.user = this.activeUser.name
+  },
+  computed: {
+    ...mapState([
+      'activeUser'
+    ])
+  },
+  data () {
+    return {
+      user: ''
+    }
+  },
   methods: {
     async signOut () {
       if (auth.currentUser) {
