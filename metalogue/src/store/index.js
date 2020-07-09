@@ -54,14 +54,12 @@ export default new Vuex.Store({
       }
     },
     removeProject: (state, project) => {
-      // cut item from bank
       const toModIndex = state.projectBank.findIndex(element => element.id === project)
       if (toModIndex > -1) {
         state.projectBank.splice(toModIndex, 1)
       }
     },
     removeScene: (state, scene) => {
-      // cut item from bank
       const toModIndex = state.dialogueBank.findIndex(element => element.id === scene)
       if (toModIndex > -1) {
         state.dialogueBank.splice(toModIndex, 1)

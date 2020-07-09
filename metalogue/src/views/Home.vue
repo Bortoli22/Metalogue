@@ -5,6 +5,11 @@
         <ProjectCreate class="toolbar" align ="left"/>
         <SpeakerCreate class="toolbar" align="left"/>
         <SceneCreate class="toolbar" align="left"/>
+        <ProjectDelete
+        v-bind:activeSceneID="activeSceneID"
+        v-bind:activeProjectID="activeProjectID"
+        @setActiveProjectID="setActiveProjectID"
+        class="toolbar" align="left"/>
         <SceneDelete
         v-bind:activeSceneID="activeSceneID"
         @setActiveScene="setActiveScene"
@@ -50,13 +55,18 @@
 // @ is an alias to /src
 import DialogueContainer from '@/components/DialogueContainer.vue'
 import SpeakerCreate from '@/components/SpeakerCreate.vue'
+
 import SceneManager from '@/components/SceneManager.vue'
 import SceneCreate from '@/components/SceneCreate.vue'
 import SceneDelete from '@/components/SceneDelete.vue'
+
 import DialogueInitiator from '@/components/DialogueInitiator.vue'
 import SceneInitiator from '@/components/SceneInitiator.vue'
+
 import ProjectManager from '@/components/ProjectManager.vue'
 import ProjectCreate from '@/components/ProjectCreate.vue'
+import ProjectDelete from '@/components/ProjectDelete.vue'
+
 import { mapState } from 'vuex'
 
 export default {
@@ -70,7 +80,8 @@ export default {
     SceneInitiator,
     SceneDelete,
     ProjectManager,
-    ProjectCreate
+    ProjectCreate,
+    ProjectDelete
   },
   computed: {
     ...mapState([
