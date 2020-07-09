@@ -25,6 +25,16 @@ export default new Vuex.Store({
       const toInsert = { name: project.projectName, id: project.projectID, sceneBank: [] }
       state.projectBank.push(toInsert)
     },
+    appendScene: (state, scene) => {
+      const toInsert = { name: scene.sceneName, id: scene.sceneID, data: [] }
+      state.dialogueBank.push(toInsert)
+    },
+    appendSpeaker: (state, Speaker) => {
+      state.characterBank.push(Speaker)
+    },
+    changeActiveUser: (state, user) => {
+      state.activeUser = user
+    },
     modifyDialogue: (state, Dialogue) => {
       const toModIndex = state.dialogueData.findIndex(element => element.id === Dialogue.id)
       if (toModIndex > -1) {
@@ -43,8 +53,19 @@ export default new Vuex.Store({
         state.dialogueData.splice(toModIndex, 1)
       }
     },
-    appendSpeaker: (state, Speaker) => {
-      state.characterBank.push(Speaker)
+    removeProject: (state, project) => {
+      // cut item from bank
+      const toModIndex = state.projectBank.findIndex(element => element.id === project)
+      if (toModIndex > -1) {
+        state.projectBank.splice(toModIndex, 1)
+      }
+    },
+    removeScene: (state, scene) => {
+      // cut item from bank
+      const toModIndex = state.dialogueBank.findIndex(element => element.id === scene)
+      if (toModIndex > -1) {
+        state.dialogueBank.splice(toModIndex, 1)
+      }
     },
     swapBankData: (state, bank) => {
       console.log('enter swapBank: ' + bank.old + bank.new)
@@ -113,25 +134,23 @@ export default new Vuex.Store({
           state.dialogueData.push(element)
         }
       }
-    },
-    appendScene: (state, scene) => {
-      const toInsert = { name: scene.sceneName, id: scene.sceneID, data: [] }
-      state.dialogueBank.push(toInsert)
-    },
-    removeScene: (state, scene) => {
-      // cut item from bank
-      const toModIndex = state.dialogueBank.findIndex(element => element.id === scene)
-      if (toModIndex > -1) {
-        state.dialogueBank.splice(toModIndex, 1)
-      }
-    },
-    changeActiveUser: (state, user) => {
-      state.activeUser = user
     }
   },
   actions: {
     addDialogue: ({ commit }, added) => {
       commit('appendDialogue', added)
+    },
+    addProject: ({ commit }, project) => {
+      commit('appendProject', project)
+    },
+    addScene: ({ commit }, scene) => {
+      commit('appendScene', scene)
+    },
+    addSpeaker: ({ commit }, added) => {
+      commit('appendSpeaker', added)
+    },
+    changeUser: ({ commit }, user) => {
+      commit('changeActiveUser', user)
     },
     modDialogue: ({ commit }, modded) => {
       commit('modifyDialogue', modded)
@@ -142,26 +161,17 @@ export default new Vuex.Store({
     remDialogue: ({ commit }, removed) => {
       commit('removeDialogue', removed)
     },
-    addSpeaker: ({ commit }, added) => {
-      commit('appendSpeaker', added)
+    remProject: ({ commit }, project) => {
+      commit('removeProject', project)
+    },
+    remScene: ({ commit }, scene) => {
+      commit('removeScene', scene)
     },
     swapBank: ({ commit }, bank) => {
       commit('swapBankData', bank)
     },
     swapProject: ({ commit }, project) => {
       commit('swapProjectBank', project)
-    },
-    addScene: ({ commit }, scene) => {
-      commit('appendScene', scene)
-    },
-    remScene: ({ commit }, scene) => {
-      commit('removeScene', scene)
-    },
-    changeUser: ({ commit }, user) => {
-      commit('changeActiveUser', user)
-    },
-    addProject: ({ commit }, project) => {
-      commit('appendProject', project)
     }
   },
   modules: {

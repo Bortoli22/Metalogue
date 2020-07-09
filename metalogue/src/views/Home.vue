@@ -12,14 +12,14 @@
       </b-row>
       <b-row>
         <b-col class="col-md-auto">
-          <SceneManager
-          v-bind:activeSceneID="activeSceneID"
-          @setActiveScene="setActiveScene"
-          />
           <ProjectManager
           v-bind:activeProjectID="activeProjectID"
           v-bind:activeSceneID="activeSceneID"
           @setActiveProjectID="setActiveProjectID"
+          />
+          <SceneManager
+          v-bind:activeSceneID="activeSceneID"
+          @setActiveScene="setActiveScene"
           />
         </b-col>
         <b-col>
@@ -56,7 +56,7 @@ import SceneDelete from '@/components/SceneDelete.vue'
 import DialogueInitiator from '@/components/DialogueInitiator.vue'
 import SceneInitiator from '@/components/SceneInitiator.vue'
 import ProjectManager from '@/components/ProjectManager.vue'
-import ProjectCreate from '@componenets/ProjectCreate.vue'
+import ProjectCreate from '@/components/ProjectCreate.vue'
 import { mapState } from 'vuex'
 
 export default {
