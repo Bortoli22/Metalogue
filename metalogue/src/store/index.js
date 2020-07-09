@@ -93,6 +93,7 @@ export default new Vuex.Store({
         // swapping because of selection of another scene
         toModIndex = state.dialogueBank.findIndex(scene => scene.id === bank.new)
       }
+      // push new data to dialogueData
       if (state.dialogueBank.length > 0) {
         for (element of state.dialogueBank[toModIndex].data) {
           state.dialogueData.push(element)
@@ -101,11 +102,12 @@ export default new Vuex.Store({
     },
     swapProjectBank: (state, project) => {
       console.log('enterswapproject: ' + project.old + ', ' + project.new)
-      // push updates from dialogueData to projectBank
-      var toModIndex = state.projectBank.findIndex(p => p.id === project.old)
+      // push updates from dialogueData to dialogueBank
+      var toModIndex = state.dialogueBank.findIndex(scene => scene.id === project.sceneID)
       console.log('toModIndex ' + toModIndex)
       var oldData = []
       var element
+      var toInsert
       for (element of state.dialogueData) {
         oldData.push(element)
       }
@@ -115,20 +117,46 @@ export default new Vuex.Store({
         state.dialogueData.pop()
       }
       if (toModIndex > -1) {
-        var toInsert = { name: state.dialogueBank[toModIndex].name, id: project.old, data: oldData }
+        toInsert = { name: state.dialogueBank[toModIndex].name, id: project.sceneID, data: oldData }
         state.dialogueBank[toModIndex] = toInsert
       }
-      // swap to new Scene
+
+      // push updates from dialogueBank to projectBank
+      toModIndex = state.projectBank.findIndex(p => p.id === project.old)
+      console.log('toModIndex ' + toModIndex)
+      oldData = []
+      for (element of state.dialogueBank) {
+        oldData.push(element)
+      }
+      oldLength = state.dialogueBank.length
+      for (x = 0; x < oldLength; x++) {
+        state.dialogueBank.pop()
+      }
+      if (toModIndex > -1) {
+        toInsert = { name: state.projectBank[toModIndex].name, id: project.old, sceneBank: oldData }
+        state.projectBank[toModIndex] = toInsert
+      }
+
+      // swap to new project
       if (project.new === undefined) {
-        // swapping because of scene deletion
+        // swapping because of project deletion
         console.log('swapping because of a deletion')
         toModIndex = 0
       } else {
-        // swapping because of selection of another scene
-        toModIndex = state.dialogueBank.findIndex(scene => scene.id === project.new)
+        // swapping because of selection of another project
+        toModIndex = state.projectBank.findIndex(p => p.id === project.new)
       }
+
+      // pull new dialogueBank data from projectBank
+      if (state.projectBank.length > 0) {
+        for (element of state.projectBank[toModIndex].sceneBank) {
+          state.dialogueBank.push(element)
+        }
+      }
+
+      // pull new dialogueData from first scene in dialogueBank
       if (state.dialogueBank.length > 0) {
-        for (element of state.dialogueBank[toModIndex].data) {
+        for (element of state.dialogueBank[0].data) {
           state.dialogueData.push(element)
         }
       }

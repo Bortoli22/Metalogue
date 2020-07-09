@@ -9,7 +9,7 @@
                 v-bind:key="item.id"
                 v-bind:class="[{'active' : (item.id === activeProjectID ? true : false)},
                   {'hoverable' : (item.id === activeProjectID ? false : true)}]"
-                v-on:click="swapProject({name: item.name, id: item.id})">
+                v-on:click="swap({name: item.name, id: item.id})">
                     {{ item.name }}
             </b-list-group-item>
         </b-list-group>
@@ -26,9 +26,9 @@ export default {
     if (this.projectBank.findIndex(element => element.id === this.activeProjectID) === -1) {
       // if the selected scene has been removed since last create
       if (this.projectBank.length > 0) {
-        this.$emit('setActiveProject', this.projectBank[0].id)
+        this.$emit('setActiveProjectID', this.projectBank[0].id)
       } else {
-        this.$emit('setActiveProject', 'none')
+        this.$emit('setActiveProjectID', 'none')
       }
     }
   },
@@ -42,10 +42,10 @@ export default {
     ...mapActions([
       'swapProject'
     ]),
-    swapProject (newProject) {
+    swap (newProject) {
       if (newProject.id !== this.activeProjectID) {
         this.swapProject({ old: this.activeProjectID, new: newProject.id, sceneID: this.activeSceneID })
-        this.$emit('setActiveProject', newProject.id)
+        this.$emit('setActiveProjectID', newProject.id)
       }
     }
   },

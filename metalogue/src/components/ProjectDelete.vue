@@ -38,7 +38,7 @@ export default {
     },
     swapAction () {
       this.swapProject({ old: this.activeProjectID, sceneID: this.activeSceneID })
-      if (this.dialogueBank.length > 0) {
+      if (this.projectBank.length > 0) {
         this.$emit('setActiveProjectID', this.projectBank[0].id)
       }
     },
