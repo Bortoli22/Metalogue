@@ -2,6 +2,7 @@
   <div class="home">
     <b-container fluid>
       <b-row>
+        <ProjectCreate class="toolbar" align ="left"/>
         <SpeakerCreate class="toolbar" align="left"/>
         <SceneCreate class="toolbar" align="left"/>
         <SceneDelete
@@ -14,6 +15,11 @@
           <SceneManager
           v-bind:activeSceneID="activeSceneID"
           @setActiveScene="setActiveScene"
+          />
+          <ProjectManager
+          v-bind:activeProjectID="activeProjectID"
+          v-bind:activeSceneID="activeSceneID"
+          @setActiveProjectID="setActiveProjectID"
           />
         </b-col>
         <b-col>
@@ -48,7 +54,9 @@ import SceneManager from '@/components/SceneManager.vue'
 import SceneCreate from '@/components/SceneCreate.vue'
 import SceneDelete from '@/components/SceneDelete.vue'
 import DialogueInitiator from '@/components/DialogueInitiator.vue'
-import SceneInitiator from '@/components/SceneInitiator'
+import SceneInitiator from '@/components/SceneInitiator.vue'
+import ProjectManager from '@/components/ProjectManager.vue'
+import ProjectCreate from '@componenets/ProjectCreate.vue'
 import { mapState } from 'vuex'
 
 export default {
@@ -60,7 +68,9 @@ export default {
     DialogueInitiator,
     SceneCreate,
     SceneInitiator,
-    SceneDelete
+    SceneDelete,
+    ProjectManager,
+    ProjectCreate
   },
   computed: {
     ...mapState([
@@ -74,12 +84,16 @@ export default {
     },
     setActiveScene (payload) {
       this.activeSceneID = payload
+    },
+    setActiveProjectID (payload) {
+      this.activeProjectID = payload
     }
   },
   data () {
     return {
       activeContainerID: 'none',
-      activeSceneID: 'dj3K9'
+      activeSceneID: 'dj3K9',
+      activeProjectID: 'f93jd'
     }
   }
 }

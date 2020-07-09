@@ -5,6 +5,7 @@ import dialogueData from '@/data/dialogueData.js'
 import characterBank from '@/data/characterBank.js'
 import dialogueBank from '@/data/dialogueBank.js'
 import activeUser from '@/data/user.js'
+import projectBank from '@/data/projectBank.js'
 
 Vue.use(Vuex)
 
@@ -13,11 +14,16 @@ export default new Vuex.Store({
     dialogueData,
     characterBank,
     dialogueBank,
-    activeUser
+    activeUser,
+    projectBank
   },
   mutations: {
     appendDialogue: (state, Dialogue) => {
       state.dialogueData.push(Dialogue)
+    },
+    appendProject: (state, project) => {
+      const toInsert = { name: project.projectName, id: project.projectID, sceneBank: [] }
+      state.projectBank.push(toInsert)
     },
     modifyDialogue: (state, Dialogue) => {
       const toModIndex = state.dialogueData.findIndex(element => element.id === Dialogue.id)
@@ -74,6 +80,40 @@ export default new Vuex.Store({
         }
       }
     },
+    swapProjectBank: (state, project) => {
+      console.log('enterswapproject: ' + project.old + ', ' + project.new)
+      // push updates from dialogueData to projectBank
+      var toModIndex = state.projectBank.findIndex(p => p.id === project.old)
+      console.log('toModIndex ' + toModIndex)
+      var oldData = []
+      var element
+      for (element of state.dialogueData) {
+        oldData.push(element)
+      }
+      var x, oldLength
+      oldLength = state.dialogueData.length
+      for (x = 0; x < oldLength; x++) {
+        state.dialogueData.pop()
+      }
+      if (toModIndex > -1) {
+        var toInsert = { name: state.dialogueBank[toModIndex].name, id: project.old, data: oldData }
+        state.dialogueBank[toModIndex] = toInsert
+      }
+      // swap to new Scene
+      if (project.new === undefined) {
+        // swapping because of scene deletion
+        console.log('swapping because of a deletion')
+        toModIndex = 0
+      } else {
+        // swapping because of selection of another scene
+        toModIndex = state.dialogueBank.findIndex(scene => scene.id === project.new)
+      }
+      if (state.dialogueBank.length > 0) {
+        for (element of state.dialogueBank[toModIndex].data) {
+          state.dialogueData.push(element)
+        }
+      }
+    },
     appendScene: (state, scene) => {
       const toInsert = { name: scene.sceneName, id: scene.sceneID, data: [] }
       state.dialogueBank.push(toInsert)
@@ -108,6 +148,9 @@ export default new Vuex.Store({
     swapBank: ({ commit }, bank) => {
       commit('swapBankData', bank)
     },
+    swapProject: ({ commit }, project) => {
+      commit('swapProjectBank', project)
+    },
     addScene: ({ commit }, scene) => {
       commit('appendScene', scene)
     },
@@ -116,6 +159,9 @@ export default new Vuex.Store({
     },
     changeUser: ({ commit }, user) => {
       commit('changeActiveUser', user)
+    },
+    addProject: ({ commit }, project) => {
+      commit('appendProject', project)
     }
   },
   modules: {
