@@ -14,11 +14,11 @@ If you were type the following in the editor:
   
 And make the text into an ‘option’ with two possible responses the following would be generated:
 
- ``` \*/ 2B5 X27cT -o x17s5 t2116 /\* Hello there, traveler!```
+ ``` */ 2B5 X27cT -o x17s5 t2116 /* Hello there, traveler!```
   
 Taking a look at that particular tag to break down the components:
 ```
-\*/ 	2B5 		X27cT 		-o 		x17s5 		t2116		 /\*
+*/ 	2B5 		X27cT 		-o 		x17s5 		t2116		 /*
   
  LS	spID		msgID		flags		args[0]		args[1]		RS
  ``` 
