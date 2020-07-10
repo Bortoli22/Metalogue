@@ -1,6 +1,7 @@
 <template>
     <div>
-        <b-dropdown id="dropdown-right" right text="Export" variant="success">
+        <b-spinner v-if="isExporting" label="Loading..."></b-spinner>
+        <b-dropdown v-if="!isExporting" id="dropdown-right" right text="Export" variant="success">
             <b-dropdown-group id="dropdown-group-1" header="Scene">
                 <b-dropdown-item v-on:click="exporting('scene', 'mm')">Export as MM </b-dropdown-item>
                 <b-dropdown-item v-on:click="exporting('scene', 'json')">Export as JSON </b-dropdown-item>
@@ -28,8 +29,14 @@ export default {
       'characterBank'
     ])
   },
+  data () {
+    return {
+      isExporting: false
+    }
+  },
   methods: {
     characters () {
+      this.isExporting = true
       var c
       var toSend = ''
       for (c of this.characterBank) {
@@ -42,13 +49,15 @@ export default {
       document.body.appendChild(element)
       element.click()
       document.body.removeChild(element)
+      this.isExporting = false
     },
     exporting (operation, type) {
+      this.isExporting = true
       var name = 'file1'
       if (operation === 'scene') {
-        name = 'scene' + this.activeSceneID
+        name = 'scene_' + this.activeSceneID
       } else {
-        name = 'project' + this.activeProjectID
+        name = 'project_' + this.activeProjectID
       }
       var toSend = this.pack(operation, type)
       var element = document.createElement('a')
@@ -58,22 +67,44 @@ export default {
       document.body.appendChild(element)
       element.click()
       document.body.removeChild(element)
+      this.isExporting = false
     },
     pack (operation, type) {
       var packed = ''
       var element
       var subelement
+      var passFlag = ''
+      var index = 0
       if (type === 'mm') {
         if (operation === 'scene') {
           for (element of this.dialogueData) {
-            packed += this.mm(element)
+            // assign opener, sequence, and/or terminus
+            if (index === 0) {
+              passFlag = '-z '
+            } else if (index === this.dialogueData.length - 1) {
+              passFlag = '-t '
+            } else {
+              passFlag = '-s '
+            }
+            packed += this.mm(element, passFlag)
+            index++
           }
         } else {
           for (element of this.dialogueBank) {
             packed += '/* ' + element.name + ' ' + element.id + ' */\n'
             for (subelement of element.data) {
-              packed += this.mm(subelement)
+              // assign opener, sequence, and/or terminus
+              if (index === 0) {
+                passFlag = '-z '
+              } else if (index === element.data.length - 1) {
+                passFlag = '-t '
+              } else {
+                passFlag = '-s '
+              }
+              packed += this.mm(subelement, passFlag)
+              index++
             }
+            index = 0
             packed += '\n'
           }
         }
@@ -90,26 +121,32 @@ export default {
       }
       return packed
     },
-    mm (element) {
+    mm (element, passFlag) {
       console.log(element.id)
       var mmString = '/* '
-      mmString = mmString + element.name + ' ' + element.id + ' '
+      mmString = mmString + this.characterBank.find(e => e.spName === element.name).spID + ' ' + element.id + ' ' + passFlag
       var f
       var arg
+      var addArgs = false
       for (f of element.mod) {
+        // assign option, roulette, and/or event
         switch (f.flag) {
           case 'Option':
             mmString += '-o '
+            addArgs = true
             break
           case 'Roulette':
             mmString += '-r '
+            addArgs = true
             break
           case 'Event':
-            mmString += '-x '
+            mmString = mmString + '-x ' + f.args + ' '
             break
         }
-        for (arg of f.args) {
-          mmString = mmString + arg + ' '
+        if (addArgs) {
+          for (arg of f.args) {
+            mmString = mmString + arg + ' '
+          }
         }
       }
       mmString = mmString + '*/ ' + element.msg + '\n'
