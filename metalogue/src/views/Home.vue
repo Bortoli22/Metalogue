@@ -14,6 +14,10 @@
         v-bind:activeSceneID="activeSceneID"
         @setActiveScene="setActiveScene"
         class="toolbar" align="left"/>
+        <Export
+        v-bind:activeSceneID="activeSceneID"
+        v-bind:activeProjectID="activeProjectID"
+        class="toolbar" align="left"/>
       </b-row>
       <b-row>
         <b-col class="col-md-auto">
@@ -55,6 +59,7 @@
 // @ is an alias to /src
 import DialogueContainer from '@/components/DialogueContainer.vue'
 import SpeakerCreate from '@/components/SpeakerCreate.vue'
+import Export from '@/components/Export.vue'
 
 import SceneManager from '@/components/SceneManager.vue'
 import SceneCreate from '@/components/SceneCreate.vue'
@@ -81,7 +86,8 @@ export default {
     SceneDelete,
     ProjectManager,
     ProjectCreate,
-    ProjectDelete
+    ProjectDelete,
+    Export
   },
   computed: {
     ...mapState([
