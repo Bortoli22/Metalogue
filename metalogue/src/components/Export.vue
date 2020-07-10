@@ -45,14 +45,20 @@ export default {
     pack (operation, type) {
       var packed = ''
       var element
+      var subelement
       if (type === 'mm') {
         if (operation === 'scene') {
           for (element of this.dialogueData) {
             packed += this.mm(element)
-            console.log(element.id)
           }
         } else {
-
+          for (element of this.dialogueBank) {
+            packed += '/* ' + element.name + ' ' + element.id + ' */\n'
+            for (subelement of element.data) {
+              packed += this.mm(subelement)
+            }
+            packed += '\n'
+          }
         }
       } else if (type === 'json') {
         if (operation === 'scene') {
