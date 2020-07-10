@@ -9,6 +9,9 @@
                 <b-dropdown-item v-on:click="exporting('project', 'mm')">Export as MM </b-dropdown-item>
                 <b-dropdown-item v-on:click="exporting('project', 'json')">Export as JSON </b-dropdown-item>
             </b-dropdown-group>
+            <b-dropdown-group id="dropdown-group-3" header="Characters">
+                <b-dropdown-item v-on:click="characters()">Export as MM </b-dropdown-item>
+            </b-dropdown-group>
         </b-dropdown>
     </div>
 </template>
@@ -21,12 +24,26 @@ export default {
     ...mapState([
       'dialogueData',
       'dialogueBank',
-      'projectBank'
+      'projectBank',
+      'characterBank'
     ])
   },
   methods: {
+    characters () {
+      var c
+      var toSend = ''
+      for (c of this.characterBank) {
+        toSend += '/* ' + c.spID + ' */ ' + c.spName + '\n'
+      }
+      var element = document.createElement('a')
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(toSend))
+      element.setAttribute('download', 'characters')
+      element.style.display = 'none'
+      document.body.appendChild(element)
+      element.click()
+      document.body.removeChild(element)
+    },
     exporting (operation, type) {
-      console.log('exporting')
       var name = 'file1'
       if (operation === 'scene') {
         name = 'scene' + this.activeSceneID
