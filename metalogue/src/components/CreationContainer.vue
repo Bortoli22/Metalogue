@@ -1,14 +1,14 @@
 <template>
   <div>
     <b-dropdown id="dropdown-right" right text="Create New" variant="info">
-        <b-dropdown-item v-b-toggle.collapse-1 v-on:click="clicked('project')">Project </b-dropdown-item>
-        <b-dropdown-item v-b-toggle.collapse-1 v-on:click="clicked('scene')">Scene </b-dropdown-item>
-        <b-dropdown-item v-b-toggle.collapse-1 v-on:click="clicked('speaker')">Speaker </b-dropdown-item>
+        <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('project')">Project </b-dropdown-item>
+        <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('scene')">Scene </b-dropdown-item>
+        <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('speaker')">Speaker </b-dropdown-item>
     </b-dropdown>
-    <b-collapse id="collapse-1" class="mt-2">
-        <SceneCreate @created="created" @setActiveSceneID="setActiveSceneID" v-if="(type === 'scene')"/>
-        <ProjectCreate @created="created" @setActiveProjectID="setActiveProjectID" v-if="(type === 'project')"/>
-        <SpeakerCreate @created="created" v-if="(type === 'speaker')"/>
+    <b-collapse id="collapse-1" v-model="visible" class="mt-2">
+        <SceneCreate @close="close" @created="created" @setActiveSceneID="setActiveSceneID" v-if="(type === 'scene')"/>
+        <ProjectCreate @close="close" @created="created" @setActiveProjectID="setActiveProjectID" v-if="(type === 'project')"/>
+        <SpeakerCreate @close="close" @created="created" v-if="(type === 'speaker')"/>
     </b-collapse>
   </div>
 </template>
@@ -26,15 +26,21 @@ export default {
   },
   data () {
     return {
-      type: 'none'
+      type: 'none',
+      visible: false
     }
   },
   methods: {
     clicked (type) {
+      this.visible = true
       this.type = type
+    },
+    close (payload) {
+      this.visible = false
     },
     created (payload) {
       this.type = 'none'
+      this.visible = false
     },
     setActiveSceneID (payload) {
       this.$emit('setActiveSceneID', payload)

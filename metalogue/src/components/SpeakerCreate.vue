@@ -5,7 +5,7 @@
       <b-form-input v-model="newSpeaker" placeholder="Enter Name..." v-on:keyup.enter="addCharacter()"></b-form-input>
       <b-button-group>
           <b-button v-on:click="addCharacter()" variant="info" size="sm">Add</b-button>
-          <b-button variant="danger" size="sm">Close</b-button>
+          <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
       </b-button-group>
       {{ error }}
       </b-card>
@@ -45,6 +45,9 @@ export default {
       this.addSpeaker(toSend)
       this.newSpeaker = ''
       this.$emit('created', null)
+    },
+    close () {
+      this.$emit('close', null)
     }
   }
 }

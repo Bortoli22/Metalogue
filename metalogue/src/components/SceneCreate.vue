@@ -5,7 +5,7 @@
       <b-form-input v-model="newScene" placeholder="Scene Name..." v-on:keyup.enter="createScene()"></b-form-input>
       <b-button-group>
           <b-button v-on:click="createScene()" variant="info" size="sm">Add</b-button>
-          <b-button variant="danger" size="sm">Close</b-button>
+          <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
       </b-button-group>
       {{ error }}
       </b-card>
@@ -32,6 +32,9 @@ export default {
     ...mapActions([
       'addScene'
     ]),
+    close () {
+      this.$emit('close', null)
+    },
     createScene () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       var toSend = { sceneName: this.newScene, sceneID: id }
@@ -49,6 +52,7 @@ export default {
       if (this.dialogueBank.length === 0) {
         this.$emit('setActiveSceneID', id)
       }
+      this.$emit('created', null)
       this.error = ''
       this.addScene(toSend)
       this.newScene = ''

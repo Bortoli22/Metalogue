@@ -6,7 +6,7 @@
       <b-form-input v-model="newProject" placeholder="Project Name..." v-on:keyup.enter="createProject()"></b-form-input>
       <b-button-group>
           <b-button v-on:click="createProject()" variant="info" size="sm">Add</b-button>
-          <b-button variant="danger" size="sm">Close</b-button>
+          <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
       </b-button-group>
       {{ error }}
       </b-card>
@@ -32,6 +32,9 @@ export default {
     ...mapActions([
       'addProject'
     ]),
+    close () {
+      this.$emit('close', null)
+    },
     createProject () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       var toSend = { projectName: this.newProject, projectID: id }
