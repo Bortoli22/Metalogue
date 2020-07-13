@@ -146,13 +146,19 @@ export default {
     createDialoguePackaging () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       var computedNest = this.nested
+      var computedName = this.charname
       var computedParent = ''
       var computedMod = []
       if (this.optionsFlag || this.responseFlag || this.rouletteFlag) {
         // add to new DC nest value, push response flag if needed
         computedNest++
         computedParent = this.sentId
-        if (!this.responseFlag) {
+        if (this.responseFlag) {
+          // current DC is response, change speaker for convenience
+          const parent = this.dialogueData.find(element => element.id === this.parentId)
+          computedName = parent.name
+        } else {
+          // current DC is option/roulette, so child will be response
           computedMod.push({ flag: 'Response', args: [this.sentId] })
           var mIndex
           if (this.optionsFlag) {
@@ -168,7 +174,7 @@ export default {
       } else {
         computedParent = this.parentId
       }
-      const toAdd = { id: id, name: this.charname, msg: '', mod: computedMod, parent: computedParent, nest: computedNest }
+      const toAdd = { id: id, name: computedName, msg: '', mod: computedMod, parent: computedParent, nest: computedNest }
       return toAdd
     },
     eventBlur () {
