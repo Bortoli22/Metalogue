@@ -21,7 +21,8 @@ import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'projectBank'
+      'projectBank',
+      'dialogueBank'
     ])
   },
   data () {
@@ -41,6 +42,13 @@ export default {
       if (this.projectBank.length === 0) {
         this.error = 'Must create a project first'
         return
+      }
+      var element
+      for (element of this.dialogueBank) {
+        if (element.name === this.newScene) {
+          this.error = 'Name already used'
+          return
+        }
       }
       this.error = ''
       this.addScene(toSend)

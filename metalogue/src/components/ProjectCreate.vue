@@ -10,19 +10,26 @@
                 <b-button v-b-toggle.projectCreate v-on:click="createProject()" variant="info" size="sm">Add</b-button>
                 <b-button v-b-toggle.projectCreate variant="danger" size="sm">Close</b-button>
             </b-button-group>
+            {{ error }}
             </b-card>
         </b-collapse>
     </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
+  computed: {
+    ...mapState([
+      'projectBank'
+    ])
+  },
   data () {
     return {
       mainButtonText: 'New Project',
-      newProject: ''
+      newProject: '',
+      error: ''
     }
   },
   methods: {
@@ -32,6 +39,14 @@ export default {
     createProject () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       var toSend = { projectName: this.newProject, projectID: id }
+      var element
+      for (element of this.projectBank) {
+        if (element.name === this.newProject) {
+          this.error = 'Name already used'
+          return
+        }
+      }
+      this.error = ''
       this.addProject(toSend)
       this.newProject = ''
     },
