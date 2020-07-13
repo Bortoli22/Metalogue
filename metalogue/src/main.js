@@ -3,10 +3,17 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 
+import { auth } from './firebase.js'
+
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  render: h => h(App)
-}).$mount('#app')
+let app
+auth.onAuthStateChanged(user => {
+  if (!app) {
+    new Vue({
+      router,
+      store,
+      render: h => h(App)
+    }).$mount('#app')
+  }
+})

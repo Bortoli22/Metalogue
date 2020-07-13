@@ -38,12 +38,13 @@
 </template>
 
 <script>
-import { auth } from './firebase'
+import { auth, usersCollection } from './firebase'
 import { mapActions, mapState } from 'vuex'
 
 export default {
   created () {
     this.user = this.activeUser.name
+    this.getUser()
   },
   computed: {
     ...mapState([
@@ -64,6 +65,13 @@ export default {
         auth.signOut()
         this.changeUser({ name: 'User' })
         this.$router.replace({ name: 'login' })
+      }
+    },
+    async getUser () {
+      if (auth.currentUser) {
+        const getName = await usersCollection.doc(auth.currentUser.uid).get()
+        const toSend = getName.data().name
+        this.changeUser({ name: toSend })
       }
     }
   }
