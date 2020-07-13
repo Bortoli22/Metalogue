@@ -2,13 +2,10 @@
   <div class="home">
     <b-container fluid>
       <b-row>
-        <ProjectCreate
+        <CreationContainer
+        @setActiveSceneID="setActiveScene"
         @setActiveProjectID="setActiveProjectID"
         class="toolbar" align ="left"/>
-        <SpeakerCreate class="toolbar" align="left"/>
-        <SceneCreate
-        @setActiveSceneID="setActiveScene"
-        class="toolbar" align="left"/>
         <ProjectDelete
         v-bind:activeSceneID="activeSceneID"
         v-bind:activeProjectID="activeProjectID"
@@ -64,11 +61,10 @@
 <script>
 // @ is an alias to /src
 import DialogueContainer from '@/components/DialogueContainer.vue'
-import SpeakerCreate from '@/components/SpeakerCreate.vue'
 import Export from '@/components/Export.vue'
+import CreationContainer from '@/components/CreationContainer.vue'
 
 import SceneManager from '@/components/SceneManager.vue'
-import SceneCreate from '@/components/SceneCreate.vue'
 import SceneDelete from '@/components/SceneDelete.vue'
 
 import DialogueInitiator from '@/components/DialogueInitiator.vue'
@@ -76,7 +72,6 @@ import SceneInitiator from '@/components/SceneInitiator.vue'
 import ProjectInitiator from '@/components/ProjectInitiator.vue'
 
 import ProjectManager from '@/components/ProjectManager.vue'
-import ProjectCreate from '@/components/ProjectCreate.vue'
 import ProjectDelete from '@/components/ProjectDelete.vue'
 
 import { mapState } from 'vuex'
@@ -85,17 +80,15 @@ export default {
   name: 'Home',
   components: {
     DialogueContainer,
-    SpeakerCreate,
     SceneManager,
     DialogueInitiator,
-    SceneCreate,
     SceneInitiator,
     SceneDelete,
     ProjectManager,
-    ProjectCreate,
-    ProjectDelete,
     ProjectInitiator,
-    Export
+    ProjectDelete,
+    Export,
+    CreationContainer
   },
   computed: {
     ...mapState([

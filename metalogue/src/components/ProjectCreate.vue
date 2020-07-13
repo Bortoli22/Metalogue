@@ -1,18 +1,15 @@
 <template>
     <div>
-        <b-button v-b-toggle.projectCreate variant="info"> {{ mainButtonText }} </b-button>
-        <b-collapse id="projectCreate" class="mt-2" v-on:show="swapMainButtonText('Collapse')" v-on:hide="swapMainButtonText('New Project')">
-            <b-card>
-            <p class="card-text">Create a new project
-            </p>
-            <b-form-input v-model="newProject" placeholder="Project Name..." v-on:keyup.enter="createProject()"></b-form-input>
-            <b-button-group>
-                <b-button v-b-toggle.projectCreate v-on:click="createProject()" variant="info" size="sm">Add</b-button>
-                <b-button v-b-toggle.projectCreate variant="danger" size="sm">Close</b-button>
-            </b-button-group>
-            {{ error }}
-            </b-card>
-        </b-collapse>
+      <b-card>
+      <p class="card-text">Create a new project
+      </p>
+      <b-form-input v-model="newProject" placeholder="Project Name..." v-on:keyup.enter="createProject()"></b-form-input>
+      <b-button-group>
+          <b-button v-on:click="createProject()" variant="info" size="sm">Add</b-button>
+          <b-button variant="danger" size="sm">Close</b-button>
+      </b-button-group>
+      {{ error }}
+      </b-card>
     </div>
 </template>
 
@@ -27,7 +24,6 @@ export default {
   },
   data () {
     return {
-      mainButtonText: 'New Project',
       newProject: '',
       error: ''
     }
@@ -52,9 +48,7 @@ export default {
       }
       this.addProject(toSend)
       this.newProject = ''
-    },
-    swapMainButtonText (newText) {
-      this.mainButtonText = newText
+      this.$emit('created', null)
     }
   }
 }
