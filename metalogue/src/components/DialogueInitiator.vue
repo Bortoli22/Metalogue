@@ -1,7 +1,7 @@
 <template>
     <div>
         <div>
-        <b-jumbotron v-bind:header="activeSceneID" lead="Scene is empty">
+        <b-jumbotron v-bind:header="activeSceneName" lead="Scene is empty">
             <p>No dialogue data here. Create some!</p>
             <b-button variant="info" v-on:click="createDialogue()">+</b-button>
         </b-jumbotron>
@@ -15,8 +15,18 @@ import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'characterBank'
+      'characterBank',
+      'dialogueBank'
     ])
+  },
+  created () {
+    const getName = this.dialogueBank.find(e => e.id === this.activeSceneID)
+    this.activeSceneName = getName.name
+  },
+  data () {
+    return {
+      activeSceneName: ''
+    }
   },
   methods: {
     ...mapActions([

@@ -2,9 +2,13 @@
   <div class="home">
     <b-container fluid>
       <b-row>
-        <ProjectCreate class="toolbar" align ="left"/>
+        <ProjectCreate
+        @setActiveProjectID="setActiveProjectID"
+        class="toolbar" align ="left"/>
         <SpeakerCreate class="toolbar" align="left"/>
-        <SceneCreate class="toolbar" align="left"/>
+        <SceneCreate
+        @setActiveSceneID="setActiveScene"
+        class="toolbar" align="left"/>
         <ProjectDelete
         v-bind:activeSceneID="activeSceneID"
         v-bind:activeProjectID="activeProjectID"

@@ -50,6 +50,9 @@ export default {
           return
         }
       }
+      if (this.dialogueBank.length === 0) {
+        this.$emit('setActiveSceneID', id)
+      }
       this.error = ''
       this.addScene(toSend)
       this.newScene = ''

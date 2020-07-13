@@ -47,6 +47,9 @@ export default {
         }
       }
       this.error = ''
+      if (this.projectBank.length === 0) {
+        this.$emit('setActiveProjectID', id)
+      }
       this.addProject(toSend)
       this.newProject = ''
     },
