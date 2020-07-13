@@ -9,7 +9,7 @@
                 <b-button v-b-toggle.speakerCreate v-on:click="addCharacter()" variant="info" size="sm">Add</b-button>
                 <b-button v-b-toggle.speakerCreate variant="danger" size="sm">Close</b-button>
             </b-button-group>
-            <p>{{ error }}</p>
+            {{ error }}
             </b-card>
         </b-collapse>
     </div>

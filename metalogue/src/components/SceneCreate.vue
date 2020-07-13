@@ -9,19 +9,26 @@
                 <b-button v-b-toggle.sceneCreate v-on:click="createScene()" variant="info" size="sm">Add</b-button>
                 <b-button v-b-toggle.sceneCreate variant="danger" size="sm">Close</b-button>
             </b-button-group>
+            {{ error }}
             </b-card>
         </b-collapse>
     </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
+  computed: {
+    ...mapState([
+      'projectBank'
+    ])
+  },
   data () {
     return {
       mainButtonText: 'New Scene',
-      newScene: ''
+      newScene: '',
+      error: ''
     }
   },
   methods: {
@@ -31,6 +38,11 @@ export default {
     createScene () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       var toSend = { sceneName: this.newScene, sceneID: id }
+      if (this.projectBank.length === 0) {
+        this.error = 'Must create a project first'
+        return
+      }
+      this.error = ''
       this.addScene(toSend)
       this.newScene = ''
     },

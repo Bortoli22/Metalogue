@@ -32,8 +32,10 @@
           />
         </b-col>
         <b-col>
+          <ProjectInitiator
+          v-if="projectBank.length === 0"/>
           <SceneInitiator
-          v-if="dialogueBank.length === 0"/>
+          v-if="dialogueBank.length === 0 && projectBank.length > 0"/>
           <DialogueInitiator
           v-if="(dialogueData.length === 0) && (dialogueBank.length > 0)"
           v-bind:activeSceneID="activeSceneID"/>
@@ -67,6 +69,7 @@ import SceneDelete from '@/components/SceneDelete.vue'
 
 import DialogueInitiator from '@/components/DialogueInitiator.vue'
 import SceneInitiator from '@/components/SceneInitiator.vue'
+import ProjectInitiator from '@/components/ProjectInitiator.vue'
 
 import ProjectManager from '@/components/ProjectManager.vue'
 import ProjectCreate from '@/components/ProjectCreate.vue'
@@ -87,12 +90,14 @@ export default {
     ProjectManager,
     ProjectCreate,
     ProjectDelete,
+    ProjectInitiator,
     Export
   },
   computed: {
     ...mapState([
       'dialogueData',
-      'dialogueBank'
+      'dialogueBank',
+      'projectBank'
     ])
   },
   methods: {
