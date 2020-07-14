@@ -2,23 +2,11 @@
   <div class="home">
     <b-container fluid>
       <b-row>
-        <CreationContainer
+        <Toolbar
         @setActiveSceneID="setActiveScene"
         @setActiveProjectID="setActiveProjectID"
-        class="toolbar" align ="left"/>
-        <ProjectDelete
         v-bind:activeSceneID="activeSceneID"
-        v-bind:activeProjectID="activeProjectID"
-        @setActiveProjectID="setActiveProjectID"
-        class="toolbar" align="left"/>
-        <SceneDelete
-        v-bind:activeSceneID="activeSceneID"
-        @setActiveScene="setActiveScene"
-        class="toolbar" align="left"/>
-        <Export
-        v-bind:activeSceneID="activeSceneID"
-        v-bind:activeProjectID="activeProjectID"
-        class="toolbar" align="left"/>
+        v-bind:activeProjectID="activeProjectID"/>
       </b-row>
       <b-row>
         <b-col class="col-md-auto">
@@ -61,18 +49,15 @@
 <script>
 // @ is an alias to /src
 import DialogueContainer from '@/components/DialogueContainer.vue'
-import Export from '@/components/Export.vue'
-import CreationContainer from '@/components/CreationContainer.vue'
+import Toolbar from '@/components/Toolbar.vue'
 
 import SceneManager from '@/components/SceneManager.vue'
-import SceneDelete from '@/components/SceneDelete.vue'
 
 import DialogueInitiator from '@/components/DialogueInitiator.vue'
 import SceneInitiator from '@/components/SceneInitiator.vue'
 import ProjectInitiator from '@/components/ProjectInitiator.vue'
 
 import ProjectManager from '@/components/ProjectManager.vue'
-import ProjectDelete from '@/components/ProjectDelete.vue'
 
 import { mapState } from 'vuex'
 
@@ -83,12 +68,9 @@ export default {
     SceneManager,
     DialogueInitiator,
     SceneInitiator,
-    SceneDelete,
     ProjectManager,
     ProjectInitiator,
-    ProjectDelete,
-    Export,
-    CreationContainer
+    Toolbar
   },
   computed: {
     ...mapState([
@@ -117,9 +99,3 @@ export default {
   }
 }
 </script>
-
-<style>
-  .toolbar {
-    padding: 0px 20px 20px 0px
-  }
-</style>
