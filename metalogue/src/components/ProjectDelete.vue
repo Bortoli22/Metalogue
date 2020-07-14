@@ -16,7 +16,8 @@ import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'projectBank'
+      'projectBank',
+      'dialogueBank'
     ])
   },
   methods: {
@@ -36,6 +37,9 @@ export default {
       this.swapProject({ old: this.activeProjectID, sceneID: this.activeSceneID })
       if (this.projectBank.length > 0) {
         this.$emit('setActiveProjectID', this.projectBank[0].id)
+      }
+      if (this.dialogueBank.length > 0) {
+        this.$emit('setActiveSceneID', this.dialogueBank[0].id)
       }
     }
   },

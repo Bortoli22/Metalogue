@@ -27,7 +27,8 @@
         v-bind:activeProjectID="activeProjectID"
         v-if="(type === 'delproject')"
         @close="close"
-        @setActiveProjectID="setActiveProjectID"/>
+        @setActiveProjectID="setActiveProjectID"
+        @setActiveSceneID="setActiveSceneID"/>
         <SceneDelete
         v-bind:activeSceneID="activeSceneID"
         v-if="(type === 'delscene')"
