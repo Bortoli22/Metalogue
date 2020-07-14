@@ -12,16 +12,16 @@
               <router-link to="/">Home</router-link>
             </b-nav-item>
             <b-nav-item>
+              <router-link to="/about">About</router-link>
+            </b-nav-item>
+            <b-nav-item>
               <router-link to="/getstore">Store Data</router-link>
             </b-nav-item>
           </b-navbar-nav>
 
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
-            <b-nav-item>
-              <router-link to="/about">The Forbidden Feast</router-link>
-            </b-nav-item>
-            <b-nav-item-dropdown right>
+            <b-nav-item-dropdown v-if="(user !== '')" right>
               <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
                 <em>{{ activeUser.name }}</em>
@@ -63,7 +63,7 @@ export default {
     async signOut () {
       if (auth.currentUser) {
         auth.signOut()
-        this.changeUser({ name: 'User' })
+        this.changeUser({ name: '' })
         this.$router.replace({ name: 'login' })
       }
     },
@@ -71,6 +71,7 @@ export default {
       if (auth.currentUser) {
         const getName = await usersCollection.doc(auth.currentUser.uid).get()
         const toSend = getName.data().name
+        this.user = toSend
         this.changeUser({ name: toSend })
       }
     }

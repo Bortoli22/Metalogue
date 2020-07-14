@@ -15,6 +15,7 @@
           v-bind:activeSceneID="activeSceneID"
           v-bind:activeProjectID="activeProjectID"
           class="toolbar" align ="left"/>
+      <CloudPublish />
     </b-row>
     </b-container>
     <b-collapse id="collapse-1" v-model="visible" class="mt-2">
@@ -47,6 +48,7 @@ import ProjectDelete from '@/components/ProjectDelete.vue'
 import SceneDelete from '@/components/SceneDelete.vue'
 
 import Export from '@/components/Export.vue'
+import CloudPublish from '@/components/CloudPublish.vue'
 
 export default {
   components: {
@@ -55,7 +57,8 @@ export default {
     SceneCreate,
     ProjectDelete,
     SceneDelete,
-    SpeakerCreate
+    SpeakerCreate,
+    CloudPublish
   },
   data () {
     return {

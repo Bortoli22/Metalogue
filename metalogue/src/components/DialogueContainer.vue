@@ -177,7 +177,7 @@ export default {
       }
       var dIndex = this.dialogueData.findIndex(e => e.id === this.activeContainerID)
       if (dIndex !== this.dialogueData.length - 1) {
-        console.log('the stars are not aligned')
+        // current DC must be inserted somewhere in the array instead of pushed
         computedActive = dIndex
       }
       const toAdd = {
@@ -292,6 +292,8 @@ export default {
             })
           }
         }
+        // DCs with this DC as parent must be unNested
+        this.unNestChild({ val: this.sentId, pAdjust: true })
       }
       return null
     },
@@ -314,7 +316,6 @@ export default {
       console.log('leaving unNestChild with: ' + payload.val)
     },
     updateMod (payload) {
-      // console.log('Payload: ' + payload)
       switch (payload.mod) {
         case 'Event':
           this.eventFlag = payload.emitting
