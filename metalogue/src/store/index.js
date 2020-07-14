@@ -19,7 +19,11 @@ export default new Vuex.Store({
   },
   mutations: {
     appendDialogue: (state, Dialogue) => {
-      state.dialogueData.push(Dialogue)
+      if (Dialogue.active < 0) {
+        state.dialogueData.push(Dialogue)
+      } else {
+        state.dialogueData.splice(Dialogue.active + 1, 0, Dialogue)
+      }
     },
     appendProject: (state, project) => {
       const toInsert = { name: project.projectName, id: project.projectID, sceneBank: [] }

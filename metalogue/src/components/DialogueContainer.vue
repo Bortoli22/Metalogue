@@ -149,6 +149,7 @@ export default {
       var computedName = this.charname
       var computedParent = ''
       var computedMod = []
+      var computedActive = -1
       if (this.optionsFlag || this.responseFlag || this.rouletteFlag) {
         // add to new DC nest value, push response flag if needed
         computedNest++
@@ -174,7 +175,20 @@ export default {
       } else {
         computedParent = this.parentId
       }
-      const toAdd = { id: id, name: computedName, msg: '', mod: computedMod, parent: computedParent, nest: computedNest }
+      var dIndex = this.dialogueData.findIndex(e => e.id === this.activeContainerID)
+      if (dIndex !== this.dialogueData.length - 1) {
+        console.log('the stars are not aligned')
+        computedActive = dIndex
+      }
+      const toAdd = {
+        id: id,
+        name: computedName,
+        msg: '',
+        mod: computedMod,
+        parent: computedParent,
+        nest: computedNest,
+        active: computedActive
+      }
       return toAdd
     },
     eventBlur () {
