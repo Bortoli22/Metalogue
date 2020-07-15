@@ -39,6 +39,41 @@ export default new Vuex.Store({
     changeActiveUser: (state, user) => {
       state.activeUser = user
     },
+    loadFromCloud: (state, bank) => {
+      // pop all Bank data
+      var oldLength = state.dialogueData.length
+      var x, element
+      for (x = 0; x < oldLength; x++) {
+        state.dialogueData.pop()
+      }
+      oldLength = state.dialogueBank.length
+      for (x = 0; x < oldLength; x++) {
+        state.dialogueBank.pop()
+      }
+      oldLength = state.projectBank.length
+      for (x = 0; x < oldLength; x++) {
+        state.projectBank.pop()
+      }
+      // push fire data to projectBank
+      if (bank.length > 0) {
+        for (element of bank) {
+          state.projectBank.push(element)
+        }
+        // push fire data to dialogueBank
+        if (bank[0].sceneBank.length > 0) {
+          for (element of bank[0].sceneBank) {
+            state.dialogueBank.push(element)
+          }
+          // push fire data to dialogueData
+          if (bank[0].sceneBank[0].data.length > 0) {
+            for (element of bank[0].sceneBank[0].data) {
+              state.dialogueData.push(element)
+            }
+          }
+        }
+      }
+      console.log('exitting fireload')
+    },
     modifyDialogue: (state, Dialogue) => {
       const toModIndex = state.dialogueData.findIndex(element => element.id === Dialogue.id)
       if (toModIndex > -1) {
@@ -181,6 +216,9 @@ export default new Vuex.Store({
     },
     changeUser: ({ commit }, user) => {
       commit('changeActiveUser', user)
+    },
+    fireLoad: ({ commit }, bank) => {
+      commit('loadFromCloud', bank)
     },
     modDialogue: ({ commit }, modded) => {
       commit('modifyDialogue', modded)

@@ -1,7 +1,20 @@
 <template>
     <div>
       <b-container>
-      <b-jumbotron header="Welcome" lead="Hello! Log in to your Metalogue account below">
+      <b-card
+        title="Logging in"
+        img-src="https://placekitten.com/800/500"
+        img-alt="Image"
+        img-top
+        class="mb-2"
+        v-if="loadingData"
+      >
+        <b-card-text>
+          <b-spinner small></b-spinner>
+          Getting your dialogue ready...
+        </b-card-text>
+      </b-card>
+      <b-jumbotron v-if="!loadingData" header="Welcome" lead="Hello! Log in to your Metalogue account below">
         <hr class="my-4">
         <b-form @submit.stop.prevent>
                 <label for="text-email">Email</label>
@@ -22,30 +35,90 @@
 
 <script>
 import * as fire from '../firebase'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
+  created () {
+    console.log('logincreated')
+  },
+  computed: {
+    ...mapState([
+      'projectBank'
+    ])
+  },
   data () {
     return {
       email: '',
-      password: ''
+      password: '',
+      loadingData: false
     }
   },
   methods: {
     ...mapActions([
-      'changeUser'
+      'changeUser',
+      'fireLoad'
     ]),
     async tryLogin () {
+      this.loadingData = true
       try {
         await fire.auth.signInWithEmailAndPassword(this.email, this.password)
         const getName = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
         const toSend = getName.data().name
         this.changeUser({ name: toSend })
-        // TO-DO: use action/mutator to set vuex store with data from user
-        this.$router.replace({ name: 'Home' })
+
+        console.log('startedloading')
+        const toLoad = await this.fetchData()
+        console.log('finishedloading, push to fireload')
+        this.fireLoad(toLoad)
+        console.log('finished fireload')
+
+        this.$router.replace({ path: '/' })
       } catch (err) {
         console.log(err)
+        this.loadingData = false
       }
+    },
+    async fetchData () {
+      // set vuex store with data from firestore
+      var pBank = []
+
+      var fireProjectBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+        .collection('projects').get()
+      console.log(fireProjectBank)
+      for (const doc of fireProjectBank.docs) {
+        // Obtain data for each project
+        console.log(doc.id, ' => ', doc.data())
+        var sBank = []
+        var fireSceneBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+          .collection('projects').doc(doc.id).collection('scenes').get()
+        for (const doc2 of fireSceneBank.docs) {
+          // Obtain data for each scene
+          console.log(doc2.id, ' => ', doc2.data())
+          var dBank = []
+          var fireDataBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+            .collection('projects').doc(doc.id).collection('scenes').doc(doc2.id).collection('data').get()
+          for (const doc3 of fireDataBank.docs) {
+            // Obtain data for each dialogue
+            console.log(doc3.id, ' => ', doc3.data())
+            var mBank = []
+            var fireModBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+              .collection('projects').doc(doc.id).collection('scenes').doc(doc2.id)
+              .collection('data').doc(doc3.id).collection('mod').get()
+            for (const doc4 of fireModBank.docs) {
+              // Obtain mod data for each dialogue
+              mBank.push({ flag: doc4.data().flag, args: doc4.data().args })
+            }
+            // push all mod data to dialogue
+            dBank.push({ id: doc3.data().id, name: doc3.data().name, msg: doc3.data().msg, mod: mBank, parent: doc3.data().parent, nest: doc3.data().nest })
+          }
+          // push all dialogue data to scene
+          sBank.push({ name: doc2.id, id: doc2.data().id, data: dBank })
+        }
+        // push all scene data to project
+        pBank.push({ name: doc.id, id: doc.data().id, sceneBank: sBank })
+      }
+      console.log('sendBank => ', pBank)
+      return pBank
     }
   }
 }

@@ -1,6 +1,6 @@
 export default [
   {
-    name: 'project1',
+    name: 'shouldnotsee',
     id: 'f93jd',
     sceneBank: [
       {

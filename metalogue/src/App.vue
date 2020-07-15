@@ -64,7 +64,7 @@ export default {
       if (auth.currentUser) {
         auth.signOut()
         this.changeUser({ name: '' })
-        this.$router.replace({ name: 'login' })
+        this.$router.replace({ path: '/login' })
       }
     },
     async getUser () {
