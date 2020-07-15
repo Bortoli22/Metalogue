@@ -59,19 +59,14 @@ export default {
       'fireLoad'
     ]),
     async tryLogin () {
-      this.loadingData = true
       try {
         await fire.auth.signInWithEmailAndPassword(this.email, this.password)
         const getName = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
         const toSend = getName.data().name
         this.changeUser({ name: toSend })
-
-        console.log('startedloading')
+        this.loadingData = true
         const toLoad = await this.fetchData()
-        console.log('finishedloading, push to fireload')
         this.fireLoad(toLoad)
-        console.log('finished fireload')
-
         this.$router.replace({ path: '/' })
       } catch (err) {
         console.log(err)
@@ -84,22 +79,18 @@ export default {
 
       var fireProjectBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
         .collection('projects').get()
-      console.log(fireProjectBank)
       for (const doc of fireProjectBank.docs) {
         // Obtain data for each project
-        console.log(doc.id, ' => ', doc.data())
         var sBank = []
         var fireSceneBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
           .collection('projects').doc(doc.id).collection('scenes').get()
         for (const doc2 of fireSceneBank.docs) {
           // Obtain data for each scene
-          console.log(doc2.id, ' => ', doc2.data())
           var dBank = []
           var fireDataBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
             .collection('projects').doc(doc.id).collection('scenes').doc(doc2.id).collection('data').get()
           for (const doc3 of fireDataBank.docs) {
             // Obtain data for each dialogue
-            console.log(doc3.id, ' => ', doc3.data())
             var mBank = []
             var fireModBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
               .collection('projects').doc(doc.id).collection('scenes').doc(doc2.id)
@@ -117,7 +108,6 @@ export default {
         // push all scene data to project
         pBank.push({ name: doc.id, id: doc.data().id, sceneBank: sBank })
       }
-      console.log('sendBank => ', pBank)
       return pBank
     }
   }

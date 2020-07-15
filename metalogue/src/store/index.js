@@ -72,7 +72,6 @@ export default new Vuex.Store({
           }
         }
       }
-      console.log('exitting fireload')
     },
     modifyDialogue: (state, Dialogue) => {
       const toModIndex = state.dialogueData.findIndex(element => element.id === Dialogue.id)

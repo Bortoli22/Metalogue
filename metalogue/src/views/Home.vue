@@ -14,6 +14,7 @@
           v-bind:activeProjectID="activeProjectID"
           v-bind:activeSceneID="activeSceneID"
           @setActiveProjectID="setActiveProjectID"
+          @setActiveScene="setActiveScene"
           />
           <SceneManager
           v-bind:activeSceneID="activeSceneID"

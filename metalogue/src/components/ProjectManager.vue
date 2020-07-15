@@ -46,6 +46,9 @@ export default {
       if (newProject.id !== this.activeProjectID) {
         this.swapProject({ old: this.activeProjectID, new: newProject.id, sceneID: this.activeSceneID })
         this.$emit('setActiveProjectID', newProject.id)
+        if (this.dialogueBank.length > 0) {
+          this.$emit('setActiveScene', this.dialogueBank[0].id)
+        }
       }
     }
   },
