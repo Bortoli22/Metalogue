@@ -33,12 +33,13 @@
         </b-collapse>
       </b-navbar>
     </div>
+    <b-container>
       <b-card
-        title="Logging in"
-        img-src="https://placekitten.com/800/500"
+        title="One Moment"
+        img-src="https://placekitten.com/1080/720"
         img-alt="Image"
         img-top
-        class="mb-2"
+        class="mb-2 cardimg"
         v-if="loadingData"
       >
         <b-card-text>
@@ -46,6 +47,7 @@
           Getting your dialogue ready...
         </b-card-text>
       </b-card>
+    </b-container>
       <router-view
         v-if="!loadingData"/>
   </div>
@@ -166,5 +168,13 @@ export default {
 
 .navlogo {
   padding-right: 10px
+}
+
+.cardimg {
+  width: 50%;
+  height: 50%;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 </style>

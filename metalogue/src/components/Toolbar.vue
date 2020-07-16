@@ -15,7 +15,9 @@
           v-bind:activeSceneID="activeSceneID"
           v-bind:activeProjectID="activeProjectID"
           class="toolbar" align ="left"/>
-      <CloudPublish v-bind:activeProjectID="activeProjectID" />
+      <CloudPublish
+          v-bind:activeSceneID="activeSceneID"
+          v-bind:activeProjectID="activeProjectID" />
     </b-row>
     </b-container>
     <b-collapse id="collapse-1" v-model="visible" class="mt-2">

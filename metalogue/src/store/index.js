@@ -85,6 +85,32 @@ export default new Vuex.Store({
         state.dialogueData[toModIndex].name = Dialogue.name
       }
     },
+    projectSyncing: (state, project) => {
+      // push updates from dialogueData to dialogueBank
+      var toModIndex = state.dialogueBank.findIndex(scene => scene.id === project.scene)
+      console.log('toModIndex ' + toModIndex)
+      var oldData = []
+      var element
+      var toInsert
+      for (element of state.dialogueData) {
+        oldData.push(element)
+      }
+      if (toModIndex > -1) {
+        toInsert = { name: state.dialogueBank[toModIndex].name, id: project.scene, data: oldData }
+        state.dialogueBank[toModIndex] = toInsert
+      }
+
+      // push updates from dialogueBank to projectBank
+      toModIndex = state.projectBank.findIndex(p => p.id === project.project)
+      oldData = []
+      for (element of state.dialogueBank) {
+        oldData.push(element)
+      }
+      if (toModIndex > -1) {
+        toInsert = { name: state.projectBank[toModIndex].name, id: project.project, sceneBank: oldData }
+        state.projectBank[toModIndex] = toInsert
+      }
+    },
     removeDialogue: (state, id) => {
       const toModIndex = state.dialogueData.findIndex(element => element.id === id)
       if (toModIndex > -1) {
@@ -224,6 +250,9 @@ export default new Vuex.Store({
     },
     modSpeaker: ({ commit }, modded) => {
       commit('modifySpeaker', modded)
+    },
+    projectSync: ({ commit }, project) => {
+      commit('projectSyncing', project)
     },
     remDialogue: ({ commit }, removed) => {
       commit('removeDialogue', removed)

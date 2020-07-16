@@ -9,7 +9,7 @@
 
 <script>
 import * as fire from '../firebase'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   computed: {
@@ -23,9 +23,15 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'projectSync'
+    ]),
     async pushData () {
       // very expensive complete user re-write
-      // add watchers/snapshots if you ever pay for a higher quota
+      // add watchers/snapshots if you ever pay for a higher quota :)
+
+      this.projectSync({ project: this.activeProjectID, scene: this.activeSceneID })
+
       this.isExporting = true
       var p = this.projectBank.find(element => element.id === this.activeProjectID)
       // set project fields
@@ -78,7 +84,8 @@ export default {
     }
   },
   props: {
-    activeProjectID: String
+    activeProjectID: String,
+    activeSceneID: String
   }
 }
 </script>
