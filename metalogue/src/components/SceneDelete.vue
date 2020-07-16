@@ -12,11 +12,13 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import * as fire from '../firebase'
 
 export default {
   computed: {
     ...mapState([
-      'dialogueBank'
+      'dialogueBank',
+      'projectBank'
     ])
   },
   methods: {
@@ -27,7 +29,15 @@ export default {
     close () {
       this.$emit('close', null)
     },
-    deleteScene () {
+    async deleteScene () {
+      try {
+        var pname = this.projectBank.find(e => e.id === this.activeProjectID).name
+        var sname = this.dialogueBank.find(e => e.id === this.activeSceneID).name
+        await fire.usersCollection.doc(fire.auth.currentUser.uid)
+          .collection('projects').doc(pname).collection('scenes').doc(sname).delete()
+      } catch (err) {
+        console.log(err)
+      }
       this.remScene(this.activeSceneID)
       this.swapAction()
       this.$emit('close', null)
@@ -40,6 +50,7 @@ export default {
     }
   },
   props: {
+    activeProjectID: String,
     activeSceneID: String
   }
 }

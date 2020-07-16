@@ -12,6 +12,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import * as fire from '../firebase'
 
 export default {
   computed: {
@@ -28,7 +29,14 @@ export default {
     close () {
       this.$emit('close', null)
     },
-    deleteProject () {
+    async deleteProject () {
+      try {
+        var name = this.projectBank.find(e => e.id === this.activeProjectID).name
+        await fire.usersCollection.doc(fire.auth.currentUser.uid)
+          .collection('projects').doc(name).delete()
+      } catch (err) {
+        console.log(err)
+      }
       this.remProject(this.activeProjectID)
       this.swapAction()
       this.$emit('close', null)

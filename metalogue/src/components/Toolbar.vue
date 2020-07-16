@@ -32,6 +32,7 @@
         @setActiveSceneID="setActiveSceneID"/>
         <SceneDelete
         v-bind:activeSceneID="activeSceneID"
+        v-bind:activeProjectID="activeProjectID"
         v-if="(type === 'delscene')"
         @close="close"
         @setActiveScene="setActiveSceneID"/>
