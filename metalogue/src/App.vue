@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div id="nav">
-        <b-navbar toggleable="lg" type="dark" variant="info">
+        <b-navbar id="navbar" toggleable="lg">
         <img src="@/assets/logo.png" length=2% width=2% class="navlogo">
         <b-navbar-brand href="#">Metalogue</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
@@ -151,6 +151,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background-color: #1F2933;
 }
 
 #nav {
@@ -159,11 +160,15 @@ export default {
 
 #nav a {
   font-weight: bold;
-  color: #2c3e50;
+  color: #f5f7fa;
+}
+
+#navbar {
+  background-color: #3e4c59;
 }
 
 #nav a.router-link-exact-active {
-  color: #ddcad9;
+  color: #b085f5;
 }
 
 .navlogo {

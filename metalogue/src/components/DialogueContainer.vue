@@ -17,11 +17,13 @@
           </b-col>
           <b-col>
             <b-form-textarea
+              class="middark"
               ref="dialogue"
               id="dtext"
               v-model="text"
               placeholder="Dialogue Here..."
               rows="2"
+              no-resize
               v-bind:formatter="formatter"
               v-on:keyup.enter="createDialogue"
               v-on:keyup.delete="removeDialogueCheck(1)"
@@ -446,3 +448,18 @@ export default {
 
 }
 </script>
+
+<style>
+  .middark, .middark:focus {
+    background-color: #3E4C59;
+    color: #f5f7fa;
+    border-style: none;
+    border-color: Transparent;
+    overflow: auto;
+  }
+
+  .middark:focus {
+    outline-color: #9e98a8;
+    box-shadow: #7e57c2;
+  }
+</style>

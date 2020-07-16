@@ -102,3 +102,9 @@ export default {
   }
 }
 </script>
+
+<style>
+  .home {
+    background-color: #1F2933;
+  }
+</style>
