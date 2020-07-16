@@ -38,9 +38,6 @@ import * as fire from '../firebase'
 import { mapActions, mapState } from 'vuex'
 
 export default {
-  created () {
-    console.log('logincreated')
-  },
   computed: {
     ...mapState([
       'projectBank'

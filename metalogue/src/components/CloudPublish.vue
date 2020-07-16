@@ -27,50 +27,58 @@ export default {
       // very expensive complete user re-write
       // add watchers/snapshots if you ever pay for a higher quota
       this.isExporting = true
-      var p
-      for (p of this.projectBank) {
-        // set project fields
-        try {
-          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).set({
-            name: p.name,
-            id: p.id
+      var p = this.projectBank.find(element => element.id === this.activeProjectID)
+      // set project fields
+      try {
+        await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).set({
+          name: p.name,
+          id: p.id
+        })
+        var s
+        for (s of p.sceneBank) {
+          // set scene fields
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).collection('scenes').doc(s.name).set({
+            name: s.name,
+            id: s.id
           })
-          var s
-          for (s of p.sceneBank) {
-            // set scene fields
-            await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).collection('scenes').doc(s.name).set({
-              name: s.name,
-              id: s.id
-            })
-            var d
-            for (d of s.data) {
-              // set dialogue fields
+          var d
+          for (d of s.data) {
+            // set dialogue fields
+            await fire.usersCollection.doc(fire.auth.currentUser.uid)
+              .collection('projects').doc(p.name).collection('scenes').doc(s.name).collection('data').doc(d.id).set({
+                id: d.id,
+                name: d.name,
+                msg: d.msg,
+                parent: d.parent,
+                nest: d.nest
+              })
+            var m
+            var fireModBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+              .collection('projects').doc(p.name).collection('scenes').doc(s.name)
+              .collection('data').doc(d.id).collection('mod').get()
+            for (m of fireModBank.docs) {
+              // delete mod fields
+              m.ref.delete()
+            }
+            for (m of d.mod) {
+              // set mod fields
               await fire.usersCollection.doc(fire.auth.currentUser.uid)
-                .collection('projects').doc(p.name).collection('scenes').doc(s.name).collection('data').doc(d.id).set({
-                  id: d.id,
-                  name: d.name,
-                  msg: d.msg,
-                  parent: d.parent,
-                  nest: d.nest
+                .collection('projects').doc(p.name).collection('scenes')
+                .doc(s.name).collection('data').doc(d.id).collection('mod').doc(m.flag).set({
+                  flag: m.flag,
+                  args: m.args
                 })
-              var m
-              for (m of d.mod) {
-                // set mod fields
-                await fire.usersCollection.doc(fire.auth.currentUser.uid)
-                  .collection('projects').doc(p.name).collection('scenes')
-                  .doc(s.name).collection('data').doc(d.id).collection('mod').doc(m.flag).set({
-                    flag: m.flag,
-                    args: m.args
-                  })
-              }
             }
           }
-        } catch (err) {
-          console.log(err)
         }
+      } catch (err) {
+        console.log(err)
       }
       this.isExporting = false
     }
+  },
+  props: {
+    activeProjectID: String
   }
 }
 </script>

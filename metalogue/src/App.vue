@@ -33,7 +33,21 @@
         </b-collapse>
       </b-navbar>
     </div>
-    <router-view/>
+      <b-card
+        title="Logging in"
+        img-src="https://placekitten.com/800/500"
+        img-alt="Image"
+        img-top
+        class="mb-2"
+        v-if="loadingData"
+      >
+        <b-card-text>
+          <b-spinner small></b-spinner>
+          Getting your dialogue ready...
+        </b-card-text>
+      </b-card>
+      <router-view
+        v-if="!loadingData"/>
   </div>
 </template>
 
@@ -44,6 +58,12 @@ import { mapActions, mapState } from 'vuex'
 export default {
   created () {
     this.getUser()
+    this.tryFetch()
+  },
+  data () {
+    return {
+      loadingData: false
+    }
   },
   computed: {
     ...mapState([
@@ -52,7 +72,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'changeUser'
+      'changeUser',
+      'fireLoad'
     ]),
     async signOut () {
       if (auth.currentUser) {
@@ -67,6 +88,54 @@ export default {
         const toSend = getName.data().name
         this.changeUser({ name: toSend })
       }
+    },
+    async tryFetch () {
+      try {
+        this.loadingData = true
+        const toLoad = await this.fetchData()
+        this.fireLoad(toLoad)
+        this.loadingData = false
+      } catch (err) {
+        console.log(err)
+        this.loadingData = false
+      }
+    },
+    async fetchData () {
+      // set vuex store with data from firestore
+      var pBank = []
+
+      var fireProjectBank = await usersCollection.doc(auth.currentUser.uid)
+        .collection('projects').get()
+      for (const doc of fireProjectBank.docs) {
+        // Obtain data for each project
+        var sBank = []
+        var fireSceneBank = await usersCollection.doc(auth.currentUser.uid)
+          .collection('projects').doc(doc.id).collection('scenes').get()
+        for (const doc2 of fireSceneBank.docs) {
+          // Obtain data for each scene
+          var dBank = []
+          var fireDataBank = await usersCollection.doc(auth.currentUser.uid)
+            .collection('projects').doc(doc.id).collection('scenes').doc(doc2.id).collection('data').get()
+          for (const doc3 of fireDataBank.docs) {
+            // Obtain data for each dialogue
+            var mBank = []
+            var fireModBank = await usersCollection.doc(auth.currentUser.uid)
+              .collection('projects').doc(doc.id).collection('scenes').doc(doc2.id)
+              .collection('data').doc(doc3.id).collection('mod').get()
+            for (const doc4 of fireModBank.docs) {
+              // Obtain mod data for each dialogue
+              mBank.push({ flag: doc4.data().flag, args: doc4.data().args })
+            }
+            // push all mod data to dialogue
+            dBank.push({ id: doc3.data().id, name: doc3.data().name, msg: doc3.data().msg, mod: mBank, parent: doc3.data().parent, nest: doc3.data().nest })
+          }
+          // push all dialogue data to scene
+          sBank.push({ name: doc2.id, id: doc2.data().id, data: dBank })
+        }
+        // push all scene data to project
+        pBank.push({ name: doc.id, id: doc.data().id, sceneBank: sBank })
+      }
+      return pBank
     }
   }
 }
