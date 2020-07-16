@@ -39,6 +39,8 @@
           v-bind:nestProp="val.nest"
           v-bind:parentProp="val.parent"
           v-bind:activeContainerID="activeContainerID"
+          v-bind:activeProjectID="activeProjectID"
+          v-bind:activeSceneID="activeSceneID"
           @setActiveContainerID="setActiveContainerID"
           />
         </b-col>
