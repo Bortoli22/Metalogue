@@ -21,7 +21,7 @@
 
           <!-- Right aligned nav items -->
           <b-navbar-nav class="ml-auto">
-            <b-nav-item-dropdown v-if="(user !== '')" right>
+            <b-nav-item-dropdown v-if="(activeUser.name !== '')" right>
               <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
                 <em>{{ activeUser.name }}</em>
@@ -43,18 +43,12 @@ import { mapActions, mapState } from 'vuex'
 
 export default {
   created () {
-    this.user = this.activeUser.name
     this.getUser()
   },
   computed: {
     ...mapState([
       'activeUser'
     ])
-  },
-  data () {
-    return {
-      user: ''
-    }
   },
   methods: {
     ...mapActions([
@@ -71,7 +65,6 @@ export default {
       if (auth.currentUser) {
         const getName = await usersCollection.doc(auth.currentUser.uid).get()
         const toSend = getName.data().name
-        this.user = toSend
         this.changeUser({ name: toSend })
       }
     }
