@@ -14,7 +14,9 @@ import { mapState, mapActions } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'projectBank'
+      'projectBank',
+      'characterBank',
+      'customMod'
     ])
   },
   data () {
@@ -27,12 +29,40 @@ export default {
       'projectSync'
     ]),
     async pushData () {
-      // very expensive complete user re-write
+      // pushData is a very expensive, complete user re-write
       // add watchers/snapshots if you ever pay for a higher quota :)
-
       this.projectSync({ project: this.activeProjectID, scene: this.activeSceneID })
-
       this.isExporting = true
+
+      // push characters
+      try {
+        var character
+        for (character of this.characterBank) {
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('characters').doc(character.spID).set({
+            spName: character.spName,
+            spID: character.spID
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+
+      // push custom mods
+
+      try {
+        var mod
+        for (mod of this.customMod) {
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('mods').doc(mod.flag).set({
+            flag: mod.flag,
+            args: mod.args,
+            shorthand: mod.shorthand
+          })
+        }
+      } catch (err) {
+        console.log(err)
+      }
+
+      // push project
       var p = this.projectBank.find(element => element.id === this.activeProjectID)
       // set project fields
       try {
