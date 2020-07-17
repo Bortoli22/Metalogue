@@ -6,6 +6,7 @@
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('project')">Project </b-dropdown-item>
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('scene')">Scene </b-dropdown-item>
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('speaker')">Speaker </b-dropdown-item>
+          <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('mod')">Custom Mod </b-dropdown-item>
       </b-dropdown>
       <b-dropdown id="dropdown-right" right text="Delete" class="toolbar" align ="left">
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('delproject')">Project </b-dropdown-item>
@@ -25,6 +26,7 @@
         <SceneCreate @close="close" @created="created" @setActiveSceneID="setActiveSceneID" v-if="(type === 'scene')"/>
         <ProjectCreate @close="close" @created="created" @setActiveProjectID="setActiveProjectID" v-if="(type === 'project')"/>
         <SpeakerCreate @close="close" @created="created" v-if="(type === 'speaker')"/>
+        <CustomModCreate @close="close" @created="created" v-if="(type === 'mod')"/>
 
         <ProjectDelete
         v-bind:activeSceneID="activeSceneID"
@@ -47,6 +49,7 @@
 import SceneCreate from '@/components/SceneCreate.vue'
 import ProjectCreate from '@/components/ProjectCreate.vue'
 import SpeakerCreate from '@/components/SpeakerCreate.vue'
+import CustomModCreate from '@/components/CustomModCreate.vue'
 
 import ProjectDelete from '@/components/ProjectDelete.vue'
 import SceneDelete from '@/components/SceneDelete.vue'
@@ -62,7 +65,8 @@ export default {
     ProjectDelete,
     SceneDelete,
     SpeakerCreate,
-    CloudPublish
+    CloudPublish,
+    CustomModCreate
   },
   data () {
     return {

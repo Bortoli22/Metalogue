@@ -1,39 +1,43 @@
 <template>
     <div>
-            <b-button-group>
-                <SpeakerSelect @propUpdate="propUpdate"
-                    v-bind:id="id"
-                    v-bind:name="charname"
-                />
-                <b-dropdown right v-bind:text="selectedMod">
-                    <b-dropdown-item
-                        key="Normal"
-                        v-on:click="updateMod('Normal')"
-                        >Normal</b-dropdown-item>
-                    <b-dropdown-item
-                        key="Option"
-                        v-on:click="updateMod('Option')"
-                        >Option</b-dropdown-item>
-                    <b-dropdown-item
-                        key="Roulette"
-                        v-on:click="updateMod('Roulette')"
-                        >Roulette</b-dropdown-item>
-                </b-dropdown>
-                <b-button
-                  v-bind:pressed.sync="emitting"
-                  v-on:click="updateMod('Event')"
-                >Event</b-button>
-                <b-button v-bind:pressed.sync="queued">Queue</b-button>
-            </b-button-group>
+      <b-button-group>
+          <SpeakerSelect @propUpdate="propUpdate"
+              v-bind:id="id"
+              v-bind:name="charname"
+          />
+          <b-dropdown right v-bind:text="selectedMod">
+              <b-dropdown-item
+                  key="Normal"
+                  v-on:click="updateMod('Normal')"
+                  >Normal</b-dropdown-item>
+              <b-dropdown-item
+                  key="Option"
+                  v-on:click="updateMod('Option')"
+                  >Option</b-dropdown-item>
+              <b-dropdown-item
+                  key="Roulette"
+                  v-on:click="updateMod('Roulette')"
+                  >Roulette</b-dropdown-item>
+          </b-dropdown>
+          <b-button
+            v-bind:pressed.sync="emitting"
+            v-on:click="updateMod('Event')"
+          >Event</b-button>
+          <b-button v-bind:pressed.sync="queued">Queue</b-button>
+          <CustomModSelect v-bind:mod="mod"
+          v-bind:activeContainerID="activeContainerID"/>
+      </b-button-group>
     </div>
 </template>
 
 <script>
 import SpeakerSelect from '@/components/SpeakerSelect.vue'
+import CustomModSelect from '@/components/CustomModSelect.vue'
 
 export default {
   components: {
-    SpeakerSelect
+    SpeakerSelect,
+    CustomModSelect
   },
   data () {
     return {
@@ -74,7 +78,9 @@ export default {
     id: String,
     name: String,
     starter: String,
-    eventFlag: Boolean
+    eventFlag: Boolean,
+    mod: Array,
+    activeContainerID: String
   }
 }
 </script>

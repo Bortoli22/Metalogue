@@ -46,6 +46,8 @@
               v-bind:name="charname"
               v-bind:starter="modStarter"
               v-bind:eventFlag="eventFlag"
+              v-bind:mod="mod"
+              v-bind:activeContainerID="activeContainerID"
               @propUpdate="propUpdate"
               @updateMod="updateMod"
             />

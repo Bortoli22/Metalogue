@@ -1,6 +1,6 @@
 <template>
     <div>
-      <b-card>
+      <b-card  class = "middark">
       <p class="card-text">Create a new scene for additional dialogue interaction</p>
       <b-form-input v-model="newScene" placeholder="Scene Name..." v-on:keyup.enter="createScene()"></b-form-input>
       <b-button-group>
@@ -60,3 +60,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .middark {
+    background-color: #3E4C59;
+  }
+</style>

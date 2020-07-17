@@ -6,6 +6,7 @@ import characterBank from '@/data/characterBank.js'
 import dialogueBank from '@/data/dialogueBank.js'
 import activeUser from '@/data/user.js'
 import projectBank from '@/data/projectBank.js'
+import customMod from '@/data/customMod.js'
 
 Vue.use(Vuex)
 
@@ -15,9 +16,17 @@ export default new Vuex.Store({
     characterBank,
     dialogueBank,
     activeUser,
-    projectBank
+    projectBank,
+    customMod
   },
   mutations: {
+    addCustomMod: (state, mod) => {
+      state.customMod.push(mod)
+    },
+    appendCustomModToDC: (state, mod) => {
+      const toModIndex = state.dialogueData.findIndex(e => e.id === mod.id)
+      state.dialogueData[toModIndex].mod.push(mod.mod)
+    },
     appendDialogue: (state, Dialogue) => {
       if (Dialogue.active < 0) {
         state.dialogueData.push(Dialogue)
@@ -109,6 +118,17 @@ export default new Vuex.Store({
       if (toModIndex > -1) {
         toInsert = { name: state.projectBank[toModIndex].name, id: project.project, sceneBank: oldData }
         state.projectBank[toModIndex] = toInsert
+      }
+    },
+    removeCustomMod: (state, mod) => {
+      const toModIndex = state.customMod.findIndex(element => element.flag === mod.flag)
+      state.customMod.splice(toModIndex, 1)
+    },
+    removeCustomModFromDC: (state, mod) => {
+      const toModIndex = state.dialogueData.findIndex(e => e.id === mod.id)
+      const spliceIndex = state.dialogueData[toModIndex].mod.findIndex(e => e.flag === mod.mod.flag)
+      if (spliceIndex > -1) {
+        state.dialogueData[toModIndex].mod.splice(spliceIndex, 1)
       }
     },
     removeDialogue: (state, id) => {
@@ -227,6 +247,12 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    addCMod: ({ commit }, mod) => {
+      commit('addCustomMod', mod)
+    },
+    addCModToDC: ({ commit }, mod) => {
+      commit('appendCustomModToDC', mod)
+    },
     addDialogue: ({ commit }, added) => {
       commit('appendDialogue', added)
     },
@@ -253,6 +279,12 @@ export default new Vuex.Store({
     },
     projectSync: ({ commit }, project) => {
       commit('projectSyncing', project)
+    },
+    remCModFromDC: ({ commit }, mod) => {
+      commit('removeCustomModFromDC', mod)
+    },
+    remCMod: ({ commit }, mod) => {
+      commit('removeCustomMod', mod)
     },
     remDialogue: ({ commit }, removed) => {
       commit('removeDialogue', removed)
