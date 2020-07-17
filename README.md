@@ -1,7 +1,7 @@
 # Metalogue
 
 <p align="center">
-<img src="https://github.com/Bortoli22/Metalogue/blob/master/metalogue/src/assets/logo.png" height="25%" width="25%">
+<img src="https://github.com/Bortoli22/Metalogue/blob/master/metalogue/src/assets/path53.png" height="25%" width="25%">
 </p>
 
 ## About
