@@ -89,3 +89,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .btn.btn-secondary, .btn.btn-secondary:hover,
+  .btn.btn-secondary:focus {
+    background: #b085f5;
+    color: #f5f7fa;
+    border-color: #b085f5;
+  }
+</style>

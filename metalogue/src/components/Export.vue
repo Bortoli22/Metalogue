@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-spinner v-if="isExporting" label="Loading..."></b-spinner>
-        <b-dropdown v-if="!isExporting" id="dropdown-right" right text="Export" variant="success">
+        <b-dropdown v-if="!isExporting" id="dropdown-right" right text="Export">
             <b-dropdown-group id="dropdown-group-1" header="Scene">
                 <b-dropdown-item v-on:click="exporting('scene', 'mm')">Export as MM </b-dropdown-item>
                 <b-dropdown-item v-on:click="exporting('scene', 'json')">Export as JSON </b-dropdown-item>

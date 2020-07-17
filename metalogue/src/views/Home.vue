@@ -1,13 +1,14 @@
 <template>
   <div class="home">
     <b-container fluid>
-      <b-row>
+      <b-row class="toolrow">
         <Toolbar
         @setActiveSceneID="setActiveScene"
         @setActiveProjectID="setActiveProjectID"
         v-bind:activeSceneID="activeSceneID"
         v-bind:activeProjectID="activeProjectID"/>
       </b-row>
+      <hr/>
       <b-row>
         <b-col class="col-md-auto">
           <ProjectManager
@@ -106,5 +107,11 @@ export default {
 <style scoped>
   .home {
     background-color: #1F2933;
+  }
+  .toolrow {
+    margin-bottom: 0px
+  }
+  hr {
+    border-top: 1px solid #f5f7fa;;
   }
 </style>

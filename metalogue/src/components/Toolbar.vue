@@ -2,12 +2,12 @@
   <div>
     <b-container>
     <b-row>
-      <b-dropdown id="dropdown-right" right text="Create New" variant="info" class="toolbar" align ="left">
+      <b-dropdown id="dropdown-right" right text="Create New" class="toolbar" align ="left">
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('project')">Project </b-dropdown-item>
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('scene')">Scene </b-dropdown-item>
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('speaker')">Speaker </b-dropdown-item>
       </b-dropdown>
-      <b-dropdown id="dropdown-right" right text="Delete" variant="danger" class="toolbar" align ="left">
+      <b-dropdown id="dropdown-right" right text="Delete" class="toolbar" align ="left">
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('delproject')">Project </b-dropdown-item>
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('delscene')">Scene </b-dropdown-item>
       </b-dropdown>
@@ -17,7 +17,8 @@
           class="toolbar" align ="left"/>
       <CloudPublish
           v-bind:activeSceneID="activeSceneID"
-          v-bind:activeProjectID="activeProjectID" />
+          v-bind:activeProjectID="activeProjectID"
+          class="toolbar" align ="left"/>
     </b-row>
     </b-container>
     <b-collapse id="collapse-1" v-model="visible" class="mt-2">
@@ -97,6 +98,12 @@ export default {
 
 <style>
   .toolbar {
-    padding: 0px 20px 20px 0px
+    padding: 0px 0px 15px 15px;
+  }
+  .btn.dropdown-toggle, .btn.dropdown-toggle:hover,
+  .btn.dropdown-toggle:focus {
+    background: #b085f5;
+    color: #f5f7fa;
+    border-color: #b085f5;
   }
 </style>

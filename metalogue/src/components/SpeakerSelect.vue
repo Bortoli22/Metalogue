@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-dropdown variant="info" split v-on:click="cycleCharacter()" v-bind:text="selectedCharacter">
+    <b-dropdown v-bind:text="selectedCharacter">
       <b-dropdown-item-button
       v-for="character in characterBank"
       v-bind:key="character.spID"
@@ -59,3 +59,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .btn-secondary, .btn-secondary:hover,
+  .btn-secondary:focus {
+    background: #b085f5;
+    color: #f5f7fa;
+    border-color: #b085f5;
+  }
+</style>

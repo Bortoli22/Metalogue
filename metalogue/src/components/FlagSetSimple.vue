@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-row>
-            <button type="button" class="btn btn-info" disabled>{{ name }}</button>
+            <b-button disabled>{{ name }}</b-button>
         </b-row>
         <b-row class="flags">
             <p>{{this.id}} ::</p>
@@ -25,5 +25,12 @@ export default {
 <style scoped>
     .flags {
         font-size: 80%;
+        color: #f5f7fa
     }
+      .btn-secondary, .btn-secondary:hover,
+  .btn-secondary:focus {
+    background: #b085f5  !important;
+    color: #f5f7fa;
+    border-color: #b085f5;
+  }
 </style>

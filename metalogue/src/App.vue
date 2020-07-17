@@ -155,7 +155,7 @@ export default {
 }
 
 #nav {
-  padding: 0px 0px 30px 0px;
+  padding: 0px 0px 15px 0px;
 }
 
 #nav a {

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-list-group>
+        <b-list-group class="table">
             <b-list-group-item class="title">
                 <strong>Project Select</strong>
             </b-list-group-item>
@@ -72,5 +72,8 @@ export default {
   .hoverable:hover {
     cursor: pointer;
     background: #323f4b
+  }
+  .table {
+    padding-bottom: 15px;
   }
 </style>

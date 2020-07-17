@@ -5,7 +5,7 @@
                     v-bind:id="id"
                     v-bind:name="charname"
                 />
-                <b-dropdown variant="info" right v-bind:text="selectedMod">
+                <b-dropdown right v-bind:text="selectedMod">
                     <b-dropdown-item
                         key="Normal"
                         v-on:click="updateMod('Normal')"
@@ -19,11 +19,11 @@
                         v-on:click="updateMod('Roulette')"
                         >Roulette</b-dropdown-item>
                 </b-dropdown>
-                <b-button variant="info"
+                <b-button
                   v-bind:pressed.sync="emitting"
                   v-on:click="updateMod('Event')"
                 >Event</b-button>
-                <b-button variant="info" v-bind:pressed.sync="queued">Queue</b-button>
+                <b-button v-bind:pressed.sync="queued">Queue</b-button>
             </b-button-group>
     </div>
 </template>
@@ -78,3 +78,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .btn-secondary, .btn-secondary:hover,
+  .btn-secondary:focus, .btn-secondary:active {
+    background: #b085f5;
+    color: #f5f7fa;
+    border-color: #b085f5;
+  }
+</style>
