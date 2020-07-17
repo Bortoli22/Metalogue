@@ -1,13 +1,13 @@
 <template>
     <div>
         <b-list-group>
-            <b-list-group-item>
+            <b-list-group-item class="title">
                 <strong>Scene Select</strong>
             </b-list-group-item>
             <b-list-group-item
                 v-for="item in dialogueBank"
                 v-bind:key="item.id"
-                v-bind:class="[{'active' : (item.id === activeSceneID ? true : false)},
+                v-bind:class="[{'activated' : (item.id === activeSceneID ? true : false)},
                   {'hoverable' : (item.id === activeSceneID ? false : true)}]"
                 v-on:click="swapAction({name: item.name, id: item.id})">
                     {{ item.name }}
@@ -53,8 +53,17 @@ export default {
 </script>
 
 <style scoped>
+  .activated {
+    background: #b085f5
+  }
+  .title, .hoverable {
+    background: #3e4c59
+  }
+  .activated, .title, .hoverable {
+    color: #f5f7fa;
+  }
   .hoverable:hover {
     cursor: pointer;
-    background: #cecece
+    background: #323f4b
   }
 </style>

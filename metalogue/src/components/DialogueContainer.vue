@@ -449,7 +449,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .middark, .middark:focus {
     background-color: #3E4C59;
     color: #f5f7fa;
@@ -460,6 +460,6 @@ export default {
 
   .middark:focus {
     outline-color: #9e98a8;
-    box-shadow: #7e57c2;
+    box-shadow: 0 0 5px #7e57c2;
   }
 </style>

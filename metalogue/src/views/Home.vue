@@ -103,7 +103,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .home {
     background-color: #1F2933;
   }
