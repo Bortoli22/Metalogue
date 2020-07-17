@@ -26,7 +26,8 @@ export default {
       'dialogueData',
       'dialogueBank',
       'projectBank',
-      'characterBank'
+      'characterBank',
+      'customMod'
     ])
   },
   data () {
@@ -127,9 +128,10 @@ export default {
       mmString = mmString + this.characterBank.find(e => e.spName === element.name).spID + ' ' + element.id + ' ' + passFlag
       var f
       var arg
+      var cMod
       var addArgs = false
       for (f of element.mod) {
-        // assign option, roulette, and/or event
+        // assign option, roulette, event and/or custom flag
         switch (f.flag) {
           case 'Option':
             mmString += '-o '
@@ -141,6 +143,14 @@ export default {
             break
           case 'Event':
             mmString = mmString + '-x ' + f.args + ' '
+            addArgs = false
+            break
+          default:
+            cMod = this.customMod.find(e => e.flag === f.flag)
+            if (cMod !== undefined) {
+              mmString = mmString + cMod.shorthand + ' ' + f.args + ' '
+            }
+            addArgs = false
             break
         }
         if (addArgs) {

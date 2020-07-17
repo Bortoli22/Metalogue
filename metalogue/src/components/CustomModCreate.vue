@@ -2,9 +2,8 @@
     <div>
       <b-card class="middark">
       <p class="card-text">Create a new custom mod for your dialogue</p>
-      <b-form-input v-model="flag" placeholder="Enter flag..."></b-form-input>
-      <b-form-input v-model="shorthand" placeholder="Enter flag shorthand (e.g. '-t')..."></b-form-input>
-      <b-form-input v-model="argRaw" placeholder="Enter args separated by a space..." v-on:keyup.enter="addMod()"></b-form-input>
+      <b-form-input class="fspace" v-model="flag" placeholder="Enter flag..."></b-form-input>
+      <b-form-input class="fspace" v-model="shorthand" placeholder="Enter flag shorthand (e.g. '-t')..." v-on:keyup.enter="addMod()"></b-form-input>
       <b-button-group>
           <b-button v-on:click="addMod()" variant="info" size="sm">Add</b-button>
           <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
@@ -69,5 +68,8 @@ export default {
 <style scoped>
   .middark {
     background-color: #3E4C59;
+  }
+  .fspace {
+      margin-bottom: 5px;
   }
 </style>

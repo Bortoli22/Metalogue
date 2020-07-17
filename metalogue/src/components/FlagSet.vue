@@ -1,38 +1,50 @@
 <template>
     <div>
-      <b-button-group>
-          <SpeakerSelect @propUpdate="propUpdate"
-              v-bind:id="id"
-              v-bind:name="charname"
-          />
-          <b-dropdown right v-bind:text="selectedMod">
-              <b-dropdown-item
-                  key="Normal"
-                  v-on:click="updateMod('Normal')"
-                  >Normal</b-dropdown-item>
-              <b-dropdown-item
-                  key="Option"
-                  v-on:click="updateMod('Option')"
-                  >Option</b-dropdown-item>
-              <b-dropdown-item
-                  key="Roulette"
-                  v-on:click="updateMod('Roulette')"
-                  >Roulette</b-dropdown-item>
-          </b-dropdown>
-          <b-button
-            v-bind:pressed.sync="emitting"
-            v-on:click="updateMod('Event')"
-          >Event</b-button>
-          <b-button v-bind:pressed.sync="queued">Queue</b-button>
-          <CustomModSelect v-bind:mod="mod"
-          v-bind:activeContainerID="activeContainerID"/>
-      </b-button-group>
+      <b-row>
+        <b-button-group>
+            <SpeakerSelect @propUpdate="propUpdate"
+                v-bind:id="id"
+                v-bind:name="charname"
+            />
+            <b-dropdown right v-bind:text="selectedMod">
+                <b-dropdown-item
+                    key="Normal"
+                    v-on:click="updateMod('Normal')"
+                    >Normal</b-dropdown-item>
+                <b-dropdown-item
+                    key="Option"
+                    v-on:click="updateMod('Option')"
+                    >Option</b-dropdown-item>
+                <b-dropdown-item
+                    key="Roulette"
+                    v-on:click="updateMod('Roulette')"
+                    >Roulette</b-dropdown-item>
+            </b-dropdown>
+            <b-button
+              v-bind:pressed.sync="emitting"
+              v-on:click="updateMod('Event')"
+            >Event</b-button>
+            <b-button v-bind:pressed.sync="queued">Queue</b-button>
+            <CustomModSelect
+            @clickedCustom="showArg"/>
+        </b-button-group>
+      </b-row>
+      <b-row>
+        <b-col sm>
+          <b-form-input v-if="argEnter" v-on:keyup.enter="clickedCustom()" v-model="argRaw" placeholder="Enter args separated by space..."></b-form-input>
+        </b-col>
+        <b-col>
+          <b-button v-if="argEnter" v-on:click="clickedCustom()" sm>Add</b-button>
+          <b-button v-if="argEnter" v-on:click="closeArg()" sm>Cancel</b-button>
+        </b-col>
+      </b-row>
     </div>
 </template>
 
 <script>
 import SpeakerSelect from '@/components/SpeakerSelect.vue'
 import CustomModSelect from '@/components/CustomModSelect.vue'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -45,7 +57,10 @@ export default {
       queued: false,
       charname: '',
       selectedMod: 'Normal',
-      payload: {}
+      payload: {},
+      argEnter: false,
+      argRaw: '',
+      cMod: null
     }
   },
   created () {
@@ -58,9 +73,31 @@ export default {
     }
   },
   methods: {
+    ...mapActions([
+      'addCModToDC',
+      'remCModFromDC'
+    ]),
+    clickedCustom () {
+      const modFound = this.mod.findIndex(e => e.flag === this.cMod.flag)
+      if (modFound > -1) {
+        this.remCModFromDC({ id: this.activeContainerID, mod: this.cMod })
+      } else {
+        this.cMod.args = this.argRaw.split()
+        this.addCModToDC({ id: this.activeContainerID, mod: this.cMod })
+      }
+      this.argRaw = ''
+      this.closeArg()
+    },
+    closeArg () {
+      this.argEnter = false
+    },
     propUpdate (payload) {
       this.charname = payload.name
       this.$emit('propUpdate', payload)
+    },
+    showArg (m) {
+      this.argEnter = true
+      this.cMod = m
     },
     updateMod (mod) {
       var modToSend = ''
