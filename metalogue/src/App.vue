@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav">
         <b-navbar id="navbar" toggleable="lg">
-        <img src="@/assets/logo.png" length=2% width=2% class="navlogo">
+        <img src="@/assets/path53.png" length=3% width=3% class="navlogo">
         <b-navbar-brand href="#">Metalogue</b-navbar-brand>
         <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
 
@@ -150,7 +150,7 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #f5f7fa;
   background-color: #1F2933;
 }
 
