@@ -125,7 +125,13 @@ export default {
     mm (element, passFlag) {
       console.log(element.id)
       var mmString = '/* '
-      mmString = mmString + this.characterBank.find(e => e.spName === element.name).spID + ' ' + element.id + ' ' + passFlag
+      var sName
+      if (this.characterBank.find(e => e.spName === element.name) === undefined) {
+        sName = '00000'
+      } else {
+        sName = this.characterBank.find(e => e.spName === element.name).spID
+      }
+      mmString = mmString + sName + ' ' + element.id + ' ' + passFlag
       var f
       var arg
       var cMod

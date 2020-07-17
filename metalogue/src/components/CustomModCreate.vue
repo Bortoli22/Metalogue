@@ -33,8 +33,7 @@ export default {
   },
   methods: {
     ...mapActions([
-      'addCMod',
-      'remCMod'
+      'addCMod'
     ]),
     addMod () {
       this.args = this.argRaw.split()
@@ -70,6 +69,6 @@ export default {
     background-color: #3E4C59;
   }
   .fspace {
-      margin-bottom: 5px;
+    margin-bottom: 5px;
   }
 </style>

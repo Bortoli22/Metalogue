@@ -149,6 +149,10 @@ export default new Vuex.Store({
         state.dialogueBank.splice(toModIndex, 1)
       }
     },
+    removeSpeaker: (state, speaker) => {
+      const toModIndex = state.characterBank.findIndex(element => element.spID === speaker)
+      state.characterBank.splice(toModIndex, 1)
+    },
     swapBankData: (state, bank) => {
       console.log('enter swapBank: ' + bank.old + bank.new)
       // push updates to Bank
@@ -294,6 +298,9 @@ export default new Vuex.Store({
     },
     remScene: ({ commit }, scene) => {
       commit('removeScene', scene)
+    },
+    remSpeaker: ({ commit }, speaker) => {
+      commit('removeSpeaker', speaker)
     },
     swapBank: ({ commit }, bank) => {
       commit('swapBankData', bank)
