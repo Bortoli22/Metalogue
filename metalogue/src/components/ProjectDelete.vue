@@ -1,6 +1,6 @@
 <template>
     <div>
-        <b-card>
+        <b-card class="middark">
           <p class="card-text">Are you sure you would like to delete this project and all of its contents?</p>
           <b-button-group>
               <b-button v-on:click="deleteProject()" variant="danger" size="sm">Delete</b-button>
@@ -57,3 +57,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .middark {
+    background-color: #3E4C59;
+    color: #f5f7fa;
+  }
+</style>

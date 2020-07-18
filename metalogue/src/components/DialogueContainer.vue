@@ -8,7 +8,7 @@
           v-for="num in nested">
             <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
           </b-col>
-          <b-col class="col-md-auto">
+          <b-col cols="1">
             <FlagSetSimple
               v-bind:id="sentId"
               v-bind:name="charname"

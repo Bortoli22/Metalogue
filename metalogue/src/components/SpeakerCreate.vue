@@ -1,6 +1,6 @@
 <template>
     <div>
-      <b-card>
+      <b-card class="middark">
       <p class="card-text">Create a new speaker to take part in the dialogue</p>
       <b-form-input v-model="newSpeaker" placeholder="Enter Name..." v-on:keyup.enter="addCharacter()"></b-form-input>
       <b-button-group>
@@ -52,3 +52,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .middark {
+    background-color: #3E4C59;
+    color: #f5f7fa;
+  }
+</style>

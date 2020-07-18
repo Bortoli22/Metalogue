@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-row>
-            <b-button disabled>{{ name }}</b-button>
+            <b-button block disabled>{{ name.substring(0, 10) }}</b-button>
         </b-row>
         <b-row class="flags">
             <p>{{this.id}} ::</p>

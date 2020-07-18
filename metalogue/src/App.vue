@@ -39,7 +39,7 @@
         img-src="https://placekitten.com/1080/720"
         img-alt="Image"
         img-top
-        class="mb-2 cardimg"
+        class="mb-2 cardimg middark"
         v-if="loadingData"
       >
         <b-card-text>
@@ -182,4 +182,11 @@ export default {
   margin-left: auto;
   margin-right: auto;
 }
+</style>
+
+<style scoped>
+  .middark {
+    background-color: #3E4C59;
+    color: #f5f7fa;
+  }
 </style>

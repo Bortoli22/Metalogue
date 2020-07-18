@@ -1,6 +1,6 @@
 <template>
     <div>
-      <b-card>
+      <b-card class="middark">
       <p class="card-text">Create a new project
       </p>
       <b-form-input v-model="newProject" placeholder="Project Name..." v-on:keyup.enter="createProject()"></b-form-input>
@@ -56,3 +56,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .middark {
+    background-color: #3E4C59;
+    color: #f5f7fa;
+  }
+</style>
