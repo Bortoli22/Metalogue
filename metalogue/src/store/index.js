@@ -104,6 +104,9 @@ export default new Vuex.Store({
       for (element of bank.cBank) {
         state.characterBank.push(element)
       }
+
+      // push fire settings to settings
+      state.settings = bank.settings
     },
     modifyDialogue: (state, Dialogue) => {
       const toModIndex = state.dialogueData.findIndex(element => element.id === Dialogue.id)
@@ -274,6 +277,33 @@ export default new Vuex.Store({
     },
     syncUserSettings: (state, settings) => {
       state.settings = settings
+    },
+    userRegister: (state, register) => {
+      // pop all store data
+      var oldLength = state.dialogueData.length
+      var x
+      for (x = 0; x < oldLength; x++) {
+        state.dialogueData.pop()
+      }
+      oldLength = state.dialogueBank.length
+      for (x = 0; x < oldLength; x++) {
+        state.dialogueBank.pop()
+      }
+      oldLength = state.projectBank.length
+      for (x = 0; x < oldLength; x++) {
+        state.projectBank.pop()
+      }
+      oldLength = state.characterBank.length
+      for (x = 0; x < oldLength; x++) {
+        state.characterBank.pop()
+      }
+      oldLength = state.customMod.length
+      for (x = 0; x < oldLength; x++) {
+        state.customMod.pop()
+      }
+
+      // push null speaker
+      state.characterBank.push(register)
     }
   },
   actions: {
@@ -312,6 +342,9 @@ export default new Vuex.Store({
     },
     projectSync: ({ commit }, project) => {
       commit('projectSyncing', project)
+    },
+    registered: ({ commit }, register) => {
+      commit('userRegister', register)
     },
     remCModFromDC: ({ commit }, mod) => {
       commit('removeCustomModFromDC', mod)

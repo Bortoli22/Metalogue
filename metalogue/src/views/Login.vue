@@ -2,12 +2,25 @@
     <div>
       <b-container>
       <b-card
-        title="Logging in"
-        img-src="https://placekitten.com/1080/720"
-        img-alt="Image"
+        title="Logging In"
+        img-src="@/assets/cats/cat04.png"
+        img-alt="Hold Tight"
         img-top
-        class="mb-2 middark cardimg"
-        v-if="loadingData"
+        class="cardimg middark"
+        v-if="loadingData && settings.cat && resolvedSettings"
+      >
+        <b-card-text>
+          <b-spinner small></b-spinner>
+          Getting your dialogue ready...
+        </b-card-text>
+      </b-card>
+      <b-card
+        title="Logging In"
+        img-src="@/assets/path53.png"
+        img-alt="Hold Tight"
+        img-top
+        class="cardimg middark"
+        v-if="loadingData && !settings.cat && resolvedSettings"
       >
         <b-card-text>
           <b-spinner small></b-spinner>
@@ -40,14 +53,16 @@ import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'projectBank'
+      'projectBank',
+      'settings'
     ])
   },
   data () {
     return {
       email: '',
       password: '',
-      loadingData: false
+      loadingData: false,
+      resolvedSettings: false
     }
   },
   methods: {
@@ -63,14 +78,16 @@ export default {
         const toSend = getName.data().name
         this.changeUser({ name: toSend })
         this.loadingData = true
-        var toLoad = await this.fetchData()
-        this.fireLoad(toLoad)
-        toLoad = await this.fetchOther()
+        var toLoad = await this.fetchOther()
         this.fireLoadOther(toLoad)
+        this.resolvedSettings = true
+        toLoad = await this.fetchData()
+        this.fireLoad(toLoad)
         this.$router.replace({ path: '/' })
       } catch (err) {
         console.log(err)
         this.loadingData = false
+        this.resolvedSettings = false
       }
     },
     async fetchOther () {
@@ -90,7 +107,10 @@ export default {
         cmBank.push({ flag: mod.data().flag, shorthand: mod.data().shorthand })
       }
 
-      return { cBank, cmBank }
+      // get settings
+      var fireSettings = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
+      var settings = fireSettings.data()
+      return { cBank, cmBank, settings }
     },
     async fetchData () {
       // set vuex store with data from firestore

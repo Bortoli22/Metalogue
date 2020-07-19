@@ -6,8 +6,8 @@
         Debug</b-form-checkbox>
         <b-form-text id="debug-help-block">Enable Debug to add developer info to the editor. May look cluttered.</b-form-text>
       <br>
-      <b-form-checkbox v-model="debug" aria-describedby="cat-help-block">
-        Cat Mode</b-form-checkbox>
+      <b-form-checkbox v-model="cat" aria-describedby="cat-help-block">
+        Cat Mode<a v-if="cat"> ฅ(•ㅅ•❀)ฅ</a></b-form-checkbox>
         <b-form-text id="cat-help-block">Replace some imagery with cat placeholders similar to those used during development.</b-form-text>
       <b-button id="save" v-on:click="saveSettings">Save Changes</b-button>
     </b-container>
@@ -21,6 +21,7 @@ import { mapState, mapActions } from 'vuex'
 export default {
   created () {
     this.debug = this.settings.debug
+    this.cat = this.settings.cat
   },
   computed: {
     ...mapState([
@@ -29,7 +30,8 @@ export default {
   },
   data () {
     return {
-      debug: false
+      debug: false,
+      cat: false
     }
   },
   methods: {
@@ -37,9 +39,9 @@ export default {
       'syncSettings'
     ]),
     async saveSettings () {
-      this.syncSettings({ debug: this.debug })
+      this.syncSettings({ debug: this.debug, cat: this.cat })
       try {
-        await fire.usersCollection.doc(fire.auth.currentUser.uid).update({ debug: this.debug })
+        await fire.usersCollection.doc(fire.auth.currentUser.uid).update({ debug: this.debug, cat: this.cat })
       } catch (err) {
         console.log(err)
       }

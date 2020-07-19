@@ -38,11 +38,24 @@
     <b-container>
       <b-card
         title="One Moment"
-        img-src="https://placekitten.com/1080/720"
-        img-alt="Image"
+        img-src="@/assets/cats/cat03.png"
+        img-alt="Hold Tight"
         img-top
-        class="mb-2 cardimg middark"
-        v-if="loadingData"
+        class="cardimg middark"
+        v-if="loadingData && settings.cat && resolvedSettings"
+      >
+        <b-card-text>
+          <b-spinner small></b-spinner>
+          Getting your dialogue ready...
+        </b-card-text>
+      </b-card>
+      <b-card
+        title="One Moment"
+        img-src="@/assets/path53.png"
+        img-alt="Hold Tight"
+        img-top
+        class="cardimg middark"
+        v-if="loadingData && !settings.cat && resolvedSettings"
       >
         <b-card-text>
           <b-spinner small></b-spinner>
@@ -66,7 +79,8 @@ export default {
   },
   data () {
     return {
-      loadingData: false
+      loadingData: false,
+      resolvedSettings: false
     }
   },
   computed: {
@@ -99,16 +113,21 @@ export default {
       }
     },
     async tryFetch () {
-      try {
-        this.loadingData = true
-        var toLoad = await this.fetchData()
-        this.fireLoad(toLoad)
-        toLoad = await this.fetchOther()
-        this.fireLoadOther(toLoad)
-        this.loadingData = false
-      } catch (err) {
-        console.log(err)
-        this.loadingData = false
+      if (auth.currentUser) {
+        try {
+          this.loadingData = true
+          var toLoad = await this.fetchOther()
+          this.fireLoadOther(toLoad)
+          this.resolvedSettings = true
+          toLoad = await this.fetchData()
+          this.fireLoad(toLoad)
+          this.loadingData = false
+          this.resolvedSettings = false
+        } catch (err) {
+          console.log(err)
+          this.loadingData = false
+          this.resolvedSettings = false
+        }
       }
     },
     async fetchOther () {
@@ -128,7 +147,11 @@ export default {
         cmBank.push({ flag: mod.data().flag, shorthand: mod.data().shorthand })
       }
 
-      return { cBank, cmBank }
+      // get settings
+      var fireSettings = await usersCollection.doc(auth.currentUser.uid).get()
+      var settings = fireSettings.data()
+
+      return { cBank, cmBank, settings }
     },
     async fetchData () {
       // set vuex store with data from firestore
@@ -218,11 +241,12 @@ export default {
 }
 
 .cardimg {
-  width: 50%;
-  height: 50%;
+  width: 25%;
+  height: 25%;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 25px;
   color: #f5f7fa;
 }
 </style>

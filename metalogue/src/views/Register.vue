@@ -46,7 +46,8 @@ export default {
   },
   methods: {
     ...mapActions([
-      'changeUser'
+      'changeUser',
+      'registered'
     ]),
     async tryRegister () {
       if (this.password !== this.passwordConfirm) {
@@ -57,9 +58,10 @@ export default {
         try {
           const user = await fire.auth.createUserWithEmailAndPassword(this.email, this.password)
           console.log(user)
-          await fire.usersCollection.doc(fire.auth.currentUser.uid).set({ name: this.email })
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).set({ name: this.email, debug: false, cat: false })
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('characters').doc('00000').set({ spName: 'None', spID: '00000' })
           this.changeUser({ name: this.email })
-          // TO-DO: use action/mutator to set vuex store with data from user
+          this.registered({ spID: '00000', spName: 'None' })
           this.$router.replace({ name: 'About' })
         } catch (error) {
           console.log(error)
