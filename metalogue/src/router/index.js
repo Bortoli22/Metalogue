@@ -8,6 +8,7 @@ import About from '../views/About.vue'
 import GetStore from '../views/GetStore.vue'
 import Login from '../views/Login.vue'
 import Register from '../views/Register.vue'
+import Settings from '../views/Settings.vue'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -54,6 +55,14 @@ const routes = [
     component: Register,
     meta: {
       authReq: false
+    }
+  },
+  {
+    path: '/settings',
+    name: 'settings',
+    component: Settings,
+    meta: {
+      authReq: true
     }
   }
 ]

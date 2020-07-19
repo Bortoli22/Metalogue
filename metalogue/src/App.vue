@@ -14,8 +14,8 @@
             <b-nav-item>
               <router-link to="/about">About</router-link>
             </b-nav-item>
-            <b-nav-item>
-              <router-link to="/getstore">Store Data</router-link>
+            <b-nav-item v-if="settings.debug">
+              <router-link to="/getstore">Vuex_Store_Data</router-link>
             </b-nav-item>
           </b-navbar-nav>
 
@@ -27,7 +27,7 @@
                 <em>{{ activeUser.name }}</em>
               </template>
               <div id="dropdowns">
-              <b-dropdown-item href="#">Settings</b-dropdown-item>
+              <b-dropdown-item v-on:click="toSettings">Settings</b-dropdown-item>
               <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
               </div>
             </b-nav-item-dropdown>
@@ -71,7 +71,8 @@ export default {
   },
   computed: {
     ...mapState([
-      'activeUser'
+      'activeUser',
+      'settings'
     ])
   },
   methods: {
@@ -80,6 +81,9 @@ export default {
       'fireLoad',
       'fireLoadOther'
     ]),
+    toSettings () {
+      this.$router.replace({ path: '/settings' })
+    },
     async signOut () {
       if (auth.currentUser) {
         auth.signOut()
@@ -187,6 +191,12 @@ export default {
 
 #app .dropdown-item {
   color: #000000
+}
+
+#app .btn {
+  background: #b085f5;
+  color: #f5f7fa;
+  border-color: #b085f5;
 }
 
 #app .dropdown-item:hover,

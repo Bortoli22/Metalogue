@@ -7,6 +7,7 @@ import dialogueBank from '@/data/dialogueBank.js'
 import activeUser from '@/data/user.js'
 import projectBank from '@/data/projectBank.js'
 import customMod from '@/data/customMod.js'
+import settings from '@/data/settings.js'
 
 Vue.use(Vuex)
 
@@ -17,7 +18,8 @@ export default new Vuex.Store({
     dialogueBank,
     activeUser,
     projectBank,
-    customMod
+    customMod,
+    settings
   },
   mutations: {
     addCustomMod: (state, mod) => {
@@ -269,6 +271,9 @@ export default new Vuex.Store({
           state.dialogueData.push(element)
         }
       }
+    },
+    syncUserSettings: (state, settings) => {
+      state.settings = settings
     }
   },
   actions: {
@@ -331,6 +336,9 @@ export default new Vuex.Store({
     },
     swapProject: ({ commit }, project) => {
       commit('swapProjectBank', project)
+    },
+    syncSettings: ({ commit }, settings) => {
+      commit('syncUserSettings', settings)
     }
   },
   modules: {

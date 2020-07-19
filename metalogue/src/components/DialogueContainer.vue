@@ -40,6 +40,7 @@
               v-on:keyup.enter="createDialogue"
             ></b-form-input>
             <FlagSet
+              class="flagset"
               align="left"
               v-if="activeContainerID === sentId"
               v-bind:id="sentId"
@@ -463,5 +464,9 @@ export default {
   .middark:focus {
     outline-color: #9e98a8;
     box-shadow: 0 0 5px #7e57c2;
+  }
+
+  .flagset {
+    padding-left: 15px;
   }
 </style>

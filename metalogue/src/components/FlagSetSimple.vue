@@ -4,14 +4,22 @@
             <b-button block disabled>{{ name.substring(0, 10) }}</b-button>
         </b-row>
         <b-row class="flags">
-            <p>{{this.id}} ::</p>
+            <p v-if="settings.debug">{{this.id}} ::</p>
+            <p v-if="!settings.debug"><br></p>
             <p v-for="modifier in modProp" v-bind:key="modifier.flag">{{ modifier.flag }}, </p>
         </b-row>
     </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
+  computed: {
+    ...mapState([
+      'settings'
+    ])
+  },
   props: {
     id: String,
     name: String,
