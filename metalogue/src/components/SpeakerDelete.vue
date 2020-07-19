@@ -23,6 +23,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import * as fire from '../firebase'
 
 export default {
   created () {
@@ -55,6 +56,12 @@ export default {
     async deleteMod () {
       if (this.toDelete === '') {
         return
+      }
+      try {
+        await fire.usersCollection.doc(fire.auth.currentUser.uid)
+          .collection('characters').doc(this.toDelete).delete()
+      } catch (err) {
+        console.log(err)
       }
       this.remSpeaker(this.toDelete)
       this.toDelete = ''

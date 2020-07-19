@@ -6,7 +6,7 @@
         img-src="https://placekitten.com/800/500"
         img-alt="Image"
         img-top
-        class="mb-2"
+        class="mb-2 middark"
         v-if="loadingData"
       >
         <b-card-text>
@@ -133,3 +133,9 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+  .middark {
+    background-color: #3E4C59;
+  }
+</style>
