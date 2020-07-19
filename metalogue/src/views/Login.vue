@@ -53,7 +53,8 @@ export default {
   methods: {
     ...mapActions([
       'changeUser',
-      'fireLoad'
+      'fireLoad',
+      'fireLoadOther'
     ]),
     async tryLogin () {
       try {
@@ -62,18 +63,40 @@ export default {
         const toSend = getName.data().name
         this.changeUser({ name: toSend })
         this.loadingData = true
-        const toLoad = await this.fetchData()
+        var toLoad = await this.fetchData()
         this.fireLoad(toLoad)
+        toLoad = await this.fetchOther()
+        this.fireLoadOther(toLoad)
         this.$router.replace({ path: '/' })
       } catch (err) {
         console.log(err)
         this.loadingData = false
       }
     },
+    async fetchOther () {
+      // get characters
+      var cBank = []
+      var fireCharacterBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+        .collection('characters').get()
+      for (const character of fireCharacterBank.docs) {
+        cBank.push({ spID: character.data().spID, spName: character.data().spName })
+      }
+
+      // get custom mods
+      var cmBank = []
+      var fireCustomModBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+        .collection('mods').get()
+      for (const mod of fireCustomModBank.docs) {
+        cmBank.push({ flag: mod.data().flag, shorthand: mod.data().shorthand })
+      }
+
+      return { cBank, cmBank }
+    },
     async fetchData () {
       // set vuex store with data from firestore
-      var pBank = []
 
+      // get projects
+      var pBank = []
       var fireProjectBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
         .collection('projects').get()
       for (const doc of fireProjectBank.docs) {

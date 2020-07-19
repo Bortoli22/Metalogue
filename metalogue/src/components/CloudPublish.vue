@@ -54,7 +54,6 @@ export default {
         for (mod of this.customMod) {
           await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('mods').doc(mod.flag).set({
             flag: mod.flag,
-            args: mod.args,
             shorthand: mod.shorthand
           })
         }

@@ -75,7 +75,8 @@ export default {
   methods: {
     ...mapActions([
       'changeUser',
-      'fireLoad'
+      'fireLoad',
+      'fireLoadOther'
     ]),
     async signOut () {
       if (auth.currentUser) {
@@ -94,13 +95,34 @@ export default {
     async tryFetch () {
       try {
         this.loadingData = true
-        const toLoad = await this.fetchData()
+        var toLoad = await this.fetchData()
         this.fireLoad(toLoad)
+        toLoad = await this.fetchOther()
+        this.fireLoadOther(toLoad)
         this.loadingData = false
       } catch (err) {
         console.log(err)
         this.loadingData = false
       }
+    },
+    async fetchOther () {
+      // get characters
+      var cBank = []
+      var fireCharacterBank = await usersCollection.doc(auth.currentUser.uid)
+        .collection('characters').get()
+      for (const character of fireCharacterBank.docs) {
+        cBank.push({ spID: character.data().spID, spName: character.data().spName })
+      }
+
+      // get custom mods
+      var cmBank = []
+      var fireCustomModBank = await usersCollection.doc(auth.currentUser.uid)
+        .collection('mods').get()
+      for (const mod of fireCustomModBank.docs) {
+        cmBank.push({ flag: mod.data().flag, shorthand: mod.data().shorthand })
+      }
+
+      return { cBank, cmBank }
     },
     async fetchData () {
       // set vuex store with data from firestore

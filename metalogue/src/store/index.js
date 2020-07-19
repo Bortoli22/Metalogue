@@ -82,6 +82,27 @@ export default new Vuex.Store({
         }
       }
     },
+    loadOtherFromCloud: (state, bank) => {
+      // pop custom mods and characters
+      var oldLength = state.characterBank.length
+      var x, element
+      for (x = 0; x < oldLength; x++) {
+        state.characterBank.pop()
+      }
+      oldLength = state.customMod.length
+      for (x = 0; x < oldLength; x++) {
+        state.customMod.pop()
+      }
+
+      // push fire data to custom mods
+      for (element of bank.cmBank) {
+        state.customMod.push(element)
+      }
+      // push fire data to character bank
+      for (element of bank.cBank) {
+        state.characterBank.push(element)
+      }
+    },
     modifyDialogue: (state, Dialogue) => {
       const toModIndex = state.dialogueData.findIndex(element => element.id === Dialogue.id)
       if (toModIndex > -1) {
@@ -274,6 +295,9 @@ export default new Vuex.Store({
     },
     fireLoad: ({ commit }, bank) => {
       commit('loadFromCloud', bank)
+    },
+    fireLoadOther: ({ commit }, bank) => {
+      commit('loadOtherFromCloud', bank)
     },
     modDialogue: ({ commit }, modded) => {
       commit('modifyDialogue', modded)
