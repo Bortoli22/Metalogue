@@ -78,13 +78,8 @@ export default {
       'remCModFromDC'
     ]),
     clickedCustom () {
-      const modFound = this.mod.findIndex(e => e.flag === this.cMod.flag)
-      if (modFound > -1) {
-        this.remCModFromDC({ id: this.activeContainerID, mod: this.cMod })
-      } else {
-        this.cMod.args = this.argRaw.split()
-        this.addCModToDC({ id: this.activeContainerID, mod: this.cMod })
-      }
+      this.cMod.args = this.argRaw.split()
+      this.addCModToDC({ id: this.activeContainerID, mod: this.cMod })
       this.argRaw = ''
       this.closeArg()
     },
@@ -96,8 +91,13 @@ export default {
       this.$emit('propUpdate', payload)
     },
     showArg (m) {
-      this.argEnter = true
+      const modFound = this.mod.findIndex(e => e.flag === m.flag)
       this.cMod = m
+      if (modFound > -1) {
+        this.remCModFromDC({ id: this.activeContainerID, mod: this.cMod })
+      } else {
+        this.argEnter = true
+      }
     },
     updateMod (mod) {
       var modToSend = ''

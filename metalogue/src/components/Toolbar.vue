@@ -114,7 +114,7 @@ export default {
 
 <style>
   .toolbar {
-    padding: 0px 0px 15px 15px;
+    padding: 0px 0px 0px 15px;
   }
   .btn.dropdown-toggle, .btn.dropdown-toggle:hover,
   .btn.dropdown-toggle:focus {

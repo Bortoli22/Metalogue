@@ -3,10 +3,10 @@
       <b-container>
       <b-card
         title="Logging in"
-        img-src="https://placekitten.com/800/500"
+        img-src="https://placekitten.com/1080/720"
         img-alt="Image"
         img-top
-        class="mb-2 middark"
+        class="mb-2 middark cardimg"
         v-if="loadingData"
       >
         <b-card-text>
@@ -137,5 +137,12 @@ export default {
 <style scoped>
   .middark {
     background-color: #3E4C59;
+  }
+  .cardimg {
+    width: 50%;
+    height: 50%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
   }
 </style>

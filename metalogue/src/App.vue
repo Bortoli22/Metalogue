@@ -26,8 +26,10 @@
               <template v-slot:button-content>
                 <em>{{ activeUser.name }}</em>
               </template>
+              <div id="dropdowns">
               <b-dropdown-item href="#">Settings</b-dropdown-item>
               <b-dropdown-item v-on:click="signOut">Sign Out</b-dropdown-item>
+              </div>
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-collapse>
@@ -172,8 +174,6 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #f5f7fa;
-  background-color: #1F2933;
 }
 
 #nav {
@@ -183,6 +183,16 @@ export default {
 #nav a {
   font-weight: bold;
   color: #f5f7fa;
+}
+
+#app .dropdown-item {
+  color: #000000
+}
+
+#app .dropdown-item:hover,
+#app .dropdown-item:focus {
+  color: #f5f7fa;
+  background-color: #b085f5;
 }
 
 #navbar {
@@ -203,6 +213,7 @@ export default {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  color: #f5f7fa;
 }
 </style>
 
