@@ -62,7 +62,6 @@
 import { mapActions, mapState } from 'vuex'
 import FlagSet from '@/components/FlagSet.vue'
 import FlagSetSimple from '@/components/FlagSetSimple.vue'
-import * as fire from '../firebase'
 
 export default {
   components: {
@@ -245,15 +244,6 @@ export default {
     },
     async unNest () {
       if (this.nested <= 0) {
-        try {
-          var pname = this.projectBank.find(e => e.id === this.activeProjectID).name
-          var sname = this.dialogueBank.find(e => e.id === this.activeSceneID).name
-          await fire.usersCollection.doc(fire.auth.currentUser.uid)
-            .collection('projects').doc(pname).collection('scenes')
-            .doc(sname).collection('data').doc(this.activeContainerID).delete()
-        } catch (err) {
-          console.log(err)
-        }
         this.remDialogue(this.sentId)
       }
       if (this.nested > 0) {

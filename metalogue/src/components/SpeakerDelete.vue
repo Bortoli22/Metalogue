@@ -58,12 +58,12 @@ export default {
         return
       }
       try {
+        this.remSpeaker(this.toDelete)
         await fire.usersCollection.doc(fire.auth.currentUser.uid)
-          .collection('characters').doc(this.toDelete).delete()
+          .collection('characters').doc('All').set({ characters: this.characterBank })
       } catch (err) {
         console.log(err)
       }
-      this.remSpeaker(this.toDelete)
       this.toDelete = ''
       this.$emit('close', null)
     },

@@ -49,8 +49,9 @@ export default {
         return
       }
       try {
-        await fire.usersCollection.doc(fire.auth.currentUser.uid)
-          .collection('mods').doc(this.toDelete).delete()
+        await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('mods').doc('All').set({
+          mods: this.customMod
+        })
       } catch (err) {
         console.log(err)
       }

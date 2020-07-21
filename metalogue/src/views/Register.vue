@@ -59,7 +59,7 @@ export default {
           const user = await fire.auth.createUserWithEmailAndPassword(this.email, this.password)
           console.log(user)
           await fire.usersCollection.doc(fire.auth.currentUser.uid).set({ name: this.email, debug: false, cat: false })
-          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('characters').doc('00000').set({ spName: 'None', spID: '00000' })
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('characters').doc('All').set({ characters: { spName: 'None', spID: '00000' } })
           this.changeUser({ name: this.email })
           this.registered({ spID: '00000', spName: 'None' })
           this.$router.replace({ name: 'About' })
