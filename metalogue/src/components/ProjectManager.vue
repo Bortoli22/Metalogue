@@ -18,11 +18,10 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import * as fire from '../firebase'
 
 export default {
   created () {
-    // after db integration move from dialogueBank set to basic template set
-
     if (this.projectBank.findIndex(element => element.id === this.activeProjectID) === -1) {
       // if the selected scene has been removed since last create
       if (this.projectBank.length > 0) {
@@ -42,9 +41,26 @@ export default {
     ...mapActions([
       'swapProject'
     ]),
-    swap (newProject) {
+    async swap (newProject) {
       if (newProject.id !== this.activeProjectID) {
-        this.swapProject({ old: this.activeProjectID, new: newProject.id, sceneID: this.activeSceneID })
+        // pull new project data and set to dialogueBank
+        try {
+          // set settings for last worked dialogue
+          await fire.usersCollection.doc(fire.auth.currentUser.uid)
+            .update({ currentProject: newProject.name, currentProjectID: newProject.id })
+          // get scene collection
+          var fireSceneBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+            .collection('projects').doc(newProject.name).collection('scenes').get()
+        } catch (err) {
+          console.log(err)
+          return
+        }
+        var sBank = []
+        for (const doc2 of fireSceneBank.docs) {
+        // Obtain data for each scene
+          sBank.push(doc2.data())
+        }
+        this.swapProject({ sBank: sBank })
         this.$emit('setActiveProjectID', newProject.id)
         if (this.dialogueBank.length > 0) {
           this.$emit('setActiveScene', this.dialogueBank[0].id)

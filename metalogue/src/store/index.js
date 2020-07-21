@@ -37,7 +37,7 @@ export default new Vuex.Store({
       }
     },
     appendProject: (state, project) => {
-      const toInsert = { name: project.projectName, id: project.projectID, sceneBank: [] }
+      const toInsert = { name: project.projectName, id: project.projectID }
       state.projectBank.push(toInsert)
     },
     appendScene: (state, scene) => {
@@ -61,14 +61,8 @@ export default new Vuex.Store({
       for (x = 0; x < oldLength; x++) {
         state.dialogueBank.pop()
       }
-      oldLength = state.projectBank.length
-      for (x = 0; x < oldLength; x++) {
-        state.projectBank.pop()
-      }
-      // push fire data to projectBank
-      if (bank.length > 0) {
-        state.projectBank.push(bank[0])
 
+      if (bank.length > 0) {
         // push fire data to dialogueBank
         if (bank[0].sceneBank.length > 0) {
           for (element of bank[0].sceneBank) {
@@ -94,6 +88,10 @@ export default new Vuex.Store({
       for (x = 0; x < oldLength; x++) {
         state.customMod.pop()
       }
+      oldLength = state.projectBank.length
+      for (x = 0; x < oldLength; x++) {
+        state.projectBank.pop()
+      }
 
       // push fire data to custom mods
       for (element of bank.cmBank) {
@@ -102,6 +100,11 @@ export default new Vuex.Store({
       // push fire data to character bank
       for (element of bank.cBank) {
         state.characterBank.push(element)
+      }
+
+      // push fire data to projectBank
+      for (element of bank.pBank) {
+        state.projectBank.push(element)
       }
 
       // push fire settings to settings
@@ -132,17 +135,6 @@ export default new Vuex.Store({
       if (toModIndex > -1) {
         toInsert = { name: state.dialogueBank[toModIndex].name, id: project.scene, data: oldData }
         state.dialogueBank[toModIndex] = toInsert
-      }
-
-      // push updates from dialogueBank to projectBank
-      toModIndex = state.projectBank.findIndex(p => p.id === project.project)
-      oldData = []
-      for (element of state.dialogueBank) {
-        oldData.push(element)
-      }
-      if (toModIndex > -1) {
-        toInsert = { name: state.projectBank[toModIndex].name, id: project.project, sceneBank: oldData }
-        state.projectBank[toModIndex] = toInsert
       }
     },
     removeCustomMod: (state, mod) => {
@@ -214,63 +206,27 @@ export default new Vuex.Store({
       }
     },
     swapProjectBank: (state, project) => {
-      console.log('enterswapproject: ' + project.old + ', ' + project.new)
-      // push updates from dialogueData to dialogueBank
-      var toModIndex = state.dialogueBank.findIndex(scene => scene.id === project.sceneID)
-      console.log('toModIndex ' + toModIndex)
-      var oldData = []
-      var element
-      var toInsert
-      for (element of state.dialogueData) {
-        oldData.push(element)
-      }
-      var x, oldLength
-      oldLength = state.dialogueData.length
+      // Pop dialogueBank and dialogueData
+      var oldLength = state.dialogueData.length
+      var x, element
       for (x = 0; x < oldLength; x++) {
         state.dialogueData.pop()
-      }
-      if (toModIndex > -1) {
-        toInsert = { name: state.dialogueBank[toModIndex].name, id: project.sceneID, data: oldData }
-        state.dialogueBank[toModIndex] = toInsert
-      }
-
-      // push updates from dialogueBank to projectBank
-      toModIndex = state.projectBank.findIndex(p => p.id === project.old)
-      console.log('toModIndex ' + toModIndex)
-      oldData = []
-      for (element of state.dialogueBank) {
-        oldData.push(element)
       }
       oldLength = state.dialogueBank.length
       for (x = 0; x < oldLength; x++) {
         state.dialogueBank.pop()
       }
-      if (toModIndex > -1) {
-        toInsert = { name: state.projectBank[toModIndex].name, id: project.old, sceneBank: oldData }
-        state.projectBank[toModIndex] = toInsert
-      }
 
-      // swap to new project
-      if (project.new === undefined) {
-        // swapping because of project deletion
-        console.log('swapping because of a deletion')
-        toModIndex = 0
-      } else {
-        // swapping because of selection of another project
-        toModIndex = state.projectBank.findIndex(p => p.id === project.new)
-      }
-
-      // pull new dialogueBank data from projectBank
-      if (state.projectBank.length > 0) {
-        for (element of state.projectBank[toModIndex].sceneBank) {
+      if (project.sBank !== undefined) {
+        // set dialogueBank
+        for (element of project.sBank) {
           state.dialogueBank.push(element)
         }
-      }
-
-      // pull new dialogueData from first scene in dialogueBank
-      if (state.dialogueBank.length > 0) {
-        for (element of state.dialogueBank[0].data) {
-          state.dialogueData.push(element)
+        // pull new dialogueData from first scene in dialogueBank
+        if (state.dialogueBank.length > 0) {
+          for (element of state.dialogueBank[0].data) {
+            state.dialogueData.push(element)
+          }
         }
       }
     },

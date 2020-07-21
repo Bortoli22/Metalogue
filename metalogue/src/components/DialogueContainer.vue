@@ -71,8 +71,7 @@ export default {
   computed: {
     ...mapState([
       'dialogueData',
-      'dialogueBank',
-      'projectBank'
+      'dialogueBank'
     ])
   },
   data () {

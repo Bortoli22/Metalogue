@@ -101,15 +101,15 @@ export default {
     async signOut () {
       if (auth.currentUser) {
         auth.signOut()
-        this.changeUser({ name: '' })
+        this.changeUser({ name: '', currentProjectID: 'none' })
         this.$router.replace({ path: '/login' })
       }
     },
     async getUser () {
       if (auth.currentUser) {
         const getName = await usersCollection.doc(auth.currentUser.uid).get()
-        const toSend = getName.data().name
-        this.changeUser({ name: toSend })
+        const toSend = { name: getName.data().name, currentProjectID: getName.data().currentProjectID }
+        this.changeUser(toSend)
       }
     },
     async tryFetch () {
@@ -147,7 +147,11 @@ export default {
       var fireSettings = await usersCollection.doc(auth.currentUser.uid).get()
       var settings = fireSettings.data()
 
-      return { cBank, cmBank, settings }
+      // get projectBank
+      var fireProjects = await usersCollection.doc(auth.currentUser.uid).get()
+      var pBank = fireProjects.data().projects
+
+      return { cBank, cmBank, settings, pBank }
     },
     async fetchData () {
       // set vuex store with data from firestore

@@ -15,6 +15,7 @@ export default {
   computed: {
     ...mapState([
       'projectBank',
+      'dialogueBank',
       'characterBank',
       'customMod'
     ])
@@ -60,7 +61,7 @@ export default {
           id: p.id
         })
         var s
-        for (s of p.sceneBank) {
+        for (s of this.dialogueBank) {
           await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).collection('scenes').doc(s.name).set({
             name: s.name,
             id: s.id,

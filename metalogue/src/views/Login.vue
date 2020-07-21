@@ -53,7 +53,6 @@ import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'projectBank',
       'settings'
     ])
   },
@@ -75,8 +74,8 @@ export default {
       try {
         await fire.auth.signInWithEmailAndPassword(this.email, this.password)
         const getName = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
-        const toSend = getName.data().name
-        this.changeUser({ name: toSend })
+        const toSend = { name: getName.data().name, currentProjectID: getName.data().currentProjectID }
+        this.changeUser(toSend)
         this.loadingData = true
         var toLoad = await this.fetchOther()
         this.fireLoadOther(toLoad)
@@ -105,7 +104,11 @@ export default {
       var fireSettings = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
       var settings = fireSettings.data()
 
-      return { cBank, cmBank, settings }
+      // get projectBank
+      var fireProjects = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
+      var pBank = fireProjects.data().projects
+
+      return { cBank, cmBank, settings, pBank }
     },
     async fetchData () {
       // set vuex store with data from firestore

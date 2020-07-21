@@ -15,6 +15,7 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import * as fire from '../firebase'
 
 export default {
   computed: {
@@ -35,7 +36,7 @@ export default {
     close () {
       this.$emit('close', null)
     },
-    createProject () {
+    async createProject () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       var toSend = { projectName: this.newProject, projectID: id }
       var element
@@ -48,8 +49,17 @@ export default {
       this.error = ''
       if (this.projectBank.length === 0) {
         this.$emit('setActiveProjectID', id)
+        await fire.usersCollection.doc(fire.auth.currentUser.uid)
+          .update({ currentProject: this.newProject, currentProjectID: id })
       }
+      await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(this.newProject).set({
+        name: this.newProject,
+        id: id
+      })
       this.addProject(toSend)
+      await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
+        projects: this.projectBank
+      })
       this.newProject = ''
       this.$emit('created', null)
     }

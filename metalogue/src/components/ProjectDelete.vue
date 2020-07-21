@@ -38,13 +38,34 @@ export default {
         console.log(err)
       }
       this.remProject(this.activeProjectID)
+      await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
+        projects: this.projectBank
+      })
       this.swapAction()
       this.$emit('close', null)
     },
-    swapAction () {
-      this.swapProject({ old: this.activeProjectID, sceneID: this.activeSceneID })
+    async swapAction () {
       if (this.projectBank.length > 0) {
+        try {
+          // set settings for last worked dialogue
+          await fire.usersCollection.doc(fire.auth.currentUser.uid)
+            .update({ currentProject: this.projectBank[0].name, currentProjectID: this.projectBank[0].id })
+          // get scene collection
+          var fireSceneBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
+            .collection('projects').doc(this.projectBank[0].name).collection('scenes').get()
+        } catch (err) {
+          console.log(err)
+          return
+        }
+        var sBank = []
+        for (const doc2 of fireSceneBank.docs) {
+        // Obtain data for each scene
+          sBank.push(doc2.data())
+        }
         this.$emit('setActiveProjectID', this.projectBank[0].id)
+        this.swapProject({ sBank: sBank })
+      } else {
+        this.swapProject({})
       }
       if (this.dialogueBank.length > 0) {
         this.$emit('setActiveSceneID', this.dialogueBank[0].id)

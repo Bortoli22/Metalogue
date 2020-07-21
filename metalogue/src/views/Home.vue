@@ -67,6 +67,9 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'Home',
+  created () {
+    this.activeProjectID = this.activeUser.currentProjectID
+  },
   components: {
     DialogueContainer,
     SceneManager,
@@ -80,7 +83,8 @@ export default {
     ...mapState([
       'dialogueData',
       'dialogueBank',
-      'projectBank'
+      'projectBank',
+      'activeUser'
     ])
   },
   methods: {
@@ -97,8 +101,8 @@ export default {
   data () {
     return {
       activeContainerID: 'none',
-      activeSceneID: 'dj3K9',
-      activeProjectID: 'f93jd'
+      activeSceneID: 'none',
+      activeProjectID: 'none'
     }
   }
 }

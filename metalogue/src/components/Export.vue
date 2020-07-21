@@ -25,7 +25,6 @@ export default {
     ...mapState([
       'dialogueData',
       'dialogueBank',
-      'projectBank',
       'characterBank',
       'customMod'
     ])
