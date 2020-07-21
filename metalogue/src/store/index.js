@@ -67,9 +67,8 @@ export default new Vuex.Store({
       }
       // push fire data to projectBank
       if (bank.length > 0) {
-        for (element of bank) {
-          state.projectBank.push(element)
-        }
+        state.projectBank.push(bank[0])
+
         // push fire data to dialogueBank
         if (bank[0].sceneBank.length > 0) {
           for (element of bank[0].sceneBank) {

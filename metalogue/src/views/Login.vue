@@ -92,62 +92,39 @@ export default {
     },
     async fetchOther () {
       // get characters
-      var cBank = []
       var fireCharacterBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
-        .collection('characters').get()
-      for (const character of fireCharacterBank.docs) {
-        cBank.push({ spID: character.data().spID, spName: character.data().spName })
-      }
+        .collection('characters').doc('All').get()
+      var cBank = fireCharacterBank.data().characters
 
       // get custom mods
-      var cmBank = []
       var fireCustomModBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
-        .collection('mods').get()
-      for (const mod of fireCustomModBank.docs) {
-        cmBank.push({ flag: mod.data().flag, shorthand: mod.data().shorthand })
-      }
+        .collection('mods').doc('All').get()
+      var cmBank = fireCustomModBank.data().mods
 
       // get settings
       var fireSettings = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
       var settings = fireSettings.data()
+
       return { cBank, cmBank, settings }
     },
     async fetchData () {
       // set vuex store with data from firestore
-
-      // get projects
-      var pBank = []
-      var fireProjectBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
-        .collection('projects').get()
-      for (const doc of fireProjectBank.docs) {
-        // Obtain data for each project
-        var sBank = []
+      var getProject = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
+      try {
+        var currentProject = { name: getProject.data().currentProject, id: getProject.data().currentProjectID }
         var fireSceneBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
-          .collection('projects').doc(doc.id).collection('scenes').get()
-        for (const doc2 of fireSceneBank.docs) {
-          // Obtain data for each scene
-          var dBank = []
-          var fireDataBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
-            .collection('projects').doc(doc.id).collection('scenes').doc(doc2.id).collection('data').get()
-          for (const doc3 of fireDataBank.docs) {
-            // Obtain data for each dialogue
-            var mBank = []
-            var fireModBank = await fire.usersCollection.doc(fire.auth.currentUser.uid)
-              .collection('projects').doc(doc.id).collection('scenes').doc(doc2.id)
-              .collection('data').doc(doc3.id).collection('mod').get()
-            for (const doc4 of fireModBank.docs) {
-              // Obtain mod data for each dialogue
-              mBank.push({ flag: doc4.data().flag, args: doc4.data().args })
-            }
-            // push all mod data to dialogue
-            dBank.push({ id: doc3.data().id, name: doc3.data().name, msg: doc3.data().msg, mod: mBank, parent: doc3.data().parent, nest: doc3.data().nest })
-          }
-          // push all dialogue data to scene
-          sBank.push({ name: doc2.id, id: doc2.data().id, data: dBank })
-        }
-        // push all scene data to project
-        pBank.push({ name: doc.id, id: doc.data().id, sceneBank: sBank })
+          .collection('projects').doc(currentProject.name).collection('scenes').get()
+      } catch (err) {
+        console.log(err)
+        console.log('No Default')
+        return []
       }
+      var sBank = []
+      for (const doc2 of fireSceneBank.docs) {
+        // Obtain data for each scene
+        sBank.push(doc2.data())
+      }
+      var pBank = [{ name: currentProject.name, id: currentProject.id, sceneBank: sBank }]
       return pBank
     }
   }
