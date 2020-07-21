@@ -11,7 +11,7 @@
 
         <br><br>Dialogue you write can be exported using Metalogue's metadata (MM) scheme as a text file,
         which can then be parsed by and interpreted by the associated scripts in your game engine. Dialogue can also be
-        exported as a JSON file, though it maintains a fixed scheme that wouldn't play nice with
+        exported as a JSON file, though it maintains a fixed scheme that may not play nice with
         preexisting scripting. The dialogue you write can be saved to the cloud, though it is currently done manually
         to keep read accesses low. Please remember to save, but do so sparingly. Local editing is also
         supported, as any exported files can be imported and worked on, even offline.
