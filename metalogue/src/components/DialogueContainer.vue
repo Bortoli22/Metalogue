@@ -6,7 +6,8 @@
           class="col-md-auto"
           v-bind:key="sentId + num"
           v-for="num in nested">
-            <b-avatar variant="info" src="https://placekitten.com/300/300"></b-avatar>
+            <b-avatar v-if="settings.cat" src='@/assets/cats/cat01.png'></b-avatar>
+            <b-avatar disabled size="20px" class="dottab" text=" " v-if="!settings.cat" rounded="lg"></b-avatar>
           </b-col>
           <b-col cols="1">
             <FlagSetSimple
@@ -71,7 +72,8 @@ export default {
   computed: {
     ...mapState([
       'dialogueData',
-      'dialogueBank'
+      'dialogueBank',
+      'settings'
     ])
   },
   data () {
@@ -457,5 +459,10 @@ export default {
 
   .flagset {
     padding-left: 15px;
+  }
+
+  .dottab {
+    background-color: #b085f5;
+    margin-top: 10px
   }
 </style>
