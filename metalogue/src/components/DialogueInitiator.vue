@@ -38,7 +38,7 @@ export default {
       if (this.characterBank.length > 0) {
         name = this.characterBank[0].spName
       }
-      const created = { id: id, name: name, msg: '', mod: [], nest: 0, active: -1, parent: '' }
+      const created = { id: id, name: name, msg: '', mod: [], nest: 0, active: -1, parent: '', importKey: 0 }
       this.addDialogue(created)
     }
   },

@@ -72,7 +72,7 @@ export default {
             this.error = 'Scene exists, overwriting...'
           }
           for (var el of jsonData.data) {
-            el.id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
+            el.importKey += 1
           }
           this.imScene({ dup: dupSearch, scene: jsonData, activeID: this.activeSceneID })
         }

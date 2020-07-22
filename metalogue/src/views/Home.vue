@@ -32,13 +32,14 @@
           v-bind:activeSceneID="activeSceneID"/>
           <DialogueContainer
           v-for="val in dialogueData"
-          v-bind:key="val.id+val.nest"
+          v-bind:key="val.id+val.nest+val.importKey"
           v-bind:msg="val.msg"
           v-bind:id="val.id"
           v-bind:name="val.name"
           v-bind:modProp="val.mod"
           v-bind:nestProp="val.nest"
           v-bind:parentProp="val.parent"
+          v-bind:importKey="val.importKey"
           v-bind:activeContainerID="activeContainerID"
           v-bind:activeProjectID="activeProjectID"
           v-bind:activeSceneID="activeSceneID"

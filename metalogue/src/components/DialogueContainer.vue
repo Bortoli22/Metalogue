@@ -109,7 +109,8 @@ export default {
     parentProp: String,
     activeContainerID: String,
     activeProjectID: String,
-    activeSceneID: String
+    activeSceneID: String,
+    importKey: Number
   },
   created () {
     this.text = this.msg
@@ -197,7 +198,8 @@ export default {
         mod: computedMod,
         parent: computedParent,
         nest: computedNest,
-        active: computedActive
+        active: computedActive,
+        importKey: this.importKey
       }
       return toAdd
     },
@@ -214,7 +216,8 @@ export default {
         msg: this.text,
         mod: this.mod,
         parent: this.parentId,
-        nest: this.nested
+        nest: this.nested,
+        importKey: this.importKey
       })
     },
     propUpdate (payload) {
@@ -278,7 +281,8 @@ export default {
                 msg: doubleParent.msg,
                 mod: computedMod,
                 parent: doubleParent.parent,
-                nest: doubleParent.nest
+                nest: doubleParent.nest,
+                importKey: this.importKey
               })
             }
           } else {
@@ -299,7 +303,8 @@ export default {
               msg: parent.msg,
               mod: computedMod,
               parent: parent.parent,
-              nest: parent.nest
+              nest: parent.nest,
+              importKey: this.importKey
             })
           }
         }
@@ -430,7 +435,8 @@ export default {
                   msg: toMod.msg,
                   mod: xSend,
                   parent: obtainParent.parent,
-                  nest: toNest
+                  nest: toNest,
+                  importKey: this.importKey
                 })
                 console.log('Entering unNestChild with: ' + toMod.id)
                 this.unNestChild({ val: toMod.id, pAdjust: true, dVal: 1 })
