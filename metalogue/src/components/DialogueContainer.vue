@@ -328,7 +328,7 @@ export default {
               dVal = 2
             }
           }
-          element.nest -= payload.dVal
+          element.nest -= 2
           if (element.nest < 0) {
             element.nest = 0
           }

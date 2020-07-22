@@ -50,6 +50,24 @@ export default new Vuex.Store({
     changeActiveUser: (state, user) => {
       state.activeUser = user
     },
+    importScene: (state, data) => {
+      if (data.dup > -1) {
+        state.dialogueBank.splice(data.dup, 1, data.scene)
+        if (data.scene.id === data.activeID) {
+          // pop dialogueData
+          var oldLength = state.dialogueData.length
+          var x, element
+          for (x = 0; x < oldLength; x++) {
+            state.dialogueData.pop()
+          }
+          for (element of data.scene.data) {
+            state.dialogueData.push(element)
+          }
+        }
+      } else {
+        state.dialogueBank.push(data.scene)
+      }
+    },
     loadFromCloud: (state, bank) => {
       // pop all Bank data
       var oldLength = state.dialogueData.length
@@ -284,6 +302,9 @@ export default new Vuex.Store({
     },
     fireLoadOther: ({ commit }, bank) => {
       commit('loadOtherFromCloud', bank)
+    },
+    imScene: ({ commit }, data) => {
+      commit('importScene', data)
     },
     modDialogue: ({ commit }, modded) => {
       commit('modifyDialogue', modded)

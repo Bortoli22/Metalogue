@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-container>
+    <b-container id="tools">
     <b-row>
       <b-dropdown id="dropdown-right" right text="Create New" class="toolbar" align ="left">
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('project')">Project </b-dropdown-item>
@@ -14,6 +14,9 @@
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('delspeaker')">Speaker </b-dropdown-item>
           <b-dropdown-item aria-controls="collapse-1" v-on:click="clicked('delcustommod')">Custom Mod </b-dropdown-item>
       </b-dropdown>
+      <b-button class="toolbar" align="left" aria-controls="collapse-1" v-on:click="clicked('importing')">
+        Import
+      </b-button>
       <Export
           v-bind:activeSceneID="activeSceneID"
           v-bind:activeProjectID="activeProjectID"
@@ -49,6 +52,11 @@
         <CustomModDelete
         v-if="(type === 'delcustommod')"
         @close="close"/>
+
+        <Import
+        v-bind:activeSceneID="activeSceneID"
+        v-if="(type === 'importing')"
+        @close="close"/>
     </b-collapse>
   </div>
 </template>
@@ -64,6 +72,7 @@ import SceneDelete from '@/components/SceneDelete.vue'
 import SpeakerDelete from '@/components/SpeakerDelete.vue'
 import CustomModDelete from '@/components/CustomModDelete.vue'
 
+import Import from '@/components/Import.vue'
 import Export from '@/components/Export.vue'
 import CloudPublish from '@/components/CloudPublish.vue'
 
@@ -78,7 +87,8 @@ export default {
     CloudPublish,
     CustomModCreate,
     CustomModDelete,
-    SpeakerDelete
+    SpeakerDelete,
+    Import
   },
   data () {
     return {
@@ -89,10 +99,15 @@ export default {
   methods: {
     clicked (type) {
       this.visible = true
-      this.type = type
+      if (this.type === type) {
+        this.close()
+      } else {
+        this.type = type
+      }
     },
     close (payload) {
       this.visible = false
+      this.type = 'none'
     },
     created (payload) {
       this.type = 'none'
@@ -114,12 +129,15 @@ export default {
 
 <style>
   .toolbar {
-    padding: 0px 0px 0px 15px;
+    margin-right: 15px;
   }
   .btn.dropdown-toggle, .btn.dropdown-toggle:hover,
   .btn.dropdown-toggle:focus {
     background: #b085f5;
     color: #f5f7fa;
     border-color: #b085f5;
+  }
+  #tools {
+    margin-left: 15px
   }
 </style>

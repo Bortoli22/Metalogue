@@ -61,7 +61,11 @@ export default {
       }
       var toSend = this.pack(operation, type)
       var element = document.createElement('a')
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(toSend))
+      if (type === 'mm') {
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(toSend))
+      } else {
+        element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(toSend))
+      }
       element.setAttribute('download', name)
       element.style.display = 'none'
       document.body.appendChild(element)
@@ -110,12 +114,14 @@ export default {
         }
       } else if (type === 'json') {
         if (operation === 'scene') {
-          for (element of this.dialogueData) {
-            packed += JSON.stringify(element)
+          var sIndex = this.dialogueBank.findIndex(e => e.id === this.activeSceneID)
+          if (sIndex < 0) {
+            return ''
           }
+          packed = JSON.stringify(this.dialogueBank[sIndex])
         } else {
           for (element of this.dialogueBank) {
-            packed += JSON.stringify(element)
+            packed = JSON.stringify(this.dialogueBank)
           }
         }
       }
