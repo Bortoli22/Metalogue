@@ -303,9 +303,8 @@ export default {
             })
           }
         }
-
         // DCs with this DC as parent must be unNested
-        this.unNestChild({ val: this.sentId, pAdjust: true })
+        this.unNestChild({ val: this.sentId, pAdjust: true, dVal: 1 })
 
         // Options kept for unNestChild conditionals spliced
         this.spliceMod('Roulette')
@@ -318,15 +317,22 @@ export default {
 
       this.dialogueData.forEach((element) => {
         if (element.parent === payload.val) {
+          var dVal = payload.dVal
           if (payload.pAdjust) {
             var p = this.dialogueData.find(e => e.id === payload.val)
             element.parent = p.parent
+            // corner case unNest option, remove it
+            var rIndex = element.mod.findIndex(i => i.flag === 'Response')
+            if (rIndex > -1) {
+              element.mod.splice(rIndex, 1)
+              dVal = 2
+            }
           }
-          element.nest -= 1
+          element.nest -= payload.dVal
           if (element.nest < 0) {
             element.nest = 0
           }
-          this.unNestChild({ val: element.id, pAdjust: false })
+          this.unNestChild({ val: element.id, pAdjust: false, dVal: dVal })
         }
       })
     },
@@ -427,7 +433,7 @@ export default {
                   nest: toNest
                 })
                 console.log('Entering unNestChild with: ' + toMod.id)
-                this.unNestChild({ val: toMod.id, pAdjust: true })
+                this.unNestChild({ val: toMod.id, pAdjust: true, dVal: 1 })
               }
             }
           }
