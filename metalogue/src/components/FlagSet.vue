@@ -2,31 +2,48 @@
     <div>
       <b-row>
         <b-button-group>
-            <SpeakerSelect @propUpdate="propUpdate"
-                v-bind:id="id"
-                v-bind:name="charname"
-            />
-            <b-dropdown right v-bind:text="selectedMod">
-                <b-dropdown-item
-                    key="Normal"
-                    v-on:click="updateMod('Normal')"
-                    >Normal</b-dropdown-item>
-                <b-dropdown-item
-                    key="Option"
-                    v-on:click="updateMod('Option')"
-                    >Option</b-dropdown-item>
-                <b-dropdown-item
-                    key="Roulette"
-                    v-on:click="updateMod('Roulette')"
-                    >Roulette</b-dropdown-item>
-            </b-dropdown>
-            <b-button
-              v-bind:pressed.sync="emitting"
-              v-on:click="updateMod('Event')"
-            >Event</b-button>
-            <b-button v-bind:pressed.sync="queued">Queue</b-button>
-            <CustomModSelect
-            @clickedCustom="showArg"/>
+          <b-dropdown v-bind:text="charname" id="spsl">
+            <b-dropdown-item-button
+            v-for="character in characterBank"
+            v-bind:key="character.spID"
+            v-on:click="propUpdate(character)"
+            > {{ character.spName }}
+            </b-dropdown-item-button>
+          </b-dropdown>
+
+          <b-dropdown right v-bind:text="selectedMod">
+              <b-dropdown-item
+                  key="Normal"
+                  v-on:click="updateMod('Normal')"
+                  >Normal</b-dropdown-item>
+              <b-dropdown-item
+                  key="Option"
+                  v-on:click="updateMod('Option')"
+                  >Option</b-dropdown-item>
+              <b-dropdown-item
+                  key="Roulette"
+                  v-on:click="updateMod('Roulette')"
+                  >Roulette</b-dropdown-item>
+          </b-dropdown>
+
+          <b-button
+            v-bind:pressed.sync="emitting"
+            v-on:click="updateMod('Event')"
+          >Event</b-button>
+
+          <b-button v-bind:pressed.sync="queued">Queue</b-button>
+
+          <b-dropdown text="Custom Mod">
+            <b-dropdown-item-button v-if="customMod.length === 0">
+            No Custom Mods Created
+            </b-dropdown-item-button>
+            <b-dropdown-item-button
+            v-for="mod in customMod"
+            v-bind:key="mod.flag"
+            v-on:click="showArg(mod)"
+            > {{ mod.flag }}
+            </b-dropdown-item-button>
+          </b-dropdown>
         </b-button-group>
       </b-row>
       <b-row>
@@ -42,14 +59,14 @@
 </template>
 
 <script>
-import SpeakerSelect from '@/components/SpeakerSelect.vue'
-import CustomModSelect from '@/components/CustomModSelect.vue'
-import { mapActions } from 'vuex'
+import { mapActions, mapState } from 'vuex'
 
 export default {
-  components: {
-    SpeakerSelect,
-    CustomModSelect
+  computed: {
+    ...mapState([
+      'customMod',
+      'characterBank'
+    ])
   },
   data () {
     return {
@@ -75,7 +92,8 @@ export default {
   methods: {
     ...mapActions([
       'addCModToDC',
-      'remCModFromDC'
+      'remCModFromDC',
+      'modSpeaker'
     ]),
     clickedCustom () {
       this.cMod.args = this.argRaw.split()
@@ -87,8 +105,10 @@ export default {
       this.argEnter = false
     },
     propUpdate (payload) {
-      this.charname = payload.name
-      this.$emit('propUpdate', payload)
+      this.charname = payload.spName
+      var pL = { id: this.id, name: payload.spName }
+      this.modSpeaker(pL)
+      this.$emit('propUpdate', pL)
     },
     showArg (m) {
       const modFound = this.mod.findIndex(e => e.flag === m.flag)

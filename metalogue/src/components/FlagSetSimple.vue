@@ -38,5 +38,7 @@ export default {
     background: #b085f5  !important;
     color: #f5f7fa;
     border-color: #b085f5;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

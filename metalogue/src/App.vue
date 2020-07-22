@@ -230,6 +230,7 @@ export default {
   margin-top: 25px;
   color: #f5f7fa;
 }
+
 </style>
 
 <style scoped>
