@@ -125,7 +125,6 @@ export default new Vuex.Store({
     projectSyncing: (state, project) => {
       // push updates from dialogueData to dialogueBank
       var toModIndex = state.dialogueBank.findIndex(scene => scene.id === project.scene)
-      console.log('toModIndex ' + toModIndex)
       var oldData = []
       var element
       var toInsert
@@ -171,10 +170,8 @@ export default new Vuex.Store({
       state.characterBank.splice(toModIndex, 1)
     },
     swapBankData: (state, bank) => {
-      console.log('enter swapBank: ' + bank.old + bank.new)
       // push updates to Bank
       var toModIndex = state.dialogueBank.findIndex(scene => scene.id === bank.old)
-      console.log('toModIndex ' + toModIndex)
       var oldData = []
       var element
       for (element of state.dialogueData) {
@@ -192,7 +189,6 @@ export default new Vuex.Store({
       // swap to new Scene
       if (bank.new === undefined) {
         // swapping because of scene deletion
-        console.log('swapping because of a deletion')
         toModIndex = 0
       } else {
         // swapping because of selection of another scene

@@ -121,8 +121,6 @@ export default {
           this.resolvedSettings = true
           toLoad = await this.fetchData()
           this.fireLoad(toLoad)
-          console.log('toLoad => ', toLoad)
-
           this.loadingData = false
           this.resolvedSettings = false
         } catch (err) {
