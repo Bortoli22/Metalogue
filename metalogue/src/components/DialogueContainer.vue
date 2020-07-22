@@ -7,7 +7,7 @@
           v-bind:key="sentId + num"
           v-for="num in nested">
             <b-avatar v-if="settings.cat" src='@/assets/cats/cat01.png'></b-avatar>
-            <b-avatar disabled size="20px" class="dottab" text=" " v-if="!settings.cat" rounded="lg"></b-avatar>
+            <b-avatar disabled size="10px" class="dottab" text=" " v-if="!settings.cat" rounded="lg"></b-avatar>
           </b-col>
           <b-col cols="1">
             <FlagSetSimple
@@ -257,6 +257,7 @@ export default {
           var computedMod
           const parent = this.dialogueData.find(element => element.id === this.parentId)
           this.parentId = parent.parent
+          this.charname = parent.name
           if (parent.mod.findIndex(element => element.flag === 'Response') > -1) {
             // parent is response, becomes a response itself
             this.sendMod.mod = 'Response'
@@ -302,8 +303,13 @@ export default {
             })
           }
         }
+
         // DCs with this DC as parent must be unNested
         this.unNestChild({ val: this.sentId, pAdjust: true })
+
+        // Options kept for unNestChild conditionals spliced
+        this.spliceMod('Roulette')
+        this.spliceMod('Option')
       }
       return null
     },
@@ -316,14 +322,13 @@ export default {
             var p = this.dialogueData.find(e => e.id === payload.val)
             element.parent = p.parent
           }
-          element.nest -= 2
+          element.nest -= 1
           if (element.nest < 0) {
             element.nest = 0
           }
           this.unNestChild({ val: element.id, pAdjust: false })
         }
       })
-      console.log('leaving unNestChild with: ' + payload.val)
     },
     updateMod (payload) {
       switch (payload.mod) {
