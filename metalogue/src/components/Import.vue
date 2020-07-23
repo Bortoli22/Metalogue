@@ -27,12 +27,15 @@
 
 <script>
 import { mapActions, mapState } from 'vuex'
+import * as fire from '../firebase'
 
 export default {
   computed: {
     ...mapState([
       'characterBank',
-      'dialogueBank'
+      'dialogueBank',
+      'projectBank',
+      'activeUser'
     ])
   },
   data () {
@@ -45,7 +48,9 @@ export default {
   },
   methods: {
     ...mapActions([
-      'imScene'
+      'imScene',
+      'addProject',
+      'swapProject'
     ]),
     importing () {
       if (this.file === null) {
@@ -62,12 +67,14 @@ export default {
     },
     manageJSON () {
       var parsedData = new FileReader()
-      parsedData.onload = (e) => {
+      parsedData.onload = async (e) => {
+        var dupSearch
         var jsonData = JSON.parse(e.target.result)
         console.log('jsonData => ', jsonData)
 
         if (this.mode === 'Scene') {
-          var dupSearch = this.dialogueBank.findIndex(e => e.id === jsonData.id)
+          // import a JSON scene
+          dupSearch = this.dialogueBank.findIndex(e => e.id === jsonData.id)
           if (dupSearch >= 0) {
             this.error = 'Scene exists, overwriting...'
           }
@@ -76,7 +83,26 @@ export default {
           }
           this.imScene({ dup: dupSearch, scene: jsonData, activeID: this.activeSceneID })
         } else {
-
+          try {
+          // import a JSON project
+            dupSearch = this.projectBank.findIndex(e => e.id === jsonData.id)
+            if (dupSearch >= 0) {
+              this.error = 'Project exists, overwriting...'
+            } else {
+              this.addProject({ projectName: jsonData.name, projectID: jsonData.id })
+              await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
+                projects: this.projectBank
+              })
+            }
+            this.swapProject({ sBank: jsonData.sceneBank, pID: jsonData.id })
+            this.$emit('setActiveProjectID', jsonData.id)
+            if (jsonData.sceneBank.length > 0) {
+              this.$emit('setActiveSceneID', jsonData.sceneBank[0].id)
+            }
+          } catch (err) {
+            console.log(err)
+            this.error = 'There was an error importing this project'
+          }
         }
       }
       parsedData.readAsText(this.file)

@@ -56,6 +56,8 @@
         <Import
         v-bind:activeSceneID="activeSceneID"
         v-if="(type === 'importing')"
+        @setActiveProjectID="setActiveProjectID"
+        @setActiveSceneID="setActiveSceneID"
         @close="close"/>
     </b-collapse>
   </div>
