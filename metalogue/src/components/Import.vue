@@ -75,6 +75,8 @@ export default {
             el.importKey += 1
           }
           this.imScene({ dup: dupSearch, scene: jsonData, activeID: this.activeSceneID })
+        } else {
+
         }
       }
       parsedData.readAsText(this.file)

@@ -54,13 +54,10 @@ export default new Vuex.Store({
       if (data.dup > -1) {
         state.dialogueBank.splice(data.dup, 1, data.scene)
         if (data.scene.id === data.activeID) {
-          // pop dialogueData
-          var oldLength = state.dialogueData.length
-          var x, element
-          for (x = 0; x < oldLength; x++) {
-            state.dialogueData.pop()
-          }
-          for (element of data.scene.data) {
+          // clear dialogueData
+          state.dialogueData.splice(0, state.dialogueData.length)
+
+          for (var element of data.scene.data) {
             state.dialogueData.push(element)
           }
         }
@@ -69,17 +66,11 @@ export default new Vuex.Store({
       }
     },
     loadFromCloud: (state, bank) => {
-      // pop all Bank data
-      var oldLength = state.dialogueData.length
-      var x, element
-      for (x = 0; x < oldLength; x++) {
-        state.dialogueData.pop()
-      }
-      oldLength = state.dialogueBank.length
-      for (x = 0; x < oldLength; x++) {
-        state.dialogueBank.pop()
-      }
+      // clear all Bank data
+      state.dialogueData.splice(0, state.dialogueData.length)
+      state.dialogueBank.splice(0, state.dialogueBank.length)
 
+      var element
       if (bank.length > 0) {
         // push fire data to dialogueBank
         if (bank[0].sceneBank.length > 0) {
@@ -96,21 +87,12 @@ export default new Vuex.Store({
       }
     },
     loadOtherFromCloud: (state, bank) => {
-      // pop custom mods and characters
-      var oldLength = state.characterBank.length
-      var x, element
-      for (x = 0; x < oldLength; x++) {
-        state.characterBank.pop()
-      }
-      oldLength = state.customMod.length
-      for (x = 0; x < oldLength; x++) {
-        state.customMod.pop()
-      }
-      oldLength = state.projectBank.length
-      for (x = 0; x < oldLength; x++) {
-        state.projectBank.pop()
-      }
+      // clear custom mods, projectbank and characters
+      state.characterBank.splice(0, state.characterBank.length)
+      state.customMod.splice(0, state.customMod.length)
+      state.projectBank.splice(0, state.projectBank.length)
 
+      var element
       // push fire data to custom mods
       for (element of bank.cmBank) {
         state.customMod.push(element)
@@ -195,11 +177,9 @@ export default new Vuex.Store({
       for (element of state.dialogueData) {
         oldData.push(element)
       }
-      var x, oldLength
-      oldLength = state.dialogueData.length
-      for (x = 0; x < oldLength; x++) {
-        state.dialogueData.pop()
-      }
+
+      state.dialogueData.splice(0, state.dialogueData.length)
+
       if (toModIndex > -1) {
         var toInsert = { name: state.dialogueBank[toModIndex].name, id: bank.old, data: oldData }
         state.dialogueBank[toModIndex] = toInsert
@@ -220,17 +200,13 @@ export default new Vuex.Store({
       }
     },
     swapProjectBank: (state, project) => {
-      // Pop dialogueBank and dialogueData
-      var oldLength = state.dialogueData.length
-      var x, element
-      for (x = 0; x < oldLength; x++) {
-        state.dialogueData.pop()
-      }
-      oldLength = state.dialogueBank.length
-      for (x = 0; x < oldLength; x++) {
-        state.dialogueBank.pop()
-      }
+      // clear dialogueBank and dialogueData
+      state.dialogueData.splice(0, state.dialogueData.length)
+      state.dialogueBank.splice(0, state.dialogueBank.length)
 
+      state.activeUser.currentProjectID = project.pID
+
+      var element
       if (project.sBank !== undefined) {
         // set dialogueBank
         for (element of project.sBank) {
@@ -248,28 +224,12 @@ export default new Vuex.Store({
       state.settings = settings
     },
     userRegister: (state, register) => {
-      // pop all store data
-      var oldLength = state.dialogueData.length
-      var x
-      for (x = 0; x < oldLength; x++) {
-        state.dialogueData.pop()
-      }
-      oldLength = state.dialogueBank.length
-      for (x = 0; x < oldLength; x++) {
-        state.dialogueBank.pop()
-      }
-      oldLength = state.projectBank.length
-      for (x = 0; x < oldLength; x++) {
-        state.projectBank.pop()
-      }
-      oldLength = state.characterBank.length
-      for (x = 0; x < oldLength; x++) {
-        state.characterBank.pop()
-      }
-      oldLength = state.customMod.length
-      for (x = 0; x < oldLength; x++) {
-        state.customMod.pop()
-      }
+      // clear all store data
+      state.dialogueData.splice(0, state.dialogueData.length)
+      state.dialogueBank.splice(0, state.dialogueBank.length)
+      state.projectBank.splice(0, state.projectBank.length)
+      state.characterBank.splice(0, state.characterBank.length)
+      state.customMod.splice(0, state.customMod.length)
 
       // push null speaker
       state.characterBank.push(register)

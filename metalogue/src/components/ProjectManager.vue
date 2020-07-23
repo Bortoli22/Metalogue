@@ -60,7 +60,7 @@ export default {
         // Obtain data for each scene
           sBank.push(doc2.data())
         }
-        this.swapProject({ sBank: sBank })
+        this.swapProject({ sBank: sBank, pID: newProject.id })
         this.$emit('setActiveProjectID', newProject.id)
         if (this.dialogueBank.length > 0) {
           this.$emit('setActiveScene', this.dialogueBank[0].id)

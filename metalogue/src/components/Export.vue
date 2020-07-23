@@ -26,7 +26,9 @@ export default {
       'dialogueData',
       'dialogueBank',
       'characterBank',
-      'customMod'
+      'customMod',
+      'activeUser',
+      'projectBank'
     ])
   },
   data () {
@@ -120,9 +122,9 @@ export default {
           }
           packed = JSON.stringify(this.dialogueBank[sIndex])
         } else {
-          for (element of this.dialogueBank) {
-            packed = JSON.stringify(this.dialogueBank)
-          }
+          var getName = this.projectBank.find(e => e.id === this.activeUser.currentProjectID).name
+          var p = { name: getName, id: this.activeUser.currentProjectID, sceneBank: this.dialogueBank }
+          packed = JSON.stringify(p)
         }
       }
       return packed
