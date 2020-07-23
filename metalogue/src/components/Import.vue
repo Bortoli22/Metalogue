@@ -35,7 +35,8 @@ export default {
       'characterBank',
       'dialogueBank',
       'projectBank',
-      'activeUser'
+      'activeUser',
+      'customMod'
     ])
   },
   data () {
@@ -60,6 +61,7 @@ export default {
       this.error = this.file.type
       if (this.file.type === 'text/plain') {
         // importing MM
+        this.manageMM()
       } else if (this.file.type === 'application/json') {
         // importing JSON
         this.manageJSON()
@@ -106,6 +108,103 @@ export default {
         }
       }
       parsedData.readAsText(this.file)
+    },
+    manageMM () {
+      var parsedData = new FileReader()
+      parsedData.onload = async (e) => {
+        var dupSearch
+        var rawText = e.target.result.split('\n')
+        console.log('array => ', rawText)
+        if (this.mode === 'Scene') {
+          // import a MM scene
+          var sceneData = rawText[0].split(' ')
+          var toObject = { name: sceneData[1], id: sceneData[2], data: [] }
+          dupSearch = this.dialogueBank.findIndex(e => e.id === sceneData[2])
+          console.log('dupSearch => ', dupSearch)
+          if (dupSearch >= 0) {
+            this.error = 'Scene exists, overwriting...'
+          }
+          for (var el = 1; el < rawText.length; el++) {
+            if (rawText[el].length > 5) {
+              toObject.data.push(this.MMextract(rawText[el]))
+            }
+          }
+          console.log('toObject => ', toObject)
+          this.imScene({ dup: dupSearch, scene: toObject, activeID: this.activeSceneID })
+        } else {
+          try {
+          // import a MM project
+
+          } catch (err) {
+            console.log(err)
+            this.error = 'There was an error importing this project'
+          }
+        }
+      }
+      parsedData.readAsText(this.file)
+    },
+    MMextract (el) {
+      var metaParse = el.substring(0, el.lastIndexOf('*/') + 2).split(' ')
+
+      // get mods
+      var getMod = []
+      var getArgs = []
+      var modName = ''
+      var parseIndex = 3
+      while (metaParse[parseIndex] !== '`' && parseIndex < 1000) {
+        modName = ''
+        switch (metaParse[parseIndex]) {
+          case '-x':
+            modName = 'Event'
+            break
+          case '-r':
+            modName = 'Response'
+            break
+          case '-rl':
+            modName = 'Roulette'
+            break
+          case '-o':
+            modName = 'Option'
+            break
+          default:
+            var cmI = this.customMod.findIndex(e => e.shorthand === metaParse[parseIndex])
+            if (cmI >= 0) {
+              modName = this.customMod[cmI].flag
+            }
+            break
+        }
+
+        // get args
+        if (modName !== '') {
+          parseIndex++
+          while (metaParse[parseIndex].indexOf('-') === -1 && metaParse[parseIndex] !== '`' && parseIndex < 1000) {
+            getArgs.push(metaParse[parseIndex])
+            parseIndex++
+          }
+          parseIndex--
+          getMod.push({ flag: modName, arg: getArgs })
+          getArgs = []
+        }
+        parseIndex++
+      }
+
+      // get parent
+      var getParent = ''
+      if (metaParse[parseIndex + 3] !== '*/') {
+        getParent = metaParse[parseIndex + 3]
+      }
+
+      // create and send object
+      var createdDC = {
+        id: metaParse[2],
+        name: this.characterBank.find(e => e.spID === metaParse[1]).spName,
+        msg: el.substring(el.lastIndexOf('*/') + 3, el.length),
+        mod: getMod,
+        nest: parseInt(metaParse[parseIndex + 1]),
+        importKey: parseInt(metaParse[parseIndex + 2]) + 1,
+        parent: getParent
+      }
+      return createdDC
     },
     switchMode () {
       if (this.mode === 'Project') {

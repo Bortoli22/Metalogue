@@ -98,6 +98,8 @@ export default {
             index++
           }
         } else {
+          var pName = this.projectBank.find(e => e.id === this.activeProjectID).name
+          packed += '/* ' + pName + ' ' + this.activeProjectID + ' */\n\n'
           for (element of this.dialogueBank) {
             packed += '/* ' + element.name + ' ' + element.id + ' */\n'
             for (subelement of element.data) {
@@ -153,11 +155,15 @@ export default {
             addArgs = true
             break
           case 'Roulette':
+            mmString += '-rl '
+            addArgs = true
+            break
+          case 'Response':
             mmString += '-r '
             addArgs = true
             break
           case 'Event':
-            mmString = mmString + '-x ' + f.args + ' '
+            mmString = mmString + '-x [' + f.args + '] '
             addArgs = false
             break
           default:
@@ -174,7 +180,7 @@ export default {
           }
         }
       }
-      mmString = mmString + '` ' + element.nest + ' ' + element.importKey + ' ' + element.parent + '*/ ' + element.msg + '\n'
+      mmString = mmString + '` ' + element.nest + ' ' + element.importKey + ' ' + element.parent + ' */ ' + element.msg + '\n'
       return mmString
     }
   },
