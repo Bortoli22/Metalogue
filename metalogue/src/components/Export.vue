@@ -134,7 +134,6 @@ export default {
       return packed
     },
     mm (element, passFlag) {
-      console.log(element.id)
       var mmString = '/* '
       var sName
       if (this.characterBank.find(e => e.spName === element.name) === undefined) {
