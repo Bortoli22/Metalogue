@@ -83,6 +83,8 @@ export default {
       var index = 0
       if (type === 'mm') {
         if (operation === 'scene') {
+          var sName = this.dialogueBank.find(e => e.id === this.activeSceneID).name
+          packed += '/* ' + sName + ' ' + this.activeSceneID + ' */\n'
           for (element of this.dialogueData) {
             // assign opener, sequence, and/or terminus
             if (index === 0) {
@@ -172,7 +174,7 @@ export default {
           }
         }
       }
-      mmString = mmString + '*/ ' + element.msg + '\n'
+      mmString = mmString + '` ' + element.nest + ' ' + element.importKey + ' ' + element.parent + '*/ ' + element.msg + '\n'
       return mmString
     }
   },
