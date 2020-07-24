@@ -194,7 +194,7 @@ export default {
 }
 
 #app .dropdown-item {
-  color: #000000
+  color: #1F2933
 }
 
 #app .btn {

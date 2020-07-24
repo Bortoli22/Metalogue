@@ -67,8 +67,9 @@ export default {
 <style scoped>
   .middark {
     background-color: #3E4C59;
+    color: #f5f7fa;
   }
   .fspace {
-    margin-bottom: 5px;
+    margin-bottom: 10px;
   }
 </style>

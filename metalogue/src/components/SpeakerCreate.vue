@@ -3,7 +3,7 @@
       <b-card class="middark">
       <p class="card-text">Create a new speaker to take part in the dialogue</p>
       <b-form-input v-model="newSpeaker" placeholder="Enter Name..." v-on:keyup.enter="addCharacter()"></b-form-input>
-      <b-button-group>
+      <b-button-group id="actionbtn">
           <b-button v-on:click="addCharacter()" variant="info" size="sm">Add</b-button>
           <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
       </b-button-group>
@@ -57,5 +57,8 @@ export default {
   .middark {
     background-color: #3E4C59;
     color: #f5f7fa;
+  }
+  #actionbtn {
+    margin-top: 10px
   }
 </style>

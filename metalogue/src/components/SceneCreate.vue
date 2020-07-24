@@ -3,7 +3,7 @@
       <b-card  class = "middark">
       <p class="card-text">Create a new scene for additional dialogue interaction</p>
       <b-form-input v-model="newScene" placeholder="Scene Name..." v-on:keyup.enter="createScene()"></b-form-input>
-      <b-button-group>
+      <b-button-group id="actionbtn">
           <b-button v-on:click="createScene()" variant="info" size="sm">Add</b-button>
           <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
       </b-button-group>
@@ -64,5 +64,9 @@ export default {
 <style scoped>
   .middark {
     background-color: #3E4C59;
+    color: #f5f7fa;
+  }
+  #actionbtn {
+    margin-top: 10px
   }
 </style>

@@ -4,7 +4,7 @@
       <p class="card-text">Create a new project
       </p>
       <b-form-input v-model="newProject" placeholder="Project Name..." v-on:keyup.enter="createProject()"></b-form-input>
-      <b-button-group>
+      <b-button-group id="actionbtn">
           <b-button v-on:click="createProject()" variant="info" size="sm">Add</b-button>
           <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
       </b-button-group>
@@ -71,5 +71,8 @@ export default {
   .middark {
     background-color: #3E4C59;
     color: #f5f7fa;
+  }
+  #actionbtn {
+    margin-top: 10px
   }
 </style>
