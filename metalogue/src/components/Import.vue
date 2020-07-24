@@ -44,15 +44,29 @@ export default {
       mode: 'Scene',
       altMode: 'Project',
       file: null,
-      error: ''
+      error: '',
+      addedProject: false
     }
   },
   methods: {
     ...mapActions([
       'imScene',
       'addProject',
-      'swapProject'
+      'swapProject',
+      'remProject'
     ]),
+    async caughtError (err, msg, id) {
+      console.log(err)
+      this.error = msg
+      this.file = null
+      if (this.addedProject) {
+        this.addedProject = false
+        this.remProject(id)
+        await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
+          projects: this.projectBank
+        })
+      }
+    },
     importing () {
       if (this.file === null) {
         this.error = 'Please upload a valid file'
@@ -71,7 +85,12 @@ export default {
       var parsedData = new FileReader()
       parsedData.onload = async (e) => {
         var dupSearch
-        var jsonData = JSON.parse(e.target.result)
+        try {
+          var jsonData = JSON.parse(e.target.result)
+        } catch (err) {
+          this.caughtError(err, 'Invalid JSON', null)
+          return
+        }
 
         if (this.mode === 'Scene') {
           try {
@@ -85,8 +104,8 @@ export default {
             }
             this.imScene({ dup: dupSearch, scene: jsonData, activeID: this.activeSceneID })
           } catch (err) {
-            console.log(err)
-            this.error = 'There was an error importing this JSON scene'
+            this.caughtError(err, 'There was an error importing this JSON scene', null)
+            return
           }
         } else {
           try {
@@ -99,6 +118,7 @@ export default {
               await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
                 projects: this.projectBank
               })
+              this.addedProject = true
             }
             this.swapProject({ sBank: jsonData.sceneBank, pID: jsonData.id })
             this.$emit('setActiveProjectID', jsonData.id)
@@ -106,8 +126,8 @@ export default {
               this.$emit('setActiveSceneID', jsonData.sceneBank[0].id)
             }
           } catch (err) {
-            console.log(err)
-            this.error = 'There was an error importing this JSON project'
+            this.caughtError(err, 'There was an error importing this JSON project', jsonData.id)
+            return
           }
         }
         this.error = 'Import Complete'
@@ -135,8 +155,8 @@ export default {
             }
             this.imScene({ dup: dupSearch, scene: toObject, activeID: this.activeSceneID })
           } catch (err) {
-            console.log(err)
-            this.error = 'There was an error importing this MM Scene'
+            this.caughtError(err, 'There was an error importing this MM Scene', null)
+            return
           }
         } else {
           try {
@@ -151,6 +171,7 @@ export default {
               await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
                 projects: this.projectBank
               })
+              this.addedProject = true
             }
             var sBank = []
             toObject = { name: sceneData[1], id: sceneData[2], data: [] }
@@ -172,8 +193,8 @@ export default {
               this.$emit('setActiveSceneID', sBank[0].id)
             }
           } catch (err) {
-            console.log(err)
-            this.error = 'There was an error importing this MM project'
+            this.caughtError(err, 'There was an error importing this MM project', projectData[2])
+            return
           }
         }
         this.error = 'Import Complete'
@@ -181,6 +202,7 @@ export default {
       parsedData.readAsText(this.file)
     },
     MMextract (el) {
+      const regex = /[&<>]/g
       var metaParse = el.substring(0, el.lastIndexOf('*/') + 2).split(' ')
 
       // get mods
@@ -219,7 +241,7 @@ export default {
             parseIndex++
           }
           parseIndex--
-          getMod.push({ flag: modName, arg: getArgs })
+          getMod.push({ flag: modName, args: getArgs })
           getArgs = []
         }
         parseIndex++
@@ -235,7 +257,7 @@ export default {
       var createdDC = {
         id: metaParse[2],
         name: this.characterBank.find(e => e.spID === metaParse[1]).spName,
-        msg: el.substring(el.lastIndexOf('*/') + 3, el.length),
+        msg: el.substring(el.lastIndexOf('*/') + 3, el.length).replace(regex, 'bad'),
         mod: getMod,
         nest: parseInt(metaParse[parseIndex + 1]),
         importKey: parseInt(metaParse[parseIndex + 2]) + 1,

@@ -61,7 +61,13 @@ export default {
       } else {
         name = 'project_' + this.activeProjectID
       }
-      var toSend = this.pack(operation, type)
+      try {
+        var toSend = this.pack(operation, type)
+      } catch (err) {
+        console.log(err)
+        this.isExporting = false
+        return
+      }
       var element = document.createElement('a')
       if (type === 'mm') {
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(toSend))

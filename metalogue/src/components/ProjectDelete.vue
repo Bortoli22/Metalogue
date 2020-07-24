@@ -42,7 +42,6 @@ export default {
         projects: this.projectBank
       })
       this.swapAction()
-      this.$emit('close', null)
     },
     async swapAction () {
       if (this.projectBank.length > 0) {
@@ -62,14 +61,15 @@ export default {
         // Obtain data for each scene
           sBank.push(doc2.data())
         }
+        this.swapProject({ sBank: sBank, pID: this.projectBank[0].id })
         this.$emit('setActiveProjectID', this.projectBank[0].id)
-        this.swapProject({ sBank: sBank })
       } else {
-        this.swapProject({})
+        this.swapProject({ pID: '' })
       }
       if (this.dialogueBank.length > 0) {
         this.$emit('setActiveSceneID', this.dialogueBank[0].id)
       }
+      this.$emit('close', null)
     }
   },
   props: {

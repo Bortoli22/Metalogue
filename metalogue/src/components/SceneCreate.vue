@@ -37,7 +37,7 @@ export default {
     },
     createScene () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      var toSend = { sceneName: this.newScene, sceneID: id }
+      var toSend = { sceneName: this.newScene.replace(/ /g, '_'), sceneID: id }
       if (this.projectBank.length === 0) {
         this.error = 'Must create a project first'
         return
