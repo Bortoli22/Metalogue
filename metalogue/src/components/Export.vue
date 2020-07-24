@@ -11,7 +11,8 @@
                 <b-dropdown-item v-on:click="exporting('project', 'json')">Export as JSON </b-dropdown-item>
             </b-dropdown-group>
             <b-dropdown-group id="dropdown-group-3" header="Characters">
-                <b-dropdown-item v-on:click="characters()">Export as MM </b-dropdown-item>
+                <b-dropdown-item v-on:click="characters('mm')">Export as MM </b-dropdown-item>
+                <b-dropdown-item v-on:click="characters('json')">Export as JSON </b-dropdown-item>
             </b-dropdown-group>
         </b-dropdown>
     </div>
@@ -37,15 +38,23 @@ export default {
     }
   },
   methods: {
-    characters () {
+    characters (type) {
       this.isExporting = true
-      var c
       var toSend = ''
-      for (c of this.characterBank) {
-        toSend += '/* ' + c.spID + ' */ ' + c.spName + '\n'
+      if (type === 'mm') {
+        var c
+        for (c of this.characterBank) {
+          toSend += '/* ' + c.spID + ' */ ' + c.spName + '\n'
+        }
+      } else {
+        toSend = JSON.stringify(this.characterBank)
       }
       var element = document.createElement('a')
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(toSend))
+      if (type === 'mm') {
+        element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(toSend))
+      } else {
+        element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(toSend))
+      }
       element.setAttribute('download', 'characters')
       element.style.display = 'none'
       document.body.appendChild(element)
