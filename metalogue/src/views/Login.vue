@@ -16,7 +16,7 @@
       </b-card>
       <b-card
         title="Logging In"
-        img-src="@/assets/path53.png"
+        img-src="@/assets/logo_square_canvas.png"
         img-alt="Hold Tight"
         img-top
         class="cardimg middark"
@@ -35,6 +35,10 @@
 
                 <label for="text-password">Password</label>
                 <b-input v-model="password" type="password" id="text-password" required></b-input>
+
+                <div v-if="logError !== ''">
+                  <br>{{logError}}
+                </div>
 
                 <br>
                 <b-button v-on:click="tryLogin">Login</b-button>
@@ -61,7 +65,8 @@ export default {
       email: '',
       password: '',
       loadingData: false,
-      resolvedSettings: false
+      resolvedSettings: false,
+      logError: ''
     }
   },
   methods: {
@@ -72,7 +77,9 @@ export default {
     ]),
     async tryLogin () {
       try {
-        await fire.auth.signInWithEmailAndPassword(this.email, this.password)
+        await fire.auth.signInWithEmailAndPassword(this.email, this.password).catch(e => {
+          this.logError = 'There was an error logging you in'
+        })
         const getName = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
         const toSend = { name: getName.data().name, currentProjectID: getName.data().currentProjectID }
         this.changeUser(toSend)
@@ -85,6 +92,7 @@ export default {
         this.$router.replace({ path: '/' })
       } catch (err) {
         console.log(err)
+        this.logError = 'There was an error logging you in'
         this.loadingData = false
         this.resolvedSettings = false
       }
@@ -139,10 +147,16 @@ export default {
     background-color: #3E4C59;
   }
   .cardimg {
-    width: 50%;
-    height: 50%;
+    width: 30%;
+    height: 30%;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 50px;
+    color: #f5f7fa;
   }
+ .jumbotron {
+    background-color: #3E4C59;
+    color: #f5f7fa;
+ }
 </style>

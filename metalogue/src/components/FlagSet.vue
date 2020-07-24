@@ -11,7 +11,7 @@
             </b-dropdown-item-button>
           </b-dropdown>
 
-          <b-dropdown right v-bind:text="selectedMod">
+          <b-dropdown v-bind:text="selectedMod">
               <b-dropdown-item
                   key="Normal"
                   v-on:click="updateMod('Normal')"
@@ -33,7 +33,7 @@
 
           <b-button v-bind:pressed.sync="queued">Queue</b-button>
 
-          <b-dropdown text="Custom Mod">
+          <b-dropdown right text="Custom Mod">
             <b-dropdown-item-button v-if="customMod.length === 0">
             No Custom Mods Created
             </b-dropdown-item-button>

@@ -51,7 +51,7 @@
       </b-card>
       <b-card
         title="One Moment"
-        img-src="@/assets/path53.png"
+        img-src="@/assets/logo_square_canvas.png"
         img-alt="Hold Tight"
         img-top
         class="cardimg middark"
@@ -222,12 +222,12 @@ export default {
 }
 
 .cardimg {
-  width: 25%;
-  height: 25%;
+  width: 30%;
+  height: 30%;
   display: block;
   margin-left: auto;
   margin-right: auto;
-  margin-top: 25px;
+  margin-top: 50px;
   color: #f5f7fa;
 }
 
