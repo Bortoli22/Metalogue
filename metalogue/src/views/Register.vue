@@ -59,7 +59,7 @@ export default {
             this.rError = 'There was an error with your Registration'
           })
           console.log(user)
-          await fire.usersCollection.doc(fire.auth.currentUser.uid).set({ name: this.email, debug: false, cat: false })
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).set({ name: this.email, debug: false, cat: false, uid: this.email })
           await fire.usersCollection.doc(fire.auth.currentUser.uid)
             .collection('characters').doc('All').set({ characters: { spName: 'None', spID: '00000' } })
           this.changeUser({ name: this.email, currentProjectID: 'none' })

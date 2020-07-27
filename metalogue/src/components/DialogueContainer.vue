@@ -34,6 +34,7 @@
             ></b-form-textarea>
             <b-form-input
               class="middark eventbox"
+              v-bind:class="{'eventboxspacing' : (activeContainerID === sentId ? false : true)}"
               v-if="eventFlag"
               v-bind:key="sentId"
               v-model="eventMsg"
@@ -488,6 +489,9 @@ export default {
 
   .eventbox {
     margin-top: 2px;
-    margin-bottom: 10px;
+  }
+
+  .eventboxspacing {
+    margin-bottom: 12px;
   }
 </style>

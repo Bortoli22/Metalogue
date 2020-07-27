@@ -221,7 +221,8 @@ export default new Vuex.Store({
       }
     },
     syncUserSettings: (state, settings) => {
-      state.settings = settings
+      state.settings = { debug: settings.debug, cat: settings.cat }
+      state.activeUser.uid = settings.uid
     },
     userRegister: (state, register) => {
       // clear all store data

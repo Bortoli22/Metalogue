@@ -8,7 +8,7 @@
             <p v-if="!settings.debug"><br></p>
             <ul>
               <li v-bind:key="modifier.flag" v-for="modifier in modProp">
-                {{ modifier.flag }}
+              {{ modifier.flag }}
               </li>
             </ul>
         </b-row>
@@ -49,5 +49,6 @@ export default {
     list-style-type: none;
     padding: 0;
     margin: 0;
+    text-align: left;
   }
 </style>

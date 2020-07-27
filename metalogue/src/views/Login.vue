@@ -81,7 +81,7 @@ export default {
           this.logError = 'There was an error logging you in'
         })
         const getName = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
-        const toSend = { name: getName.data().name, currentProjectID: getName.data().currentProjectID }
+        const toSend = { name: getName.data().name, currentProjectID: getName.data().currentProjectID, uid: getName.data().uid }
         this.changeUser(toSend)
         this.loadingData = true
         var toLoad = await this.fetchOther()

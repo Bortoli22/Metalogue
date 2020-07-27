@@ -24,7 +24,7 @@
             <b-nav-item-dropdown v-if="(activeUser.name !== '')" right>
               <!-- Using 'button-content' slot -->
               <template v-slot:button-content>
-                <em>{{ activeUser.name }}</em>
+                <em>{{ activeUser.uid }}</em>
               </template>
               <div id="dropdowns">
               <b-dropdown-item v-on:click="toSettings">Settings</b-dropdown-item>
@@ -108,7 +108,7 @@ export default {
     async getUser () {
       if (auth.currentUser) {
         const getName = await usersCollection.doc(auth.currentUser.uid).get()
-        const toSend = { name: getName.data().name, currentProjectID: getName.data().currentProjectID }
+        const toSend = { name: getName.data().name, currentProjectID: getName.data().currentProjectID, uid: getName.data().uid }
         this.changeUser(toSend)
       }
     },
