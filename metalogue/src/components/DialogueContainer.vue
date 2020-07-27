@@ -33,6 +33,8 @@
               v-on:focus="setActiveContainerID"
             ></b-form-textarea>
             <b-form-input
+              class="middark"
+              id="eventbox"
               v-if="eventFlag"
               v-bind:key="sentId"
               v-model="eventMsg"
@@ -97,7 +99,8 @@ export default {
         emitting: false,
         args: [],
         created: false
-      }
+      },
+      elimBank: []
     }
   },
   props: {
@@ -246,7 +249,15 @@ export default {
         this.mod.splice(cIndex, 1)
       }
     },
-    async unNest () {
+    unNest () {
+      // DCs with this DC as parent must be removed
+      if (this.optionsFlag || this.responseFlag || this.rouletteFlag) {
+        this.elimBank = []
+        this.unNestChild({ val: this.sentId, pAdjust: true, destructive: true })
+        for (var elim of this.elimBank) {
+          this.remDialogue(elim)
+        }
+      }
       if (this.nested <= 0) {
         this.remDialogue(this.sentId)
       }
@@ -295,7 +306,6 @@ export default {
               mIndex = computedMod.findIndex(e => e.flag === 'Roulette')
             }
             var aIndex = computedMod[mIndex].args.findIndex(e => e === this.sentId)
-            console.log('mIndex: ' + mIndex + 'aIndex: ' + aIndex)
             computedMod[mIndex].args.splice(aIndex, 1)
             this.modDialogue({
               id: parent.id,
@@ -308,9 +318,6 @@ export default {
             })
           }
         }
-        // DCs with this DC as parent must be unNested
-        this.unNestChild({ val: this.sentId, pAdjust: true, dVal: 1 })
-
         // Options kept for unNestChild conditionals spliced
         this.spliceMod('Roulette')
         this.spliceMod('Option')
@@ -318,28 +325,33 @@ export default {
       return null
     },
     unNestChild (payload) {
-      console.log('in unNestChild with: ' + payload.val + ', pAdjust is ' + payload.pAdjust)
+      console.log('in unNestChild for: ' + payload.val)
 
       this.dialogueData.forEach((element) => {
         if (element.parent === payload.val) {
-          var dVal = payload.dVal
-          if (payload.pAdjust) {
-            var p = this.dialogueData.find(e => e.id === payload.val)
-            element.parent = p.parent
-            // corner case unNest option, remove it
-            var rIndex = element.mod.findIndex(i => i.flag === 'Response')
-            if (rIndex > -1) {
-              element.mod.splice(rIndex, 1)
-              dVal = 2
+          if (!payload.destructive) {
+            if (payload.pAdjust) {
+              var p = this.dialogueData.find(e => e.id === payload.val)
+              element.parent = p.parent
+              // corner case unNest option, remove it
+              var rIndex = element.mod.findIndex(i => i.flag === 'Response')
+              if (rIndex > -1) {
+                element.mod.splice(rIndex, 1)
+              }
+            }
+            element.nest -= 2
+            if (element.nest < 0) {
+              element.nest = 0
             }
           }
-          element.nest -= 2
-          if (element.nest < 0) {
-            element.nest = 0
+          this.unNestChild({ val: element.id, pAdjust: false, destructive: payload.destructive })
+          if (payload.destructive) {
+            console.log('deleting: ' + element.id)
+            this.elimBank.push(element.id)
           }
-          this.unNestChild({ val: element.id, pAdjust: false, dVal: dVal })
         }
       })
+      console.log('exitting unNestChild for: ' + payload.val)
     },
     updateMod (payload) {
       switch (payload.mod) {
@@ -439,7 +451,7 @@ export default {
                   importKey: this.importKey
                 })
                 console.log('Entering unNestChild with: ' + toMod.id)
-                this.unNestChild({ val: toMod.id, pAdjust: true, dVal: 1 })
+                this.unNestChild({ val: toMod.id, pAdjust: true, destructive: false })
               }
             }
           }
@@ -481,5 +493,9 @@ export default {
   .dottab {
     background-color: #b085f5;
     margin-top: 10px
+  }
+
+  #eventbox {
+    margin-top: 2px;
   }
 </style>
