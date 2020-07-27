@@ -33,8 +33,7 @@
               v-on:focus="setActiveContainerID"
             ></b-form-textarea>
             <b-form-input
-              class="middark"
-              id="eventbox"
+              class="middark eventbox"
               v-if="eventFlag"
               v-bind:key="sentId"
               v-model="eventMsg"
@@ -123,7 +122,7 @@ export default {
     this.parentId = this.parentProp
     this.mod = this.modProp
     var modifier
-    console.log(this.id)
+    // console.log(this.id)
     for (modifier of this.mod) {
       this.sendMod = {
         mod: modifier.flag,
@@ -158,7 +157,7 @@ export default {
       this.addDialogue(created)
     },
     createDialoguePackaging () {
-      const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
+      const id = [...Array(10)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       var computedNest = this.nested
       var computedName = this.charname
       var computedParent = ''
@@ -325,8 +324,6 @@ export default {
       return null
     },
     unNestChild (payload) {
-      console.log('in unNestChild for: ' + payload.val)
-
       this.dialogueData.forEach((element) => {
         if (element.parent === payload.val) {
           if (!payload.destructive) {
@@ -346,12 +343,10 @@ export default {
           }
           this.unNestChild({ val: element.id, pAdjust: false, destructive: payload.destructive })
           if (payload.destructive) {
-            console.log('deleting: ' + element.id)
             this.elimBank.push(element.id)
           }
         }
       })
-      console.log('exitting unNestChild for: ' + payload.val)
     },
     updateMod (payload) {
       switch (payload.mod) {
@@ -435,9 +430,6 @@ export default {
                 for (xParse of toMod.mod) {
                   if (xParse.flag !== 'Response') {
                     xSend.push(xParse)
-                    console.log('pushed a mod')
-                  } else {
-                    console.log('parsed a response')
                   }
                 }
                 var obtainParent = this.dialogueData.find(x => x.id === toMod.parent)
@@ -450,7 +442,6 @@ export default {
                   nest: toNest,
                   importKey: this.importKey
                 })
-                console.log('Entering unNestChild with: ' + toMod.id)
                 this.unNestChild({ val: toMod.id, pAdjust: true, destructive: false })
               }
             }
@@ -495,7 +486,8 @@ export default {
     margin-top: 10px
   }
 
-  #eventbox {
+  .eventbox {
     margin-top: 2px;
+    margin-bottom: 10px;
   }
 </style>

@@ -33,7 +33,7 @@ export default {
       'addDialogue'
     ]),
     createDialogue () {
-      const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
+      const id = [...Array(10)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
       let name = ''
       if (this.characterBank.length > 0) {
         name = this.characterBank[0].spName
