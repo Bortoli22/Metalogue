@@ -195,6 +195,23 @@ export default {
       if (dIndex !== this.dialogueData.length - 1) {
         // current DC must be inserted somewhere in the array instead of pushed
         computedActive = dIndex
+        if (this.queueFlag) {
+          // Grandfather queue mod if it's the first instance of it
+          if (this.dialogueData[dIndex + 1].mod.findIndex(q => q.flag === 'Queue') !== -1) {
+            this.dialogueData[dIndex + 1].mod.find(q => q.flag === 'Queue').args = [id]
+            var mI2 = this.mod.findIndex(element => element.flag === 'Queue')
+            if (mI2 > -1) {
+              var qM = this.mod.splice(mI2, 1)
+              computedMod.push(qM[0])
+            }
+          }
+        }
+      } else if (this.queueFlag) {
+        var mI = this.mod.findIndex(element => element.flag === 'Queue')
+        if (mI > -1 && this.mod[mI].args.length === 0) {
+          this.mod[mI].args.push(id)
+          computedMod.push({ flag: 'Queue', args: [this.sentId] })
+        }
       }
       const toAdd = {
         id: id,
