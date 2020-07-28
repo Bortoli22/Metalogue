@@ -191,6 +191,15 @@ export default {
       } else {
         computedParent = this.parentId
       }
+
+      if (this.queueFlag) {
+        var mI = this.mod.findIndex(element => element.flag === 'Queue')
+        if (mI > -1 && this.mod[mI].args.length === 0) {
+          this.mod[mI].args.push(id)
+          computedMod.push({ flag: 'Queue', args: [this.sentId] })
+        }
+      }
+
       var dIndex = this.dialogueData.findIndex(e => e.id === this.activeContainerID)
       if (dIndex !== this.dialogueData.length - 1) {
         // current DC must be inserted somewhere in the array instead of pushed
@@ -205,12 +214,6 @@ export default {
               computedMod.push(qM[0])
             }
           }
-        }
-      } else if (this.queueFlag) {
-        var mI = this.mod.findIndex(element => element.flag === 'Queue')
-        if (mI > -1 && this.mod[mI].args.length === 0) {
-          this.mod[mI].args.push(id)
-          computedMod.push({ flag: 'Queue', args: [this.sentId] })
         }
       }
       const toAdd = {
@@ -392,7 +395,11 @@ export default {
           }
           break
         case 'Queue':
-          this.queueFlag = !this.queueFlag
+          if (payload.created) {
+            this.queueFlag = true
+          } else {
+            this.queueFlag = !this.queueFlag
+          }
           if (payload.updateState) {
             if (this.queueFlag) {
               const cIndex = this.mod.findIndex(opt => opt.flag === 'Queue')
@@ -401,6 +408,21 @@ export default {
               }
             } else {
               this.spliceMod('Queue')
+              // if necessary, remove queue from previous or next DC
+              var dIndex = this.dialogueData.findIndex(e => e.id === this.activeContainerID)
+              var qIndex
+              if (dIndex !== this.dialogueData.length - 1) {
+                qIndex = this.dialogueData[dIndex + 1].mod.findIndex(q => q.flag === 'Queue')
+                if (qIndex > -1) {
+                  this.dialogueData[dIndex + 1].mod.splice(qIndex, 1)
+                }
+              }
+              if (dIndex !== 0) {
+                qIndex = this.dialogueData[dIndex - 1].mod.findIndex(q => q.flag === 'Queue')
+                if (qIndex > -1) {
+                  this.dialogueData[dIndex - 1].mod.splice(qIndex, 1)
+                }
+              }
             }
           }
           break
