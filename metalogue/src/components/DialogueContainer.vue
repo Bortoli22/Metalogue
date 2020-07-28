@@ -50,6 +50,7 @@
               v-bind:name="charname"
               v-bind:starter="modStarter"
               v-bind:eventFlag="eventFlag"
+              v-bind:queueFlag="queueFlag"
               v-bind:mod="mod"
               v-bind:activeContainerID="activeContainerID"
               @propUpdate="propUpdate"
@@ -90,6 +91,7 @@ export default {
       modStarter: 'Normal',
       keyupFlag: false,
       eventFlag: false,
+      queueFlag: false,
       optionsFlag: false,
       responseFlag: false,
       rouletteFlag: false,
@@ -369,6 +371,19 @@ export default {
               }
             } else {
               this.spliceMod('Event')
+            }
+          }
+          break
+        case 'Queue':
+          this.queueFlag = !this.queueFlag
+          if (payload.updateState) {
+            if (this.queueFlag) {
+              const cIndex = this.mod.findIndex(opt => opt.flag === 'Queue')
+              if (cIndex === -1) {
+                this.mod.push({ flag: 'Queue', args: [] })
+              }
+            } else {
+              this.spliceMod('Queue')
             }
           }
           break

@@ -31,7 +31,10 @@
             v-on:click="updateMod('Event')"
           >Event</b-button>
 
-          <b-button v-bind:pressed.sync="queued">Queue</b-button>
+          <b-button
+            v-bind:pressed.sync="queued"
+            v-on:click="updateMod('Queue')"
+            >Queue</b-button>
 
           <b-dropdown right text="Custom Mod">
             <b-dropdown-item-button v-if="customMod.length === 0">
@@ -88,6 +91,9 @@ export default {
     if (this.eventFlag) {
       this.emitting = true
     }
+    if (this.queueFlag) {
+      this.queued = true
+    }
   },
   methods: {
     ...mapActions([
@@ -123,6 +129,8 @@ export default {
       var modToSend = ''
       if (mod === 'Event') {
         modToSend = 'Event'
+      } else if (mod === 'Queue') {
+        modToSend = 'Queue'
       } else {
         this.selectedMod = mod
         modToSend = mod
@@ -136,6 +144,7 @@ export default {
     name: String,
     starter: String,
     eventFlag: Boolean,
+    queueFlag: Boolean,
     mod: Array,
     activeContainerID: String
   }
