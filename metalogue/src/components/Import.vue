@@ -225,6 +225,9 @@ export default {
           case '-o':
             modName = 'Option'
             break
+          case '-q':
+            modName = 'Queue'
+            break
           default:
             var cmI = this.customMod.findIndex(e => e.shorthand === metaParse[parseIndex])
             if (cmI >= 0) {

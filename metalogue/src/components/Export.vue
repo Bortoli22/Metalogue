@@ -176,6 +176,10 @@ export default {
             mmString += '-r '
             addArgs = true
             break
+          case 'Queue':
+            mmString += '-q '
+            addArgs = true
+            break
           case 'Event':
             mmString = mmString + '-x [' + f.args + '] '
             addArgs = false
