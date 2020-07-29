@@ -264,6 +264,12 @@ export default {
     },
     setActiveContainerID () {
       this.$emit('setActiveContainerID', this.sentId)
+      if (this.queueFlag) {
+        const cIndex = this.mod.findIndex(opt => opt.flag === 'Queue')
+        if (cIndex === -1) {
+          this.queueFlag = false
+        }
+      }
     },
     spliceMod (modName) {
       const cIndex = this.mod.findIndex(opt => opt.flag === modName)
@@ -281,6 +287,16 @@ export default {
         }
       }
       if (this.nested <= 0) {
+        const cIndex = this.mod.findIndex(opt => opt.flag === 'Queue')
+        if (cIndex > -1 && this.mod[cIndex].args.length === 1) {
+          var DCQueueRemove = this.dialogueData.findIndex(e => e.id === this.mod[cIndex].args[0])
+          if (DCQueueRemove > -1) {
+            var qIndex = this.dialogueData[DCQueueRemove].mod.findIndex(q => q.flag === 'Queue')
+            if (qIndex > -1) {
+              this.dialogueData[DCQueueRemove].mod.splice(qIndex, 1)
+            }
+          }
+        }
         this.remDialogue(this.sentId)
       }
       if (this.nested > 0) {
@@ -401,28 +417,22 @@ export default {
             this.queueFlag = !this.queueFlag
           }
           if (payload.updateState) {
+            const cIndex = this.mod.findIndex(opt => opt.flag === 'Queue')
             if (this.queueFlag) {
-              const cIndex = this.mod.findIndex(opt => opt.flag === 'Queue')
               if (cIndex === -1) {
                 this.mod.push({ flag: 'Queue', args: [] })
               }
             } else {
+              if (cIndex > -1 && this.mod[cIndex].args.length === 1) {
+                var DCQueueRemove = this.dialogueData.findIndex(e => e.id === this.mod[cIndex].args[0])
+                if (DCQueueRemove > -1) {
+                  var qIndex = this.dialogueData[DCQueueRemove].mod.findIndex(q => q.flag === 'Queue')
+                  if (qIndex > -1) {
+                    this.dialogueData[DCQueueRemove].mod.splice(qIndex, 1)
+                  }
+                }
+              }
               this.spliceMod('Queue')
-              // if necessary, remove queue from previous or next DC
-              var dIndex = this.dialogueData.findIndex(e => e.id === this.activeContainerID)
-              var qIndex
-              if (dIndex !== this.dialogueData.length - 1) {
-                qIndex = this.dialogueData[dIndex + 1].mod.findIndex(q => q.flag === 'Queue')
-                if (qIndex > -1) {
-                  this.dialogueData[dIndex + 1].mod.splice(qIndex, 1)
-                }
-              }
-              if (dIndex !== 0) {
-                qIndex = this.dialogueData[dIndex - 1].mod.findIndex(q => q.flag === 'Queue')
-                if (qIndex > -1) {
-                  this.dialogueData[dIndex - 1].mod.splice(qIndex, 1)
-                }
-              }
             }
           }
           break
