@@ -7,14 +7,13 @@
         Welcome, friend!
         <br><br>Metalogue is an online, text-editing interface that caters to the creation of game dialogue.
         For each line of dialogue you write, metadata is created in the background that can be used
-        with the appropriate scripting in the creation of a full-fledged dialogue system.
+        with the appropriate scripting or plugins in the creation of a full-fledged dialogue system.
 
         <br><br>Dialogue you write can be exported using Metalogue's metadata (MM) scheme as a text file,
         which can then be parsed by and interpreted by the associated scripts in your game engine. Dialogue can also be
         exported as a JSON file, though it maintains a fixed scheme that may not play nice with
-        preexisting scripting. The dialogue you write can be saved to the cloud, though it is currently done manually
-        to keep read accesses low. Please remember to save, but do so sparingly. Local editing is also
-        supported, as any exported files can be imported and worked on, even offline.
+        preexisting scripting. The dialogue you write can be saved to the cloud. Note that it is currently done manually,
+        so remember to save when necessary. Any exported files can be imported and edited, whether a scene or a project.
 
         <br><br>There's little here in the way of tutorials or introductions at the moment.
         'Work in Progress' and all that.
