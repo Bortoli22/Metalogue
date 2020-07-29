@@ -10,6 +10,8 @@ Metalogue is an online, text-editing interface that caters to the creation of ga
 <a href=https://metalogue-52d13.web.app/>Check out the most recent deploy here</a>
 
 ## Features
+<img src="https://github.com/Bortoli22/Metalogue/blob/master/metalogue/src/assets/samples/sample_screen_1.PNG">
+
 - Create and edit projects and scenes full of your creative dialogue
 - Create custom mods that can be attached to dialogue and handled in scripts
 - Export scenes or projects as JSON or MM files
