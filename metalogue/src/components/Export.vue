@@ -50,12 +50,14 @@ export default {
         toSend = JSON.stringify(this.characterBank)
       }
       var element = document.createElement('a')
+      var name = 'characters'
       if (type === 'mm') {
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(toSend))
+        name += '.res'
       } else {
         element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(toSend))
       }
-      element.setAttribute('download', 'characters')
+      element.setAttribute('download', name)
       element.style.display = 'none'
       document.body.appendChild(element)
       element.click()
@@ -80,6 +82,7 @@ export default {
       var element = document.createElement('a')
       if (type === 'mm') {
         element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(toSend))
+        name += '_.res'
       } else {
         element.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(toSend))
       }
