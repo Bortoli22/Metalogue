@@ -229,6 +229,7 @@ export default {
       return toAdd
     },
     eventBlur () {
+      this.eventMsg = this.eventMsg.replace(/ /g, '_')
       this.updateMod({ mod: 'Event', emitting: this.eventFlag, updateState: true, created: false })
     },
     formatter (value) {

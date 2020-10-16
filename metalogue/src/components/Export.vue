@@ -184,7 +184,7 @@ export default {
             addArgs = true
             break
           case 'Event':
-            mmString = mmString + '-x [' + f.args + '] '
+            mmString = mmString + '-x ' + f.args + ' '
             addArgs = false
             break
           default:

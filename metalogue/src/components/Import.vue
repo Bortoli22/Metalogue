@@ -7,7 +7,7 @@
             :state="Boolean(file)"
             placeholder="Choose a file or drop it here..."
             drop-placeholder="Drop file here..."
-            accept=".json, .txt"
+            accept=".json, .txt, .res"
             ></b-form-file>
             <b-row id="upload" align-h="center">
                 <b-col md="4" offset-md="4">
@@ -244,7 +244,11 @@ export default {
             parseIndex++
           }
           parseIndex--
-          getMod.push({ flag: modName, args: getArgs })
+          if (modName === 'Event') {
+            getMod.push({ flag: modName, args: getArgs[0] })
+          } else {
+            getMod.push({ flag: modName, args: getArgs })
+          }
           getArgs = []
         }
         parseIndex++
