@@ -51,6 +51,10 @@ export default {
           id: p.id,
           characterBank: p.characterBank
         })
+        // push project array
+        await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
+          projects: this.projectBank
+        })
         var s
         for (s of this.dialogueBank) {
           await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).collection('scenes').doc(s.name).set({

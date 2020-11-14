@@ -60,7 +60,11 @@ export default {
         // Obtain data for each scene
           sBank.push(doc2.data())
         }
-        this.swapProject({ sBank: sBank, pID: newProject.id })
+        // pull charBank
+        var getProject = await fire.usersCollection.doc(fire.auth.currentUser.uid).get()
+        var getChar = await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(getProject.data().currentProject).get()
+        var charToSend = getChar.data().characterBank
+        this.swapProject({ sBank: sBank, pID: newProject.id, characterBank: charToSend })
         this.$emit('setActiveProjectID', newProject.id)
         if (this.dialogueBank.length > 0) {
           this.$emit('setActiveScene', this.dialogueBank[0].id)

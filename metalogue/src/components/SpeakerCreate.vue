@@ -36,10 +36,7 @@ export default {
       var toSend = { spID: id, spName: this.newSpeaker, pID: this.activeProjectID }
       var charCheck
       const toModIndex = this.projectBank.findIndex(element => element.id === this.activeProjectID)
-      console.log(toModIndex)
       if (toModIndex > -1) {
-        console.log(this.projectBank[toModIndex])
-        console.log(this.projectBank[toModIndex].characterBank)
         for (charCheck of this.projectBank[toModIndex].characterBank) {
           if (charCheck.spName === this.newSpeaker) {
             this.error = 'Speaker already exists'

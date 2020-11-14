@@ -48,6 +48,7 @@
               v-if="activeContainerID === sentId"
               v-bind:id="sentId"
               v-bind:name="charname"
+              v-bind:charBankIndex="charBankIndex"
               v-bind:starter="modStarter"
               v-bind:eventFlag="eventFlag"
               v-bind:queueFlag="queueFlag"
@@ -76,6 +77,7 @@ export default {
     ...mapState([
       'dialogueData',
       'dialogueBank',
+      'projectBank',
       'settings'
     ])
   },
@@ -85,6 +87,7 @@ export default {
       sentId: '',
       parentId: '',
       charname: '',
+      charBankIndex: 0,
       mod: [],
       eventMsg: '',
       nested: 0,
@@ -125,7 +128,6 @@ export default {
     this.parentId = this.parentProp
     this.mod = this.modProp
     var modifier
-    // console.log(this.id)
     for (modifier of this.mod) {
       this.sendMod = {
         mod: modifier.flag,
@@ -137,6 +139,7 @@ export default {
       // If an event wasn't actually emitting, it wouldn't be in this mod loop, hence the true
       this.updateMod(this.sendMod)
     }
+    this.setCharIndex()
   },
   mounted () {
     this.$nextTick(function () {
@@ -270,6 +273,13 @@ export default {
         if (cIndex === -1) {
           this.queueFlag = false
         }
+      }
+      this.setCharIndex()
+    },
+    setCharIndex () {
+      const toModIndex = this.projectBank.findIndex(element => element.id === this.activeProjectID)
+      if (toModIndex > -1) {
+        this.charBankIndex = toModIndex
       }
     },
     spliceMod (modName) {

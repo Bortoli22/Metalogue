@@ -80,8 +80,7 @@ export default {
       payload: {},
       argEnter: false,
       argRaw: '',
-      cMod: null,
-      charBankIndex: 0
+      cMod: null
     }
   },
   created () {
@@ -94,10 +93,6 @@ export default {
     }
     if (this.queueFlag) {
       this.queued = true
-    }
-    const toModIndex = this.projectBank.findIndex(element => element.id === this.activeProjectID)
-    if (toModIndex > -1) {
-      this.charBankIndex = toModIndex
     }
   },
   methods: {
@@ -151,7 +146,8 @@ export default {
     eventFlag: Boolean,
     queueFlag: Boolean,
     mod: Array,
-    activeContainerID: String
+    activeContainerID: String,
+    charBankIndex: Number
   }
 }
 </script>

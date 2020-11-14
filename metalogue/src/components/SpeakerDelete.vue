@@ -61,7 +61,7 @@ export default {
         return
       }
       try {
-        this.remSpeaker(this.toDelete)
+        this.remSpeaker({ spID: this.toDelete, pID: this.activeProjectID })
         await fire.usersCollection.doc(fire.auth.currentUser.uid)
           .update({ projects: this.projectBank })
       } catch (err) {

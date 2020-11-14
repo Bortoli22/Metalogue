@@ -44,7 +44,7 @@ export default new Vuex.Store({
     },
     appendSpeaker: (state, Speaker) => {
       const toModIndex = state.projectBank.findIndex(e => e.id === Speaker.pID)
-      const toInsert = { spID: Speaker.spID, spName: Speaker.spID }
+      const toInsert = { spID: Speaker.spID, spName: Speaker.spName }
       state.projectBank[toModIndex].characterBank.push(toInsert)
     },
     changeActiveUser: (state, user) => {
@@ -168,8 +168,9 @@ export default new Vuex.Store({
       }
     },
     removeSpeaker: (state, speaker) => {
-      const toModIndex = state.projectBank.characterBank.findIndex(element => element.spID === speaker)
-      state.projectBank.characterBank.splice(toModIndex, 1)
+      const toModIndex2 = state.projectBank.findIndex(e => e.id === speaker.pID)
+      const toModIndex = state.projectBank[toModIndex2].characterBank.findIndex(element => element.spID === speaker.spID)
+      state.projectBank[toModIndex2].characterBank.splice(toModIndex, 1)
     },
     swapBankData: (state, bank) => {
       // push updates to Bank
@@ -220,6 +221,12 @@ export default new Vuex.Store({
             state.dialogueData.push(element)
           }
         }
+      }
+
+      // characterBank update
+      const toModIndex = state.projectBank.findIndex(element => element.id === project.pID)
+      if (toModIndex > -1) {
+        state.projectBank[toModIndex].characterBank = project.characterBank
       }
     },
     syncUserSettings: (state, settings) => {
