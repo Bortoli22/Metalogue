@@ -2,17 +2,9 @@
     <div>
         <b-spinner v-if="isExporting" label="Loading..."></b-spinner>
         <b-dropdown v-if="!isExporting" id="dropdown-right" right text="Export">
-            <b-dropdown-group id="dropdown-group-1" header="Scene">
-                <b-dropdown-item v-on:click="exporting('scene', 'mm')">Export as MM </b-dropdown-item>
-                <b-dropdown-item v-on:click="exporting('scene', 'json')">Export as JSON </b-dropdown-item>
-            </b-dropdown-group>
             <b-dropdown-group id="dropdown-group-2" header="Project">
                 <b-dropdown-item v-on:click="exporting('project', 'mm')">Export as MM </b-dropdown-item>
                 <b-dropdown-item v-on:click="exporting('project', 'json')">Export as JSON </b-dropdown-item>
-            </b-dropdown-group>
-            <b-dropdown-group id="dropdown-group-3" header="Characters">
-                <b-dropdown-item v-on:click="characters('mm')">Export as MM </b-dropdown-item>
-                <b-dropdown-item v-on:click="characters('json')">Export as JSON </b-dropdown-item>
             </b-dropdown-group>
         </b-dropdown>
     </div>

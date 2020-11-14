@@ -39,10 +39,35 @@ export default {
   },
   methods: {
     ...mapActions([
-      'swapProject'
+      'swapProject',
+      'projectSync'
     ]),
     async swap (newProject) {
       if (newProject.id !== this.activeProjectID) {
+        // push project WILL BOOST READ/WRITE, COMMENT OUT IF REACHING LIMIT
+        this.projectSync({ project: this.activeProjectID, scene: this.activeSceneID })
+        var p = this.projectBank.find(element => element.id === this.activeProjectID)
+        try {
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).set({
+            name: p.name,
+            id: p.id,
+            characterBank: p.characterBank
+          })
+          // push project array
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
+            projects: this.projectBank
+          })
+          // push scene data
+          var s = this.dialogueBank.find(element => element.id === this.activeSceneID)
+          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).collection('scenes').doc(s.name).set({
+            name: s.name,
+            id: s.id,
+            data: s.data
+          })
+        } catch (err) {
+          console.log(err)
+        }
+
         // pull new project data and set to dialogueBank
         try {
           // set settings for last worked dialogue
