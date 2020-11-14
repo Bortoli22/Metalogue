@@ -275,7 +275,9 @@ export default {
           this.queueFlag = false
         }
       }
-      this.setCharIndex()
+      this.$nextTick(function () {
+        this.setCharIndex()
+      })
     },
     setCharIndex () {
       const toModIndex = this.projectBank.findIndex(element => element.id === this.activeProjectID)
