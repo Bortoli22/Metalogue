@@ -68,6 +68,15 @@ export default {
       if (type === 'mm') {
         var pName = this.projectBank.find(e => e.id === this.activeProjectID).name
         packed += '/* ' + pName + ' ' + this.activeProjectID + ' */\n\n'
+        // pack characterBank
+        if (this.toModIndex < 0) {
+          return packed
+        }
+        packed += '/* CharacterBank */\n'
+        for (element of this.projectBank[this.toModIndex].characterBank) {
+          packed += '/* ' + element.spName + ' ' + element.spID + ' */\n'
+        }
+        packed += '\n'
         for (element of this.dialogueBank) {
           packed += '/* ' + element.name + ' ' + element.id + ' */\n'
           for (subelement of element.data) {
@@ -84,14 +93,6 @@ export default {
           }
           index = 0
           packed += '\n'
-        }
-        // pack characterBank
-        if (this.toModIndex < 0) {
-          return packed
-        }
-        packed += '/* CharacterBank */\n'
-        for (element of this.projectBank[this.toModIndex].characterBank) {
-          packed += '/* ' + element.spName + ' ' + element.spID + ' */\n'
         }
       } else if (type === 'json') {
         var getP = this.projectBank.find(e => e.id === this.activeUser.currentProjectID)

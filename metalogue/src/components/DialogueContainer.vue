@@ -146,6 +146,7 @@ export default {
       if (this.$refs.dialogue !== undefined) {
         this.$refs.dialogue.focus()
       }
+      this.setCharIndex()
     })
   },
   methods: {

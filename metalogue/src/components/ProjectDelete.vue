@@ -63,11 +63,12 @@ export default {
         }
         this.swapProject({ sBank: sBank, pID: this.projectBank[0].id, characterBank: this.projectBank[0].characterBank })
         this.$emit('setActiveProjectID', this.projectBank[0].id)
+
+        if (this.dialogueBank.length > 0) {
+          this.$emit('setActiveSceneID', this.dialogueBank[0].id)
+        }
       } else {
         this.swapProject({ pID: '' })
-      }
-      if (this.dialogueBank.length > 0) {
-        this.$emit('setActiveSceneID', this.dialogueBank[0].id)
       }
       this.$emit('close', null)
     }

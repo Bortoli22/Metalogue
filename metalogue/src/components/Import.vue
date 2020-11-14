@@ -72,6 +72,8 @@ export default {
       } else if (this.file.type === 'application/json') {
         // importing JSON
         this.manageJSON()
+      } else {
+        this.error = 'Please upload a valid file'
       }
     },
     manageJSON () {
@@ -100,7 +102,7 @@ export default {
           this.swapProject({ sBank: jsonData.sceneBank, pID: jsonData.id, characterBank: jsonData.characterBank })
           this.$emit('setActiveProjectID', jsonData.id)
           if (this.dialogueBank.length > 0) {
-            this.$emit('setActiveScene', this.dialogueBank[0].id)
+            this.$emit('setActiveSceneID', this.dialogueBank[0].id)
           }
         } catch (err) {
           this.caughtError(err, 'There was an error importing this JSON project', jsonData.id)
