@@ -20,8 +20,7 @@ export default {
     ])
   },
   created () {
-    const getName = this.dialogueBank.find(e => e.id === this.activeSceneID)
-    this.activeSceneName = getName.name
+    this.alterName()
   },
   data () {
     return {
@@ -41,11 +40,25 @@ export default {
       }
       const created = { id: id, name: name, msg: '', mod: [], nest: 0, active: -1, parent: '', importKey: 0 }
       this.addDialogue(created)
+    },
+    alterName () {
+      const getName = this.dialogueBank.find(e => e.id === this.activeSceneID)
+      if (getName === '' || getName === undefined) {
+        return
+      }
+      this.activeSceneName = getName.name
     }
   },
   props: {
     activeSceneID: String,
     activeProjectID: String
+  },
+  watch: {
+    activeSceneID: {
+      handler: function (newVal, oldVal) {
+        this.alterName()
+      }
+    }
   }
 }
 </script>

@@ -4,7 +4,7 @@
         <b-button-group>
           <b-dropdown v-bind:text="charname" id="spsl">
             <b-dropdown-item-button
-            v-for="character in projectBank[charBankIndex].characterBank"
+            v-for="character in pBank"
             v-bind:key="character.spID"
             v-on:click="propUpdate(character)"
             > {{ character.spName }}
@@ -80,11 +80,13 @@ export default {
       payload: {},
       argEnter: false,
       argRaw: '',
-      cMod: null
+      cMod: null,
+      pBank: []
     }
   },
   created () {
     this.charname = this.name
+    this.setpBank()
     if (this.starter !== 'Normal') {
       this.updateMod(this.starter)
     }
@@ -115,6 +117,12 @@ export default {
       var pL = { id: this.id, name: payload.spName }
       this.modSpeaker(pL)
       this.$emit('propUpdate', pL)
+    },
+    setpBank () {
+      if (this.projectBank[this.charBankIndex] === undefined) {
+        return
+      }
+      this.pBank = this.projectBank[this.charBankIndex].characterBank
     },
     showArg (m) {
       const modFound = this.mod.findIndex(e => e.flag === m.flag)
@@ -148,6 +156,13 @@ export default {
     mod: Array,
     activeContainerID: String,
     charBankIndex: Number
+  },
+  watch: {
+    charBankIndex: {
+      handler: function (newVal, oldVal) {
+        this.setpBank()
+      }
+    }
   }
 }
 </script>

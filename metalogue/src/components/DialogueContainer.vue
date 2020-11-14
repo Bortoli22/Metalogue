@@ -54,6 +54,7 @@
               v-bind:queueFlag="queueFlag"
               v-bind:mod="mod"
               v-bind:activeContainerID="activeContainerID"
+              v-bind:key="id+activeContainerID"
               @propUpdate="propUpdate"
               @updateMod="updateMod"
             />
@@ -139,13 +140,13 @@ export default {
       // If an event wasn't actually emitting, it wouldn't be in this mod loop, hence the true
       this.updateMod(this.sendMod)
     }
+    this.setCharIndex()
   },
   mounted () {
     this.$nextTick(function () {
       if (this.$refs.dialogue !== undefined) {
         this.$refs.dialogue.focus()
       }
-      this.setCharIndex()
     })
   },
   methods: {
@@ -274,11 +275,12 @@ export default {
           this.queueFlag = false
         }
       }
-      this.$nextTick(function () {
-        this.setCharIndex()
-      })
     },
     setCharIndex () {
+      if (this.activeProjectID === undefined) {
+        this.charBankIndex = 0
+        return
+      }
       const toModIndex = this.projectBank.findIndex(element => element.id === this.activeProjectID)
       if (toModIndex > -1) {
         this.charBankIndex = toModIndex
@@ -536,8 +538,14 @@ export default {
         this.modifyDialogue()
       }
     }
+  },
+  watch: {
+    activeSceneID: {
+      handler: function (newVal, oldVal) {
+        this.setCharIndex()
+      }
+    }
   }
-
 }
 </script>
 
