@@ -38,7 +38,20 @@ export default {
     },
     async createProject () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      var toSend = { projectName: this.newProject, projectID: id }
+      var toSend = {
+        projectName: this.newProject,
+        projectID: id,
+        characterBank: [
+          {
+            spID: 'sU8k9',
+            spName: 'Player'
+          },
+          {
+            spID: '00000',
+            spName: 'None'
+          }
+        ]
+      }
       var element
       for (element of this.projectBank) {
         if (element.name === this.newProject) {
@@ -54,7 +67,17 @@ export default {
       }
       await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(this.newProject).set({
         name: this.newProject,
-        id: id
+        id: id,
+        characterBank: [
+          {
+            spID: 'sU8k9',
+            spName: 'Player'
+          },
+          {
+            spID: '00000',
+            spName: 'None'
+          }
+        ]
       })
       this.addProject(toSend)
       await fire.usersCollection.doc(fire.auth.currentUser.uid).update({

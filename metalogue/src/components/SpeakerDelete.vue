@@ -30,13 +30,16 @@ export default {
     for (var e of this.selectedBank) {
       this.selectedBank.pop()
     }
-    for (e of this.characterBank) {
-      if (e.spID !== '00000') { this.selectedBank.push(e) }
+    const toModIndex = this.projectBank.findIndex(element => element.id === this.activeProjectID)
+    if (toModIndex > -1) {
+      for (e of this.projectBank[toModIndex].characterBank) {
+        if (e.spID !== '00000') { this.selectedBank.push(e) }
+      }
     }
   },
   computed: {
     ...mapState([
-      'characterBank'
+      'projectBank'
     ])
   },
   data () {
@@ -60,7 +63,7 @@ export default {
       try {
         this.remSpeaker(this.toDelete)
         await fire.usersCollection.doc(fire.auth.currentUser.uid)
-          .collection('characters').doc('All').set({ characters: this.characterBank })
+          .update({ projects: this.projectBank })
       } catch (err) {
         console.log(err)
       }
@@ -70,6 +73,9 @@ export default {
     speakerSelect (speaker) {
       this.toDelete = speaker.spID
     }
+  },
+  props: {
+    activeProjectID: String
   }
 }
 </script>

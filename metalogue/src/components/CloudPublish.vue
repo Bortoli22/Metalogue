@@ -16,7 +16,6 @@ export default {
     ...mapState([
       'projectBank',
       'dialogueBank',
-      'characterBank',
       'customMod'
     ])
   },
@@ -35,15 +34,6 @@ export default {
       this.projectSync({ project: this.activeProjectID, scene: this.activeSceneID })
       this.isExporting = true
 
-      // push characters
-      try {
-        await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('characters').doc('All').set({
-          characters: this.characterBank
-        })
-      } catch (err) {
-        console.log(err)
-      }
-
       // push custom mods
       try {
         await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('mods').doc('All').set({
@@ -58,7 +48,8 @@ export default {
       try {
         await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).set({
           name: p.name,
-          id: p.id
+          id: p.id,
+          characterBank: p.characterBank
         })
         var s
         for (s of this.dialogueBank) {

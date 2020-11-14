@@ -131,11 +131,6 @@ export default {
       }
     },
     async fetchOther () {
-      // get characters
-      var fireCharacterBank = await usersCollection.doc(auth.currentUser.uid)
-        .collection('characters').doc('All').get()
-      var cBank = fireCharacterBank.data().characters
-
       // get custom mods
       var fireCustomModBank = await usersCollection.doc(auth.currentUser.uid)
         .collection('mods').doc('All').get()
@@ -149,13 +144,15 @@ export default {
       var fireProjects = await usersCollection.doc(auth.currentUser.uid).get()
       var pBank = fireProjects.data().projects
 
-      return { cBank, cmBank, settings, pBank }
+      return { cmBank, settings, pBank }
     },
     async fetchData () {
       // set vuex store with data from firestore
       var getProject = await usersCollection.doc(auth.currentUser.uid).get()
+      var getChar = await usersCollection.doc(auth.currentUser.uid).collection('projects').doc(getProject.data().currentProject).get()
       try {
         var currentProject = { name: getProject.data().currentProject, id: getProject.data().currentProjectID }
+        var charToSend = getChar.data().characterBank
         var fireSceneBank = await usersCollection.doc(auth.currentUser.uid)
           .collection('projects').doc(currentProject.name).collection('scenes').get()
       } catch (err) {
@@ -168,7 +165,7 @@ export default {
         // Obtain data for each scene
         sBank.push(doc2.data())
       }
-      var pBank = [{ name: currentProject.name, id: currentProject.id, sceneBank: sBank }]
+      var pBank = [{ name: currentProject.name, id: currentProject.id, characterBank: charToSend, sceneBank: sBank }]
       return pBank
     }
   }

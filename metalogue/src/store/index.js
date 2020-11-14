@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 
 import dialogueData from '@/data/dialogueData.js'
-import characterBank from '@/data/characterBank.js'
 import dialogueBank from '@/data/dialogueBank.js'
 import activeUser from '@/data/user.js'
 import projectBank from '@/data/projectBank.js'
@@ -14,7 +13,6 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     dialogueData,
-    characterBank,
     dialogueBank,
     activeUser,
     projectBank,
@@ -37,7 +35,7 @@ export default new Vuex.Store({
       }
     },
     appendProject: (state, project) => {
-      const toInsert = { name: project.projectName, id: project.projectID }
+      const toInsert = { name: project.projectName, id: project.projectID, characterBank: project.characterBank }
       state.projectBank.push(toInsert)
     },
     appendScene: (state, scene) => {
@@ -45,7 +43,9 @@ export default new Vuex.Store({
       state.dialogueBank.push(toInsert)
     },
     appendSpeaker: (state, Speaker) => {
-      state.characterBank.push(Speaker)
+      const toModIndex = state.projectBank.findIndex(e => e.id === Speaker.pID)
+      const toInsert = { spID: Speaker.spID, spName: Speaker.spID }
+      state.projectBank[toModIndex].characterBank.push(toInsert)
     },
     changeActiveUser: (state, user) => {
       state.activeUser = user
@@ -84,11 +84,17 @@ export default new Vuex.Store({
             }
           }
         }
+        // push fire char data
+        if (bank[0].characterBank.length > 0) {
+          const toModIndex = state.projectBank.findIndex(element => element.id === bank[0].id)
+          if (toModIndex > -1) {
+            state.projectBank[toModIndex].characterBank = bank[0].characterBank
+          }
+        }
       }
     },
     loadOtherFromCloud: (state, bank) => {
-      // clear custom mods, projectbank and characters
-      state.characterBank.splice(0, state.characterBank.length)
+      // clear custom mods, projectbank
       state.customMod.splice(0, state.customMod.length)
       state.projectBank.splice(0, state.projectBank.length)
 
@@ -96,10 +102,6 @@ export default new Vuex.Store({
       // push fire data to custom mods
       for (element of bank.cmBank) {
         state.customMod.push(element)
-      }
-      // push fire data to character bank
-      for (element of bank.cBank) {
-        state.characterBank.push(element)
       }
 
       // push fire data to projectBank
@@ -166,8 +168,8 @@ export default new Vuex.Store({
       }
     },
     removeSpeaker: (state, speaker) => {
-      const toModIndex = state.characterBank.findIndex(element => element.spID === speaker)
-      state.characterBank.splice(toModIndex, 1)
+      const toModIndex = state.projectBank.characterBank.findIndex(element => element.spID === speaker)
+      state.projectBank.characterBank.splice(toModIndex, 1)
     },
     swapBankData: (state, bank) => {
       // push updates to Bank
@@ -229,11 +231,7 @@ export default new Vuex.Store({
       state.dialogueData.splice(0, state.dialogueData.length)
       state.dialogueBank.splice(0, state.dialogueBank.length)
       state.projectBank.splice(0, state.projectBank.length)
-      state.characterBank.splice(0, state.characterBank.length)
       state.customMod.splice(0, state.customMod.length)
-
-      // push null speaker
-      state.characterBank.push(register)
     }
   },
   actions: {

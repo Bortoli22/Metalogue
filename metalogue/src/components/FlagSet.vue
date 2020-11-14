@@ -4,7 +4,7 @@
         <b-button-group>
           <b-dropdown v-bind:text="charname" id="spsl">
             <b-dropdown-item-button
-            v-for="character in characterBank"
+            v-for="character in projectBank[charBankIndex].characterBank"
             v-bind:key="character.spID"
             v-on:click="propUpdate(character)"
             > {{ character.spName }}
@@ -68,7 +68,7 @@ export default {
   computed: {
     ...mapState([
       'customMod',
-      'characterBank'
+      'projectBank'
     ])
   },
   data () {
@@ -80,7 +80,8 @@ export default {
       payload: {},
       argEnter: false,
       argRaw: '',
-      cMod: null
+      cMod: null,
+      charBankIndex: 0
     }
   },
   created () {
@@ -93,6 +94,10 @@ export default {
     }
     if (this.queueFlag) {
       this.queued = true
+    }
+    const toModIndex = this.projectBank.findIndex(element => element.id === this.activeProjectID)
+    if (toModIndex > -1) {
+      this.charBankIndex = toModIndex
     }
   },
   methods: {

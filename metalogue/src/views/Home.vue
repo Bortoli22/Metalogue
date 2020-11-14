@@ -29,7 +29,8 @@
           v-if="dialogueBank.length === 0 && projectBank.length > 0"/>
           <DialogueInitiator
           v-if="(dialogueData.length === 0) && (dialogueBank.length > 0)"
-          v-bind:activeSceneID="activeSceneID"/>
+          v-bind:activeSceneID="activeSceneID"
+          v-bind:activeProjectID="activeProjectID"/>
           <DialogueContainer
           v-for="val in dialogueData"
           v-bind:key="val.id+val.nest+val.importKey"

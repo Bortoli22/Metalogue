@@ -30,7 +30,7 @@
     <b-collapse id="collapse-1" v-model="visible" class="mt-2">
         <SceneCreate @close="close" @created="created" @setActiveSceneID="setActiveSceneID" v-if="(type === 'scene')"/>
         <ProjectCreate @close="close" @created="created" @setActiveProjectID="setActiveProjectID" v-if="(type === 'project')"/>
-        <SpeakerCreate @close="close" @created="created" v-if="(type === 'speaker')"/>
+        <SpeakerCreate @close="close" @created="created" v-bind:activeProjectID="activeProjectID" v-if="(type === 'speaker')"/>
         <CustomModCreate @close="close" @created="created" v-if="(type === 'mod')"/>
 
         <ProjectDelete
@@ -47,6 +47,7 @@
         @close="close"
         @setActiveScene="setActiveSceneID"/>
         <SpeakerDelete
+        v-bind:activeProjectID="activeProjectID"
         v-if="(type === 'delspeaker')"
         @close="close"/>
         <CustomModDelete

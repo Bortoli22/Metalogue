@@ -18,7 +18,7 @@ import { mapActions, mapState } from 'vuex'
 export default {
   computed: {
     ...mapState([
-      'characterBank'
+      'projectBank'
     ])
   },
   data () {
@@ -33,12 +33,18 @@ export default {
     ]),
     addCharacter () {
       const id = [...Array(5)].map(i => (~~(Math.random() * 36)).toString(36)).join('')
-      var toSend = { spID: id, spName: this.newSpeaker }
+      var toSend = { spID: id, spName: this.newSpeaker, pID: this.activeProjectID }
       var charCheck
-      for (charCheck of this.characterBank) {
-        if (charCheck.spName === this.newSpeaker) {
-          this.error = 'Speaker already exists'
-          return
+      const toModIndex = this.projectBank.findIndex(element => element.id === this.activeProjectID)
+      console.log(toModIndex)
+      if (toModIndex > -1) {
+        console.log(this.projectBank[toModIndex])
+        console.log(this.projectBank[toModIndex].characterBank)
+        for (charCheck of this.projectBank[toModIndex].characterBank) {
+          if (charCheck.spName === this.newSpeaker) {
+            this.error = 'Speaker already exists'
+            return
+          }
         }
       }
       this.error = ''
@@ -49,6 +55,9 @@ export default {
     close () {
       this.$emit('close', null)
     }
+  },
+  props: {
+    activeProjectID: String
   }
 }
 </script>
