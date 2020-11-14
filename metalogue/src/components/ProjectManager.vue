@@ -59,11 +59,13 @@ export default {
           })
           // push scene data
           var s = this.dialogueBank.find(element => element.id === this.activeSceneID)
-          await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).collection('scenes').doc(s.name).set({
-            name: s.name,
-            id: s.id,
-            data: s.data
-          })
+          if (s !== undefined) {
+            await fire.usersCollection.doc(fire.auth.currentUser.uid).collection('projects').doc(p.name).collection('scenes').doc(s.name).set({
+              name: s.name,
+              id: s.id,
+              data: s.data
+            })
+          }
         } catch (err) {
           console.log(err)
         }

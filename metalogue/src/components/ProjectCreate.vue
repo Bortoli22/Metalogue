@@ -60,6 +60,9 @@ export default {
         }
       }
       this.error = ''
+
+      this.addProject(toSend)
+
       if (this.projectBank.length === 0) {
         this.$emit('setActiveProjectID', id)
         await fire.usersCollection.doc(fire.auth.currentUser.uid)
@@ -79,7 +82,6 @@ export default {
           }
         ]
       })
-      this.addProject(toSend)
       await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
         projects: this.projectBank
       })

@@ -61,7 +61,7 @@ export default {
         // Obtain data for each scene
           sBank.push(doc2.data())
         }
-        this.swapProject({ sBank: sBank, pID: this.projectBank[0].id })
+        this.swapProject({ sBank: sBank, pID: this.projectBank[0].id, characterBank: this.projectBank[0].characterBank })
         this.$emit('setActiveProjectID', this.projectBank[0].id)
       } else {
         this.swapProject({ pID: '' })

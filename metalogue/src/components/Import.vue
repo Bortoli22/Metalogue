@@ -1,7 +1,7 @@
 <template>
     <div>
         <b-card class="middark">
-            <p class="card-text">Import a {{mode}} (MM or JSON)</p>
+            <p class="card-text">Import a Project (MM or JSON)</p>
             <b-form-file
             v-model="file"
             :state="Boolean(file)"
@@ -10,15 +10,10 @@
             accept=".json, .txt, .res"
             ></b-form-file>
             <b-row id="upload" align-h="center">
-                <b-col md="4" offset-md="4">
-                    <b-button-group>
-                        <b-button v-on:click="importing()" variant="info" size="sm">Import</b-button>
-                        <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
-                    </b-button-group>
-                </b-col>
-                <b-col md="4" offset-md="0">
-                    <b-button size="sm" v-on:click="switchMode()">Switch to {{altMode}} Import</b-button>
-                </b-col>
+              <b-button-group>
+                <b-button v-on:click="importing()" variant="info" size="sm">Import</b-button>
+                <b-button v-on:click="close()" variant="danger" size="sm">Close</b-button>
+              </b-button-group>
             </b-row>
             {{ error }}
         </b-card>
@@ -41,8 +36,6 @@ export default {
   },
   data () {
     return {
-      mode: 'Scene',
-      altMode: 'Project',
       file: null,
       error: '',
       addedProject: false
@@ -92,43 +85,26 @@ export default {
           return
         }
 
-        if (this.mode === 'Scene') {
-          try {
-          // import a JSON scene
-            dupSearch = this.dialogueBank.findIndex(e => e.id === jsonData.id)
-            if (dupSearch >= 0) {
-              this.error = 'Scene exists, overwriting...'
-            }
-            for (var el of jsonData.data) {
-              el.importKey += 1
-            }
-            this.imScene({ dup: dupSearch, scene: jsonData, activeID: this.activeSceneID })
-          } catch (err) {
-            this.caughtError(err, 'There was an error importing this JSON scene', null)
-            return
-          }
-        } else {
-          try {
+        try {
           // import a JSON project
-            dupSearch = this.projectBank.findIndex(e => e.id === jsonData.id)
-            if (dupSearch >= 0) {
-              this.error = 'Project exists, overwriting...'
-            } else {
-              this.addProject({ projectName: jsonData.name, projectID: jsonData.id })
-              await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
-                projects: this.projectBank
-              })
-              this.addedProject = true
-            }
-            this.swapProject({ sBank: jsonData.sceneBank, pID: jsonData.id })
-            this.$emit('setActiveProjectID', jsonData.id)
-            if (jsonData.sceneBank.length > 0) {
-              this.$emit('setActiveSceneID', jsonData.sceneBank[0].id)
-            }
-          } catch (err) {
-            this.caughtError(err, 'There was an error importing this JSON project', jsonData.id)
-            return
+          dupSearch = this.projectBank.findIndex(e => e.id === jsonData.id)
+          if (dupSearch >= 0) {
+            this.error = 'Project exists, overwriting...'
+          } else {
+            this.addProject({ projectName: jsonData.name, projectID: jsonData.id, characterBank: jsonData.characterBank })
+            await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
+              projects: this.projectBank
+            })
+            this.addedProject = true
           }
+          this.swapProject({ sBank: jsonData.sceneBank, pID: jsonData.id, characterBank: jsonData.characterBank })
+          this.$emit('setActiveProjectID', jsonData.id)
+          if (this.dialogueBank.length > 0) {
+            this.$emit('setActiveScene', this.dialogueBank[0].id)
+          }
+        } catch (err) {
+          this.caughtError(err, 'There was an error importing this JSON project', jsonData.id)
+          return
         }
         this.error = 'Import Complete'
       }
@@ -139,69 +115,64 @@ export default {
       parsedData.onload = async (e) => {
         var dupSearch, toObject, sceneData, el
         var rawText = e.target.result.split('\n')
-        if (this.mode === 'Scene') {
-          try {
-          // import a MM scene
-            sceneData = rawText[0].split(' ')
-            toObject = { name: sceneData[1], id: sceneData[2], data: [] }
-            dupSearch = this.dialogueBank.findIndex(e => e.id === sceneData[2])
-            if (dupSearch >= 0) {
-              this.error = 'Scene exists, overwriting...'
-            }
-            for (el = 1; el < rawText.length; el++) {
-              if (rawText[el].length > 5) {
-                toObject.data.push(this.MMextract(rawText[el]))
-              }
-            }
-            this.imScene({ dup: dupSearch, scene: toObject, activeID: this.activeSceneID })
-          } catch (err) {
-            this.caughtError(err, 'There was an error importing this MM Scene', null)
-            return
-          }
-        } else {
-          try {
+        try {
           // import a MM project
-            var projectData = rawText[0].split(' ')
-            sceneData = rawText[2].split(' ')
-            dupSearch = this.projectBank.findIndex(e => e.id === projectData[2])
-            if (dupSearch >= 0) {
-              this.error = 'Project exists, overwriting...'
-            } else {
-              this.addProject({ projectName: projectData[1], projectID: projectData[2] })
-              await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
-                projects: this.projectBank
-              })
-              this.addedProject = true
+          var sBank = []
+          var cBank = []
+          var pIndex = 3
+          var rawSplit
+          for (el = pIndex; el < rawText.length; el++) {
+            pIndex = el
+            rawSplit = rawText[el].split(' ')
+            if (rawSplit.length < 2) {
+              break
             }
-            var sBank = []
-            toObject = { name: sceneData[1], id: sceneData[2], data: [] }
-            for (el = 3; el < rawText.length; el++) {
-              if (rawText[el].split(' ').length === 4) {
-                // new scene
-                sBank.push(toObject)
-                sceneData = rawText[el].split(' ')
-                toObject = { name: sceneData[1], id: sceneData[2], data: [] }
-              } else if (rawText[el].length > 5) {
-                toObject.data.push(this.MMextract(rawText[el]))
-              }
-            }
-            sBank.push(toObject)
-
-            this.swapProject({ sBank: sBank, pID: projectData[2] })
-            this.$emit('setActiveProjectID', projectData[2])
-            if (sBank.length > 0) {
-              this.$emit('setActiveSceneID', sBank[0].id)
-            }
-          } catch (err) {
-            this.caughtError(err, 'There was an error importing this MM project', projectData[2])
-            return
+            cBank.push({ spName: rawSplit[1], spID: rawSplit[2] })
           }
+
+          sceneData = rawText[pIndex + 1].split(' ')
+          toObject = { name: sceneData[1], id: sceneData[2], data: [] }
+          for (el = pIndex + 2; el < rawText.length; el++) {
+            rawSplit = rawText[el].split(' ')
+            if (rawSplit.length === 4) {
+              // new scene
+              sBank.push(toObject)
+              toObject = { name: rawSplit[1], id: rawSplit[2], data: [] }
+            } else if (rawSplit.length > 5) {
+              toObject.data.push(this.MMextract(rawText[el], cBank))
+            }
+          }
+          sBank.push(toObject)
+
+          // add project
+          var projectData = rawText[0].split(' ')
+          dupSearch = this.projectBank.findIndex(e => e.id === projectData[2])
+          if (dupSearch >= 0) {
+            this.error = 'Project exists, overwriting...'
+          } else {
+            this.addProject({ projectName: projectData[1], projectID: projectData[2], characterBank: cBank })
+            await fire.usersCollection.doc(fire.auth.currentUser.uid).update({
+              projects: this.projectBank
+            })
+            this.addedProject = true
+          }
+
+          // swap to project
+          this.swapProject({ sBank: sBank, pID: projectData[2], characterBank: cBank })
+          this.$emit('setActiveProjectID', projectData[2])
+          if (sBank.length > 0) {
+            this.$emit('setActiveSceneID', sBank[0].id)
+          }
+        } catch (err) {
+          this.caughtError(err, 'There was an error importing this MM project', projectData[2])
+          return
         }
+
         this.error = 'Import Complete'
       }
       parsedData.readAsText(this.file)
     },
-    MMextract (el) {
+    MMextract (el, cBank) {
       const regex = /[&<>]/g
       var metaParse = el.substring(0, el.lastIndexOf('*/') + 2).split(' ')
 
@@ -263,7 +234,7 @@ export default {
       // create and send object
       var createdDC = {
         id: metaParse[2],
-        name: this.characterBank.find(e => e.spID === metaParse[1]).spName,
+        name: cBank.find(e => e.spID === metaParse[1]).spName,
         msg: el.substring(el.lastIndexOf('*/') + 3, el.length).replace(regex, 'bad'),
         mod: getMod,
         nest: parseInt(metaParse[parseIndex + 1]),
@@ -271,15 +242,6 @@ export default {
         parent: getParent
       }
       return createdDC
-    },
-    switchMode () {
-      if (this.mode === 'Project') {
-        this.mode = 'Scene'
-        this.altMode = 'Project'
-      } else {
-        this.mode = 'Project'
-        this.altMode = 'Scene'
-      }
     },
     close () {
       this.$emit('close', null)
