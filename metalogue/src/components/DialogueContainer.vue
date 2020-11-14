@@ -139,7 +139,6 @@ export default {
       // If an event wasn't actually emitting, it wouldn't be in this mod loop, hence the true
       this.updateMod(this.sendMod)
     }
-    this.setCharIndex()
   },
   mounted () {
     this.$nextTick(function () {
