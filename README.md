@@ -14,8 +14,8 @@ Metalogue is an online, text-editing interface that caters to the creation of ga
 
 - Create and edit projects and scenes full of your creative dialogue
 - Create custom mods that can be attached to dialogue and handled in scripts
-- Export scenes or projects as JSON or MM files
-- Import scenes or projects as JSON or MM files
+- Export projects as JSON or MM files
+- Import projects as JSON or MM files
 - Save data to cloud through user account
 - Enable debug features, change username, and more in Settings
 
