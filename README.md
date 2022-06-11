@@ -7,8 +7,6 @@
 ## About
 Metalogue is an online, text-editing interface that caters to the creation of game dialogue. Metalogue generates metadata for each line of dialogue you write, and this data can be used in conjunction with the appropriate scripting or plugins to create a full-fledged dialogue system. Through an intuitive, clickable interface, the text-editor allows for a variety of dialogue types, from multi-path dialogue options to randomized greetings. Projects and their scenes can be saved to the cloud with a user account. Dialogue you write can be exported using Metalogue's metadata (MM) scheme to work with the associated scripts, or as a JSON file for your own purposes. Either scheme may be reimported to be edited or saved.
 
-<a href=https://metalogue-52d13.web.app/>Check out the most recent deploy here</a>
-
 ## Features
 <img src="https://github.com/Bortoli22/Metalogue/blob/master/metalogue/src/assets/samples/sample_screen_1.PNG">
 
